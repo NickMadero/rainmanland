@@ -1,24 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
+import React  from 'react';
+import {
+  Router,
+  Routes,
+  Route,
+  NavLink,
+  Navigate,
+  useNavigate,
+  Redirect,
+} from "react-router-dom";
+import LoginForm from './pages/loginform';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div >
+        <LoginForm></LoginForm>
+      
     </div>
+   
   );
 }
 
