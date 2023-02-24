@@ -12,7 +12,7 @@ We will use pull deployments to safely update the live site. With a React app ho
 7. Restart the nginx server with `sudo systemctl restart nginx`
 8. The changes should now be live.
 
-
+**Note**: this doesn't need to be done very often. To check how changes look, we will usually just run `npm start` on our local machines to take a look in the browser.
 
 ## Getting Started with Create React App
 
