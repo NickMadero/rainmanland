@@ -3,10 +3,12 @@ import CustomerInfoPage from './customerinfo'
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const LoginForm = (props) => {
+// this small block is for navigating to customerinfo when login is clicked.
     const navigate = useNavigate();
     const CustomerInfoPage = () => {
     navigate("/rainmanland/calendar/src/pages/customerinfo.js");
   };
+
   return (
     <div>
       <div

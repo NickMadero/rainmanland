@@ -3,7 +3,7 @@ import LoginForm from './loginform'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 const WelcomePage = (props) => {
-
+  // this small block is used navigate to loginform when login is clicked
   const navigate = useNavigate();
   const gotoLogin = () => {
     navigate("/rainmanland/calendar/src/pages/LoginForm.js");
