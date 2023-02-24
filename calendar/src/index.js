@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import LoginForm from './pages/loginform';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import WelcomePage from './pages/welcomePage';
+import LoginForm from './pages/loginform';
 import CustomerInfoPage from './pages/customerinfo';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
       <Routes>
         {/* when adding a new page add here follow the layout below  */}
         <Route path='/' element={<App />}></Route>
+        <Route path="/rainmanland/calendar/src/pages/welcomePage.js" element={<WelcomePage />}></Route>
         <Route path="/rainmanland/calendar/src/pages/loginform.js" element={<LoginForm />}></Route>
         <Route path='/rainmanland/calendar/src/pages/customerinfo.js' element={<CustomerInfoPage />}></Route> 
       </Routes>

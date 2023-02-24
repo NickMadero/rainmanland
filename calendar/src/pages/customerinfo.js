@@ -6,8 +6,8 @@ const CustomerInfoPage = (props) => {
     <div>
       <div
         style={{
-          width: '1200px',
-          height: '672px',
+          width: 'auto',
+          height: 'auto',
           display: 'flex',
           overflow: 'hidden',
           position: 'relative',
@@ -20,9 +20,9 @@ const CustomerInfoPage = (props) => {
       >
         <form
           style={{
-            width: '220px',
+            width: '200px',
             paddingLeft:'5px',
-            height: '320px',
+            height: '300px',
             alignItems: 'center',
             justifyContent: 'flex-start',
             borderColor:"black",
