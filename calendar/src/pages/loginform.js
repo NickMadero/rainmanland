@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 const LoginForm = (props) => {
     const navigate = useNavigate();
-  const CustomerInfoPage = () => {
+    const CustomerInfoPage = () => {
     navigate("/rainmanland/calendar/src/pages/customerinfo.js");
   };
   return (
