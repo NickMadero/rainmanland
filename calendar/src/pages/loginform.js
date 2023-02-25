@@ -75,7 +75,7 @@ const LoginForm = (props) => {
           </span>
           <input
             type="text"
-            placeholder="enter password"
+            placeholder="enter password test mar"
             // required
             style={{
               top: '136px',
