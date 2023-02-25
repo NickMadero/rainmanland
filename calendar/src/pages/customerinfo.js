@@ -20,7 +20,7 @@ const CustomerInfoPage = (props) => {
       >
         <form
           style={{
-            width: '200px',
+            width: '184px',
             paddingLeft:'5px',
             height: '300px',
             alignItems: 'center',

@@ -3,12 +3,16 @@ import LoginForm from './loginform'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 const WelcomePage = (props) => {
-  // this small block is used navigate to loginform when login is clicked
+  
   const navigate = useNavigate();
+  // this small block is used navigate to loginform when login is clicked
   const gotoLogin = () => {
     navigate("/rainmanland/calendar/src/pages/LoginForm.js");
   };
-
+  const gotoSignup = () => {
+    navigate("/rainmanland/calendar/src/pages/signupPage.js");
+  };
+  
   return (
     <div
       style={{
@@ -41,7 +45,8 @@ const WelcomePage = (props) => {
       </h2>
       <button style={{top:'245px',left:'595px',position:'absolute', color:'white',background:'blue', fontSize:"20px"}}
        onClick={gotoLogin}>login</button>
-      <button style={{top:'280px',left:'595px',position:'absolute', color:'white',background:'blue',fontSize:"20px"}}>signup</button>
+      <button style={{top:'280px',left:'595px',position:'absolute', color:'white',background:'blue',fontSize:"20px"}}
+      onClick={gotoSignup}>signup</button>
     </div>
   )
 }

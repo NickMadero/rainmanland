@@ -1,13 +1,19 @@
 import React from 'react'
-import CustomerInfoPage from './customerinfo'
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const LoginForm = (props) => {
-// this small block is for navigating to customerinfo when login is clicked.
-    const navigate = useNavigate();
+ const navigate = useNavigate();
+
+  // used for onclick when user clicks login 
     const CustomerInfoPage = () => {
     navigate("/rainmanland/calendar/src/pages/customerinfo.js");
   };
+
+
+// used for onclick when a user clicks on signup
+  const createAccount = () => {
+    navigate("/rainmanland/calendar/src/pages/signupPage.js")
+  }
 
   return (
     <div>
@@ -57,7 +63,7 @@ const LoginForm = (props) => {
           <input
             type="text"
             placeholder="enter email"
-            // required
+            required
             style={{
               top: '64px',
               position: 'absolute',
@@ -78,7 +84,7 @@ const LoginForm = (props) => {
           <input
             type="text"
             placeholder="enter password"
-            // required
+             required
             style={{
               top: '136px',
               left: '1px',
@@ -108,19 +114,17 @@ const LoginForm = (props) => {
           >
             login
           </button>
-          <a
-            href="https://example.com"
-            target="_blank"
-            rel="noreferrer noopener"
+
+          <button onClick={createAccount }
             style={{
               left: '36px',
               position: 'absolute',
               bottom: '31px',
               color: 'var(--dl-color-primary-100)',
-            }}
-          >
+            }} 
+            >
             create account
-          </a>
+          </button>
         </form>
       </div>
     </div>
