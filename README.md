@@ -18,6 +18,9 @@ A self-scheduling calendar and route-optimization web application for rainmanlan
 * [The nginx Web Server](#the-nginx-web-server)
 * [The node.js Back End](#the-nodejs-back-end)
 * [Testing the Application Locally](#testing-the-application-locally)
+* [Troubleshooting Common Issues](#troubleshooting-common-issues)
+  * [Unable to SSH into EC2 instance](#unable-to-ssh-into-the-ec2-instance)
+  * [Unable to execute npm run build](#unable-to-execute-npm-run-build)
 
 ## Deploying changes to the live site
 We will use pull deployments (very similar to cPanel) to safely update the live site. With a React app hosted using nginx, the process looks something like this:
