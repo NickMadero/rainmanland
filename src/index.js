@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import LoginForm from './pages/loginform';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CustomerInfoPage from './pages/customerinfo';
+import OwnerHomepage from './pages/ownerhomepage'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -15,6 +16,7 @@ root.render(
         <Route path='/' element={<App />}></Route>
         <Route path="/rainmanland/calendar/src/pages/loginform.js" element={<LoginForm />}></Route>
         <Route path='/rainmanland/calendar/src/pages/customerinfo.js' element={<CustomerInfoPage />}></Route> 
+        <Route path='/rainmanland/calendar/src/pages/ownerhomepage.js' element={<OwnerHomePage />}></Route>
       </Routes>
       </Router>
   </React.StrictMode>
