@@ -39,7 +39,7 @@ const OwnerHomePage = (props) => {
                   display: 'flex',
                   flexDirection: 'column',
                   width: '350px',
-                  hei ght: 'auto',
+                  height: 'auto',
                   alignItems: 'center',
                   flex: '0 0 auto',
                 }}
