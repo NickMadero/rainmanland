@@ -1,8 +1,26 @@
 # rainmanland
 A self-scheduling calendar and route-optimization web application for rainmanland.com
 
+## Table of Contents
+
+* [Deploying changes to the live site](#deploying-changes-to-the-live-site)
+* [Getting Started with Create React App](#getting-started-with-create-react-app)
+  * [Available Scripts](#available-scripts)
+  * [Learn More](#learn-more)
+  * [Code Splitting](#code-splitting)
+  * [Analyzing the Bundle Size](#analyzing-the-bundle-size)
+  * [Making a Progressive Web App](#making-a-progressive-web-app)
+  * [Advanced Configuration](#advanced-configuration)
+  * [Deployment](#deployment)
+  * [npm run build fails to minify](#npm-run-build-fails-to-minify)
+* [The MySQL Database](#the-mysql-database)
+  * [Interacting with the Database](#interacting-with-the-database)
+* [The nginx Web Server](#the-nginx-web-server)
+* [The node.js Back End](#the-nodejs-back-end)
+* [Testing the Application Locally](#testing-the-application-locally)
+
 ## Deploying changes to the live site
-We will use pull deployments to safely update the live site. With a React app hosted using nginx, the process looks something like this:
+We will use pull deployments (very similar to cPanel) to safely update the live site. With a React app hosted using nginx, the process looks something like this:
 1. A team member commits new changes on their local machine
 2. They push or submit a pull request to the GitHub repo, depending on the branch you made changes to (*main* requires pull request).
 3. Somebody will ssh into the EC2 instance and pull the changes from GitHub into the repo on the EC2 instance (`~/team-wallaby/rainmanland`)
@@ -84,3 +102,36 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 #### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+## The MySQL Database
+TODO: provide an overview of how the MySQL database works with our environment/app.
+
+### Interacting with the database
+TODO: provide detailed instructions for accessing the database and interacting with it without messing anything up.
+
+## The nginx Web Server
+TODO: provide an overview of what the nginx web server does and how it works
+
+## The node.js Back End
+TODO: provide an overview of node.js and how we use it within the app
+
+## Testing the Application Locally
+TODO: provide detailed instructions for setting up a local environment to test changes to the app in your browser on localhost
+
+## Troubleshooting Common Issues
+
+### Unable to SSH into the EC2 instance
+If you're unable to access the instance via SSH, it could mean that the instance is under a heavy load and can't respond quickly enough.
+
+Try visiting http://100.25.143.132/ in your browser. If the page takes long to load, this is most likely the problem.
+
+The instance is getting bogged down whenever we run the `npm install` command, which is important, so we have reached out to Kim Poolos to ask about a more powerful instance.
+
+### Unable to execute npm run build
+This is often caused by misconfigured files. In theory, this shouldn't happen, but in practice, multiple updates being pushed to git can sometimes mean the config files don't get updated properly along with the source code.
+
+Luckily, it's a fairly easy fix.
+1. Delete the `package-lock.json` file
+2. Execute `npm install` to get a fresh install on the machine
+3. Try `npm run build` again, which should get you a properly-configured `package-lock.json` file
