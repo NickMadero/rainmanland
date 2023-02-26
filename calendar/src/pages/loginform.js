@@ -36,7 +36,7 @@ const LoginForm = (props) => {
             height: '317px',
             display: 'flex',
             top: '62px',
-            left: '286px',
+            left: '500px',
             position: 'absolute',
             borderStyle: 'solid',
             borderColor: 'var(--dl-color-gray-black)',
@@ -96,11 +96,11 @@ const LoginForm = (props) => {
             style={{
               top: '174px',
               position: 'absolute',
-              right: '10px',
-              width: '170px',
+              right: '50px',
+              width: '100px',
               paddingRight: '14px',
               height: '35px',
-              color: 'var(--dl-color-primary-100)',
+              color: 'blue',
             }}
           >
             forgot password?
@@ -108,8 +108,10 @@ const LoginForm = (props) => {
           <button onClick={CustomerInfoPage }
             style={{
               top: '218px',
-              left: '52px',
+              left: '50px',
+              width:'100px',
               position: 'absolute',
+              color: 'blue',
             }}
           >
             login
@@ -117,10 +119,10 @@ const LoginForm = (props) => {
 
           <button onClick={createAccount }
             style={{
-              left: '36px',
+              left: '50px',
               position: 'absolute',
               bottom: '31px',
-              color: 'var(--dl-color-primary-100)',
+              color: 'blue',
             }} 
             >
             create account
