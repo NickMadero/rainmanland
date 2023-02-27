@@ -33,7 +33,7 @@
     margin-right: 2rem;
     justify-content: flex-end;
   }
-  .service-area {
+  .form--service-area {
     float: right;
     width: 424px;
     height: 244px;
@@ -46,7 +46,7 @@
     border-style: double;
     border-width: 1px;
     border-radius: 8px;
-    justify-content: flex-start;
+    justify-content: space-between;
   }
   .confirm {
     color: #d6d3d3;
@@ -95,7 +95,7 @@
   }
   .service-area-wrapper {
     top: 0px;
-    flex: 0 0 auto;
+    /*flex: 0 0 auto;818*/
     left: 1px;
     width: 335px;
     height: 170px;
@@ -105,19 +105,11 @@
     align-items: center;
     flex-direction: column;
   }
-  .radius {
-    left: 0px;
-    bottom: 22px;
-    position: absolute;
-    margin-top: 0px;
-    margin-left: 1rem;
-    margin-bottom: 0px;
-  }
   .address-form {
     width: 335px;
     height: 121px;
     display: flex;
-    position: relative;
+    position: absolute;
     flex-wrap: wrap;
     margin-top: .5rem;
     align-items: center;
@@ -129,9 +121,19 @@
   }
   .biz-address1 {
     top: 0px;
+  }
+  .biz-address1:focus, .biz-address2:focus {
+    border-color: rgb(188, 241, 241);
+    background-color: #b1ddf1;
+  }
+  .biz-address2 {
+    top: 42px;
+  }
+
+  .biz-address1, .biz-address2 {
     left: 0px;
-    float: right;
-    width: 295px;
+    float: left;
+    width: 316px;
     height: 27px;
     position: absolute;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
@@ -140,33 +142,15 @@
     margin-left: 1rem;
     border-style: solid;
     border-width: 1px;
-    padding-left: 1.5rem;
     margin-bottom: .5rem;
     background-color: rgba(214, 202, 209, 0.35);
-  }
-  .biz-address1:focus, .biz-address2:focus {
-    border-color: rgb(188, 241, 241);
-    background-color: #b1ddf1;
-  }
-  .biz-address2 {
-    top: 42px;
-    left: 0px;
-    float: right;
-    width: 316px;
-    height: 27px;
-    position: absolute;
-    box-shadow: 5px 5px 10px 0px #d4d4d4;
-    margin-top: 0px;
-    transition: 0.3s;
-    margin-left: 1rem;
-    margin-bottom: 0px;
-    background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
   }
   
   .input-zip {
     right: -70px;
     width: 96px;
-    bottom: 2px;
+    bottom: -8px;
     height: 27px;
     position: absolute;
     align-self: flex-end;
@@ -176,6 +160,7 @@
     margin-left: 1rem;
     margin-bottom: .5rem;
     background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
   }
   .input-zip:focus {
     background-color: #92AFF9;
@@ -183,31 +168,34 @@
   .input-city {
     left: 0px;
     width: 170px;
-    bottom: 10px;
+    bottom: 0px;
     height: 27px;
     position: absolute;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
-    margin-top: auto;
+    margin-top: 0.5rem;
     margin-left: 1rem;
     margin-right: auto;
     margin-bottom: auto;
     background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
   }
   .input-state {
     left: 197px;
     width: 80px;
-    bottom: 10px;
+    bottom: 0px;
     height: 27px;
     margin-right: .5rem;
     margin-left: .5rem;
     position: absolute;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
   }
   .select-radius {
     left: 0px;
     bottom: 22px;
     height: 27px;
+    bottom: -10px;
     position: absolute;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     margin-top: .5rem;
@@ -221,7 +209,16 @@
   .select-radius:focus {
     background-color: #92AFF9;
   }
-  .bottom-container {
+  
+  .radius {
+    left: 0px;
+    bottom: 17px;
+    position: absolute;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 0px;
+  }
+  /*
     float: right;
     width: 1883px;
     border: 2px dashed rgba(120, 120, 120, 0.4);
@@ -232,7 +229,7 @@
     margin-left: 1rem;
     margin-right: 1rem;
     margin-bottom: 1rem;
-  }
+  }*/
   @media(max-width: 991px) {
     .container {
       box-shadow: 5px 5px 10px 0px #d4d4d4;
@@ -266,7 +263,7 @@
       flex-direction: row;
       justify-content: flex-end;
     }
-    .service-area {
+    .form--service-area {
       width: 442px;
       height: 242px;
       position: relative;
@@ -280,7 +277,7 @@
       flex-direction: column;
       justify-content: center;
     }
-    .text08 {
+    .btn-confirm-text {
       top: 1rem;
       left: 1rem;
       position: absolute;

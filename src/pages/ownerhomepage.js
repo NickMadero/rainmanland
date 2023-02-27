@@ -16,7 +16,7 @@ const OwnerHomePage = (props) => {
         <form
           id="form--service-area"
           name="form"
-          className={styles['service-area']}
+          className={styles['form--service-area']}
         >
           <button
             id="btn--srvc-area"
