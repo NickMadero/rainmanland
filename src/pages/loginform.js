@@ -83,8 +83,13 @@ const LoginForm = (props) => {
           </span>
           <input
             type="text"
+<<<<<<< HEAD:calendar/src/pages/loginform.js
             placeholder="enter password"
              required
+=======
+            placeholder="enter password test mar"
+            // required
+>>>>>>> main:src/pages/loginform.js
             style={{
               top: '136px',
               left: '1px',
