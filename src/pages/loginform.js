@@ -6,13 +6,13 @@ const LoginForm = (props) => {
 
   // used for onclick when user clicks login 
     const CustomerInfoPage = () => {
-    navigate("/rainmanland/calendar/src/pages/customerinfo.js");
+    navigate("/rainmanland/src/pages/customerinfo.js");
   };
 
 
 // used for onclick when a user clicks on signup
   const createAccount = () => {
-    navigate("/rainmanland/calendar/src/pages/signupPage.js")
+    navigate("/rainmanland/src/pages/signupPage.js")
   }
 
   return (
@@ -83,13 +83,8 @@ const LoginForm = (props) => {
           </span>
           <input
             type="text"
-<<<<<<< HEAD:calendar/src/pages/loginform.js
             placeholder="enter password"
              required
-=======
-            placeholder="enter password test mar"
-            // required
->>>>>>> main:src/pages/loginform.js
             style={{
               top: '136px',
               left: '1px',

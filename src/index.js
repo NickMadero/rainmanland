@@ -19,10 +19,10 @@ root.render(
       <Routes>
         {/* when adding a new page add here follow the layout below  */}
         <Route path='/' element={<App />}></Route>
-        <Route path="/rainmanland/calendar/src/pages/welcomePage.js" element={<WelcomePage />}></Route>
-        <Route path="/rainmanland/calendar/src/pages/loginform.js" element={<LoginForm />}></Route>
-        <Route path="/rainmanland/calendar/src/pages/signupPage.js" element={<Signup />}></Route>
-        <Route path='/rainmanland/calendar/src/pages/customerinfo.js' element={<CustomerInfoPage />}></Route> 
+        <Route path="/rainmanland/src/pages/welcomePage.js" element={<WelcomePage />}></Route>
+        <Route path="/rainmanland/src/pages/loginform.js" element={<LoginForm />}></Route>
+        <Route path="/rainmanland/src/pages/signupPage.js" element={<Signup />}></Route>
+        <Route path='/rainmanland/src/pages/customerinfo.js' element={<CustomerInfoPage />}></Route> 
       </Routes>
       </Router>
   </React.StrictMode>
