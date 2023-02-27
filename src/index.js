@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import LoginForm from './pages/loginform';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CustomerInfoPage from './pages/customerinfo';
-import OwnerHomepage from './pages/ownerhomepage'
+import OwnerHomePage from './pages/ownerhomepage'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

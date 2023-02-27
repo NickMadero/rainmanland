@@ -23,15 +23,15 @@ const OwnerHomePage = (props) => {
             name="btn--srvc-area"
             className={` ${styles['confirm']} ${projectStyles['button']} `}
           >
-            <span id="btn-confirm-text" className={styles['text04']}>
+            <span id="btn-confirm-text" className={styles['btn-confirm-text']}>
               <span>Confirm</span>
               <br></br>
               <br></br>
             </span>
           </button>
-          <h3 id="heading--srvc-area" className={styles['text08']}>
+          <h3 id="heading--srvc-area" className={styles['heading-srvc-area']}>
             <span>Business Address &amp; Service A</span>
-            <span className={styles['text10']}>rea</span>
+            <span className={styles['heading--srvc-area']}>rea</span>
           </h3>
           <div className={styles['service-area-wrapper']}>
             <h4 className={styles['radius']}>
@@ -61,25 +61,24 @@ const OwnerHomePage = (props) => {
                 name="zip code"
                 value="ZIP"
                 placeholder="placeholder"
-                className={` ${styles['textinput']} ${projectStyles['input']} `}
+                className={` ${styles['input-zip']} ${projectStyles['input']} `}
               />
               <input
                 type="text"
                 id="input--city"
                 name="input city"
                 placeholder="City"
-                className={` ${styles['textinput1']} ${projectStyles['input']} `}
+                className={` ${styles['input-city']} ${projectStyles['input']} `}
               />
               <input
                 type="text"
                 id="input--state"
-                name="input-"
+                name="input-state"
                 placeholder="State"
-                className={` ${styles['textinput2']} ${projectStyles['input']} `}
+                className={` ${styles['input-state']} ${projectStyles['input']} `}
               />
             </form>
-          </div>
-          <select
+            <select
             id="slct--radius"
             name="select-radius"
             className={styles['select-radius']}
@@ -90,6 +89,7 @@ const OwnerHomePage = (props) => {
             <option value="20">20 miles</option>
             <option value="25">25 miles</option>
           </select>
+          </div>
         </form>
       </div>
       <div id="container--bottom" className={styles['bottom-container']}></div>
