@@ -10,12 +10,13 @@ import {
   useNavigate,
   Redirect,
 } from "react-router-dom";
-import LoginForm from './pages/loginform';
+import WelcomePage from './pages/welcomePage';
 
 function App() {
   return (
     <div >
-        <LoginForm></LoginForm>
+      
+       <WelcomePage />
       
     </div>
    

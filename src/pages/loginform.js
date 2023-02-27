@@ -1,12 +1,20 @@
 import React from 'react'
-import CustomerInfoPage from './customerinfo'
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const LoginForm = (props) => {
-    const navigate = useNavigate();
-  const CustomerInfoPage = () => {
+ const navigate = useNavigate();
+
+  // used for onclick when user clicks login 
+    const CustomerInfoPage = () => {
     navigate("/rainmanland/calendar/src/pages/customerinfo.js");
   };
+
+
+// used for onclick when a user clicks on signup
+  const createAccount = () => {
+    navigate("/rainmanland/calendar/src/pages/signupPage.js")
+  }
+
   return (
     <div>
       <div
@@ -28,7 +36,7 @@ const LoginForm = (props) => {
             height: '317px',
             display: 'flex',
             top: '62px',
-            left: '286px',
+            left: '500px',
             position: 'absolute',
             borderStyle: 'solid',
             borderColor: 'var(--dl-color-gray-black)',
@@ -55,7 +63,7 @@ const LoginForm = (props) => {
           <input
             type="text"
             placeholder="enter email"
-            // required
+            required
             style={{
               top: '64px',
               position: 'absolute',
@@ -75,8 +83,13 @@ const LoginForm = (props) => {
           </span>
           <input
             type="text"
+<<<<<<< HEAD:calendar/src/pages/loginform.js
+            placeholder="enter password"
+             required
+=======
             placeholder="enter password test mar"
             // required
+>>>>>>> main:src/pages/loginform.js
             style={{
               top: '136px',
               left: '1px',
@@ -88,11 +101,11 @@ const LoginForm = (props) => {
             style={{
               top: '174px',
               position: 'absolute',
-              right: '10px',
-              width: '170px',
+              right: '50px',
+              width: '100px',
               paddingRight: '14px',
               height: '35px',
-              color: 'var(--dl-color-primary-100)',
+              color: 'blue',
             }}
           >
             forgot password?
@@ -100,25 +113,25 @@ const LoginForm = (props) => {
           <button onClick={CustomerInfoPage }
             style={{
               top: '218px',
-              left: '52px',
+              left: '50px',
+              width:'100px',
               position: 'absolute',
+              color: 'blue',
             }}
           >
             login
           </button>
-          <a
-            href="https://example.com"
-            target="_blank"
-            rel="noreferrer noopener"
+
+          <button onClick={createAccount }
             style={{
-              left: '36px',
+              left: '50px',
               position: 'absolute',
               bottom: '31px',
-              color: 'var(--dl-color-primary-100)',
-            }}
-          >
+              color: 'blue',
+            }} 
+            >
             create account
-          </a>
+          </button>
         </form>
       </div>
     </div>
