@@ -1,7 +1,14 @@
 import React from 'react'
+import {useNavigate } from 'react-router-dom'
+
 
 
 const CustomerInfoPage = (props) => {
+    const navigate = useNavigate();
+    const gotoCalendar = () => {
+        navigate("/rainmanland/src/pages/calendar.js");
+    };
+
   return (
     <div>
       <div
@@ -40,7 +47,7 @@ const CustomerInfoPage = (props) => {
           <input type="text" placeholder="# of zones" required  min= "0"/>
           <span>what is your address?</span>
           <input type="text" placeholder="enter address" required />
-          <button style={{margin:'30px', color: 'blue',}}>book a new  appointment</button>
+          <button style={{margin:'30px', color: 'blue',}} onClick={gotoCalendar}>book a new  appointment</button>
         </form>
       </div>
     </div>

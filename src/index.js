@@ -10,6 +10,7 @@ import WelcomePage from './pages/welcomePage';
 import LoginForm from './pages/loginform';
 import CustomerInfoPage from './pages/customerinfo';
 import Signup from './pages/signupPage';
+import Calendar from "./pages/calendar";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -22,7 +23,8 @@ root.render(
         <Route path="/rainmanland/src/pages/welcomePage.js" element={<WelcomePage />}></Route>
         <Route path="/rainmanland/src/pages/loginform.js" element={<LoginForm />}></Route>
         <Route path="/rainmanland/src/pages/signupPage.js" element={<Signup />}></Route>
-        <Route path='/rainmanland/src/pages/customerinfo.js' element={<CustomerInfoPage />}></Route> 
+        <Route path='/rainmanland/src/pages/customerinfo.js' element={<CustomerInfoPage />}></Route>
+        <Route path='/rainmanland/src/pages/calendar.js' element={<Calendar />}></Route>
       </Routes>
       </Router>
   </React.StrictMode>
