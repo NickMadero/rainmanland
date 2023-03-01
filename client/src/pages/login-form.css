@@ -1,0 +1,82 @@
+.login-form-login-form {
+    height: 394px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    align-items: center;
+    flex-shrink: 0;
+    border-color: transparent;
+    justify-content: flex-start;
+
+}
+.login-form-form {
+    top: 62px;
+    left: 286px;
+    width: 200px;
+    height: 317px;
+    display: flex;
+    position: absolute;
+    border-color: black;
+    border-style: solid;
+}
+.login-form-text {
+    top: 13px;
+    left: 81px;
+    position: absolute;
+}
+.login-form-text1 {
+    top: 44px;
+    left: 5px;
+    position: absolute;
+}
+.login-form-textinput {
+    top: 64px;
+    left: 3px;
+    width: 183px;
+    position: absolute;
+}
+.login-form-text2 {
+    top: 113px;
+    left: 4px;
+    position: absolute;
+}
+.login-form-textinput1 {
+    top: 136px;
+    left: 1px;
+    width: 187px;
+    position: absolute;
+}
+.login-form-button {
+    top: 174px;
+    color: blue;
+    right: 10px;
+    width: 170px;
+    height: 35px;
+    position: absolute;
+    padding-right: 14px;
+}
+.login-form-button1 {
+    top: 218px;
+    left: 52px;
+    position: absolute;
+}
+.login-form-link {
+    left: 36px;
+    color: blue;
+    bottom: 31px;
+    position: absolute;
+}
+@media(max-width: 1200px) {
+    .login-form-button {
+        top: 183px;
+        left: 31px;
+        width: 115px;
+        height: 33px;
+        font-size: 11px;
+        padding-right: 0px;
+    }
+    .login-form-button1 {
+        top: 226px;
+        left: 52px;
+    }
+}
