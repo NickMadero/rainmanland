@@ -9,10 +9,10 @@ const OwnerHomePage = (props) => {
     <div className={styles['container']}>
       <h1 className={styles['text']}>
         <span>Business Settings</span>
-        <br></br>
-        <br></br>
       </h1>
+      {/** Container for Service Area and Controller Pricing settings */}
       <div id="container--top" className={styles['top-container']}>
+        {/*BEGIN SERVICE AREA SETTINGS*/}
         <form
           id="form--service-area"
           name="form"
@@ -25,18 +25,14 @@ const OwnerHomePage = (props) => {
           >
             <span id="btn-confirm-text" className={styles['btn-confirm-text']}>
               <span>Confirm</span>
-              <br></br>
-              <br></br>
             </span>
           </button>
           <h3 id="heading--srvc-area" className={styles['heading-srvc-area']}>
-            <span>Business Address &amp; Service A</span>
-            <span className={styles['heading--srvc-area']}>rea</span>
+            <span className={styles['heading--srvc-area']}>Business Address & Service Area</span>
           </h3>
           <div className={styles['service-area-wrapper']}>
             <h4 className={styles['radius']}>
               <span>Radius:</span>
-              <br></br>
             </h4>
             <form
               id="input--business-address"
@@ -91,7 +87,19 @@ const OwnerHomePage = (props) => {
           </select>
           </div>
         </form>
+        {/** END SERVICE AREA SETTINGS */}
+        {/**Form for sprinkler controller pricing info */}
+        <form
+          id="form--controllers"
+          name="form"
+          className={styles['form--controllers']}
+          >
+            <h3 id='heading--controllers' className={styles['heading--controllers']}>
+              <span className={styles['heading--controllers']}>Controller Pricing</span>
+            </h3>
+        </form>
       </div>
+      {/** Container for time tracking */}
       <div id="container--bottom" className={styles['bottom-container']}></div>
     </div>
   )
