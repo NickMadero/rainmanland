@@ -168,7 +168,17 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 ## Interacting with the database using adminer
-TODO: provide detailed instructions for accessing the database and interacting with it without messing anything up.
+The adminer service that starts when we run the compose command listens on port 8000, but for the time being, we're leaving that port blocked. To access adminer, you need to set up port forwarding so `localhost:8000` connects you to the EC2 instance through an ssh tunnel. It's not as hard as it sounds.
+
+1. install SecureCRT if you don't have it already. The install and license file can be found on the Rowan site.
+2. start a session to ssh into the EC2 instance
+3. right-click on the session and click "Properties"
+4. select port-forwarding
+5. enter "8000" for client and remote
+6. save the settings and minimize the SecureCRT window (but don't close the connection)
+7. in the browser, `localhost:8000` should now direct you to the adminer dashboard
+8. enter the username and password; you don't have to specify a database
+9. be careful!!
 
 ## The nginx Web Server
 TODO: provide an overview of what the nginx web server does and how it works
