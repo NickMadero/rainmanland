@@ -1,6 +1,6 @@
 /*src/pages/ownerhomepage.module.css*/
 
-/* Styling for */
+
 .container {
     width: 100%;
     display: flex;
@@ -34,6 +34,7 @@
     margin-right: 2rem;
     justify-content: flex-end;
   }
+   /* Begin Styling for Service Area form */
   .form--service-area {
     float: right;
     width: 424px;
@@ -305,6 +306,7 @@
       padding-bottom: 1rem;
       background-color: #cfe5f5;
     }
+  /* End Styling for Service Area Form */
     .bottom-container {
       right: -3px;
       width: 961px;
