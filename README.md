@@ -90,14 +90,11 @@ The application also provides a GUI for inspecting and working with the MySQL se
 We will use pull deployments (very similar to cPanel) to safely update the live site. With a React app hosted using nginx, the process looks something like this:
 1. A team member commits new changes on their local machine
 2. They push or submit a pull request to the GitHub repo, depending on the branch you made changes to (*main* requires pull request).
-3. Somebody will ssh into the EC2 instance and pull the changes from GitHub into the repo on the EC2 instance (`~/team-wallaby/rainmanland`)
-4. Inside the repo on the EC2 instance, use the command `npm run build` to compile the app into a build folder
-5. Copy the contents from `build` into `/var/www/rainmanland/html`
-6. Test all the nginx config files with `nginx -t`
-7. Restart the nginx server with `sudo systemctl restart nginx`
-8. The changes should now be live.
+3. Somebody will ssh into the EC2 instance and pull the changes from GitHub into the repo on the EC2 instance (`~/deploy/rainmanland`). *Note: you can deploy any branch as long as it has the Docker components set up correctly*
+4. Inside the repo on the EC2 instance, use the command `sudo docker-compose up --build` to start the application
+5. The changes should now be live.
 
-**Note**: this doesn't need to be done very often. To check how changes look, we will usually just run `npm start` on our local machines to take a look in the browser.
+**Note**: this doesn't need to be done very often. To check how changes will look, we can always use the exact same `sudo docker-compose up --build` command on our local machines to take a look in the browser.
 
 ## Getting Started with Create React App
 
