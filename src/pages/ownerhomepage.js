@@ -18,22 +18,10 @@ const OwnerHomePage = (props) => {
           name="form"
           className={styles['form--service-area']}
         >
-          <button
-            id="btn--srvc-area"
-            name="btn--srvc-area"
-            className={` ${styles['confirm']} ${projectStyles['button']} `}
-          >
-            <span id="btn-confirm-text" className={styles['btn-confirm-text']}>
-              <span>Confirm</span>
-            </span>
-          </button>
-          <h3 id="heading--srvc-area" className={styles['heading-srvc-area']}>
-            <span className={styles['heading--srvc-area']}>Business Address & Service Area</span>
-          </h3>
           <div className={styles['service-area-wrapper']}>
-            <h4 className={styles['radius']}>
-              <span>Radius:</span>
-            </h4>
+            <h3 id="heading--srvc-area" className={styles['heading-srvc-area']}>
+              <span className={styles['heading--srvc-area']}>Business Address & Service Area</span>
+            </h3>
             <form
               id="input--business-address"
               name="business-street-address"
@@ -53,14 +41,6 @@ const OwnerHomePage = (props) => {
               />
               <input
                 type="text"
-                id="input--zip-code"
-                name="zip code"
-                value="ZIP"
-                placeholder="placeholder"
-                className={` ${styles['input-zip']} ${projectStyles['input']} `}
-              />
-              <input
-                type="text"
                 id="input--city"
                 name="input city"
                 placeholder="City"
@@ -73,31 +53,45 @@ const OwnerHomePage = (props) => {
                 placeholder="State"
                 className={` ${styles['input-state']} ${projectStyles['input']} `}
               />
-            </form>
-            <select
-            id="slct--radius"
-            name="select-radius"
-            className={styles['select-radius']}
-          >
-            <option value="5">5 miles</option>
-            <option value="10">10 miles</option>
-            <option value="15">15 miles</option>
-            <option value="20">20 miles</option>
-            <option value="25">25 miles</option>
+              <input
+                type="text"
+                id="input--zip-code"
+                name="zip code"
+                value="ZIP"
+                placeholder="ZIP"
+                className={` ${styles['input-zip']} ${projectStyles['input']} `}
+              />
+              <h4 className={styles['radius']}>
+                <span>Radius:</span>
+              </h4>
+              <select
+                id="slct--radius"
+                name="select-radius"
+                className={styles['select-radius']}
+              >
+                <option value="5">5 miles</option>
+                <option value="10">10 miles</option>
+                <option value="15">15 miles</option>
+                <option value="20">20 miles</option>
+                <option value="25">25 miles</option>
           </select>
+          <button
+            id="btn--srvc-area"
+            name="btn--srvc-area"
+            className={` ${styles['confirm']} ${projectStyles['button']} `}
+          >
+            <span id="btn-confirm-text" className={styles['btn-confirm-text']}>
+              <span>Confirm</span>
+            </span>
+          </button>
+            </form>
+            
           </div>
+          
         </form>
         {/** END SERVICE AREA SETTINGS */}
         {/**Form for sprinkler controller pricing info */}
-        <form
-          id="form--controllers"
-          name="form"
-          className={styles['form--controllers']}
-          >
-            <h3 id='heading--controllers' className={styles['heading--controllers']}>
-              <span className={styles['heading--controllers']}>Controller Pricing</span>
-            </h3>
-        </form>
+        
       </div>
       {/** Container for time tracking */}
       <div id="container--bottom" className={styles['bottom-container']}></div>
