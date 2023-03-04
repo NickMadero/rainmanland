@@ -39,7 +39,7 @@ function CustomerInfoPage(props) {
                     <input type="text" placeholder="# of zones" required  min= "0"/>
                     <span>what is your address?</span>
                     <input type="text" placeholder="enter address" required />
-                    <button style={{margin:'30px', color: 'blue',}}>book a new  appointment</button>
+                    <button onClick={props.onGoToCalendarButtonClick} style={{margin:'30px', color: 'blue',}}>book a new  appointment</button>
                 </form>
             </div>
         </div>

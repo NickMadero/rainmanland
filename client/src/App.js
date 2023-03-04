@@ -18,7 +18,7 @@ import Calendar from "./components/Calendar";
 // database. This is basically the core of the front end.
 class App extends Component {
     constructor(props) {
-        super(props),
+        super(props)
             this.state = {
                 // state attribute that controls which page is rendered
                 currentPage: 'LandingPage',
