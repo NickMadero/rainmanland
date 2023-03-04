@@ -10,6 +10,8 @@ import { Button, Container, Card, Row } from 'react-bootstrap'
 // IMPORTANT NOTE: filename and class name must start with a capital letter to be
 // 				   imported! I was stuck on this for two hours.
 import LandingPage from './components/LandingPage.jsx';
+import CustomerInfoPage from "./components/CustomerInfoPage";
+import Calendar from "./components/Calendar";
 
 // The App class handles the components that appear on the front end and sends requests
 // to the node.js backend (index.js) each time the front end needs to interact with the
@@ -18,11 +20,32 @@ class App extends Component {
     constructor(props) {
         super(props),
             this.state = {
+                // state attribute that controls which page is rendered
+                currentPage: 'LandingPage',
+
+                // state attributes that handle what information the user can see
+                userIsEmployee: false,
+                userIsOwner: false,
+
+                // other state attributes
                 setSomeField1: '',
                 setSomeField2: '',
                 fetchData: [],
                 someFieldUpdate: ''
-            }
+            };
+
+            // Binds methods to App class so it re-renders each time they are called
+            this.handleSetApptButtonClick = this.handleSetApptButtonClick.bind(this);
+            this.handleGoToCalendarButtonClick = this.handleGoToCalendarButtonClick.bind(this);
+    }
+    // changes "currentPage" state attribute to CustomerInfoPage, which renders the new page
+    handleSetApptButtonClick() {
+        this.setState({currentPage: 'CustomerInfoPage'});
+    }
+
+    // changes "currentPage" state attribute to Calendar
+    handleGoToCalendarButtonClick() {
+        this.setState({currentPage: 'Calendar'});
     }
 
     handleChange = (event) => {
@@ -31,7 +54,7 @@ class App extends Component {
         this.setState({
             [nam]: val
         })
-    }
+    };
 
     handleChange2 = (event) => {
         this.setState({
@@ -69,9 +92,20 @@ class App extends Component {
 
 	// loads components from the landing_page.jsx file and renders them in the browser
     render() {
-		return (
-			<LandingPage />
-		);
+
+        // a map containing the imported pages from the components directory
+        const pages = {
+            LandingPage: <LandingPage onBookButtonClick={this.handleSetApptButtonClick}/>,
+            CustomerInfoPage: <CustomerInfoPage onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>,
+            Calendar: <Calendar />
+        };
+
+        // the render method will display whichever page is set as this.state.currentPage
+        return (
+            <div>
+                {pages[this.state.currentPage]}
+            </div>
+        );
 	}
 }
 
