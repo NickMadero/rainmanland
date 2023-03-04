@@ -27,14 +27,14 @@ services:
     restart: always
     build:
       dockerfile: Dockerfile
-      context: "./nginx"
+      context: ./nginx
     ports:
       - "80:80"
 
   api:
     build:
       dockerfile: Dockerfile
-      context: "./server"
+      context: ./server
     depends_on:
       - mysql_db
     volumes:
@@ -50,10 +50,10 @@ services:
       - CHOKIDAR_USEPOLLING=true
     build:
       dockerfile: Dockerfile
-      context: "./client"
+      context: ./client
     volumes:
       - /app/node_modules
-      - ./client-old:/app
+      - ./client:/app
 
   adminer:
       image: adminer:latest
