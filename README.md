@@ -42,8 +42,9 @@ rainmanland
 │   └── src
 │       ├── App.css
 │       ├── App.js
-│       ├── components
-│       └── index.js
+│       ├── index.js
+│       ├── calendar_behavior
+│       └── components
 ├── nginx
 │   ├── Dockerfile
 │   └── default.conf
@@ -66,6 +67,7 @@ The front end lives in the **client** directory shown above. It is programmed in
   * **App.js** is the "brains" of the front end, and mostly consists of React code that handles the way components appear and update on the site.
   * **index.js** is the file that passes React components from **App.js** to **index.html**
   * The **components** directory contains small sections of React code that render individual components, like a specific form, group of text and buttons, or even a whole page (if it's simple). **App.js** imports these components to keep the code clean and organized rather than defining all the components directly in the file. This makes it easier to change or swap out components without breaking the whole site.
+  * The **calendar_behavior** directory contains frontend scripts to handle calendar behavior. It will probably get complicated, hence the separate subfolder.
 
 ### The Web Server (nginx)
 The nginx web server is responsible for listening on ports 80 and 443, then serving content to users when they visit our site. It lives in the **nginx** directory shown above.
