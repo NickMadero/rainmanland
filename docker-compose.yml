@@ -27,7 +27,7 @@ services:
     restart: always
     build:
       dockerfile: Dockerfile
-      context: ./nginx
+      context: "./nginx"
     ports:
       - "80:80"
 
@@ -50,7 +50,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     build:
       dockerfile: Dockerfile
-      context: "client"
+      context: "./client"
     volumes:
       - /app/node_modules
       - ./client-old:/app
