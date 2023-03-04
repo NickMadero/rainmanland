@@ -10,9 +10,9 @@ const db = mysql.createPool({
 })
 
 //enable CORS security headers
-//app.use(cors())
 
 const app = express();
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,8 +29,8 @@ app.get('/get', (req, res) => {
 
 // add a new user to the database
 app.post("/insert", (req, res) => {
-    const username = req.body.setUserName;
-    const password   = req.body.setPassword;
+    const username = req.body.username;
+    const password   = req.body.password;
     const InsertQuery = "INSERT INTO user_test (user_name, password_name) VALUES (?, ?)";
     db.query(InsertQuery, [username, password], (err, result) => {
         console.log(result)
