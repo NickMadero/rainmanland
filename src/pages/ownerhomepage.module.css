@@ -19,13 +19,11 @@
   }
   .top-container {
     top: 96px;
-    float: right;
     right: 0px;
     width: auto;
     height: 351px;
     margin: auto;
     display: flex;
-    position: absolute;
     align-items: center;
     margin-left: 2rem;
     border-color: #f50f13;
@@ -33,15 +31,15 @@
     border-width: 1px;
     margin-right: 2rem;
     justify-content: flex-end;
+    box-sizing: border-box;
+    position: absolute;
   }
    /* Begin Styling for Service Area form */
   .form--service-area {
-    float: right;
-    width: 424px;
-    height: 244px;
+    width: auto;
+    height: 87%;
     margin: 48px;
-    display: flex;
-    position: absolute;
+    /*position: absolute;*/
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     align-items: center;
     border-color: #0e0100;
@@ -49,21 +47,16 @@
     border-width: 1px;
     border-radius: 8px;
     justify-content: space-between;
+    box-sizing: border-box;
   }
   .confirm {
     color: #d6d3d3;
-    right: 0px;
     width: 135px;
-    bottom: 13px;
-    height: 36px;
-    display: flex;
-    position: absolute;
+    margin-left: 5rem;
     box-shadow: 5px 5px 10px 0px #8f8f90;
-    margin: 8px;
     transition: 0.3s;
     align-items: center;
     border: none;
-    flex-direction: row;
     justify-content: center;
     background-color: rgba(38, 122, 56, 0.9);
     border-radius: 4px;
@@ -90,54 +83,41 @@
   }
   .heading-srvc-area {
     top: -5px;
-    left: 1rem;
-    float: right;
-    position: absolute;
+    margin-left: 1rem;
     font-family: Arial;
   }
   .service-area-wrapper {
-    top: 0px;
-    /*flex: 0 0 auto;818*/
     left: 1px;
-    width: 335px;
-    height: 170px;
-    display: flex;
-    position: absolute;
-    margin-top: 2rem;
+    width: 500px;
+    height: auto;
+    flex-wrap: wrap;
     align-items: center;
     flex-direction: column;
+    box-sizing: border-box;
   }
   .address-form {
-    width: 335px;
+    width: auto;
     height: 121px;
-    display: flex;
-    position: absolute;
-    flex-wrap: wrap;
-    margin-top: .5rem;
     align-items: center;
     margin-left: .5rem;
     margin-right: .5rem;
     margin-bottom: 0px;
     padding-bottom: 2px;
     justify-content: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
   }
-  .biz-address1 {
-    top: 0px;
-  }
+  
   .biz-address1:focus, .biz-address2:focus {
     border-color: rgb(188, 241, 241);
     background-color: #b1ddf1;
   }
-  .biz-address2 {
-    top: 42px;
-  }
+ 
 
   .biz-address1, .biz-address2 {
     left: 0px;
-    float: left;
     width: 316px;
     height: 27px;
-    position: absolute;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     margin-top: .5rem;
     transition: 0.3s;
@@ -150,16 +130,12 @@
   }
   
   .input-zip {
-    right: -70px;
     width: 96px;
-    bottom: -8px;
     height: 27px;
-    position: absolute;
-    align-self: flex-end;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     margin-top: .5rem;
     transition: 0.3s;
-    margin-left: 1rem;
+    margin-left: .5rem;
     margin-bottom: .5rem;
     background-color: rgba(214, 202, 209, 0.35);
     border-radius: 4px;
@@ -172,7 +148,6 @@
     width: 170px;
     bottom: 0px;
     height: 27px;
-    position: absolute;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     margin-top: 0.5rem;
     margin-left: 1rem;
@@ -188,7 +163,6 @@
     height: 27px;
     margin-right: .5rem;
     margin-left: .5rem;
-    position: absolute;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     background-color: rgba(214, 202, 209, 0.35);
     border-radius: 4px;
@@ -198,7 +172,6 @@
     bottom: 22px;
     height: 27px;
     bottom: -10px;
-    position: absolute;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     margin-top: .5rem;
     transition: 0.3s;
@@ -215,12 +188,20 @@
   .radius {
     left: 0px;
     bottom: 17px;
-    position: absolute;
     margin-top: 1rem;
     margin-left: 1rem;
     margin-bottom: 0px;
   }
-  /*
+
+/* Controller form Styling 
+.form--controllers{
+  display: flex;
+  flex-wrap: wrap;
+  float: left;
+
+
+}*/
+/*
     float: right;
     width: 1883px;
     border: 2px dashed rgba(120, 120, 120, 0.4);
