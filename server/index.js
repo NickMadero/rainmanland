@@ -80,7 +80,8 @@ app.get('/get-jobs/:crewNum', (req, res) => {
     // TODO: make this query actually do its job - this is just for the demo again
     const GetJobsQuery = "SELECT * FROM appointments";
     db.query(GetJobsQuery, (err, result) => {
-        if (err) console.log(err)
+        if (err) console.log(err);
+        res.send(result);
     })
 })
 

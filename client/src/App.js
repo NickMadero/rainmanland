@@ -66,35 +66,33 @@ class App extends Component {
 
     // When the user clicks the "Log in" button on EmployeeSignInPage, this method validates the credentials and brings
     // up the appropriate dashboard for the employee
-    handleEmpLoginButtonClick(email, password) {
-        const userInfo = this.getUserInfo(email, password)  // returns either user fields from user table or false if bad credentials
-        if (!userInfo) {
-            this.setState({currentPage: 'EmployeeSignInPage'});
-            alert("Invalid login. Please try again or contact the business owner for credentials.")
-            return;
-        }
-        else {
-            this.setState({userInfo: userInfo})
-        }
-
-        if (this.state.userInfo.user_type === "owner") {
-            this.setState({currentPage: 'OwnerDashboard'});
-        }
-        else if (this.state.userInfo.user_type === "employee") {
-            this.getJobsTodayForCrew(this.state.userInfo.crew_number)
-            this.setState({currentPage: 'EmployeeDashboard'});
-        }
-    }
-
-    // checks sign-in credentials against the MySQL database
-    getUserInfo(email, pw) {
+    handleEmpLoginButtonClick(email, pw) {
         axios.post("/api/get-user-info", {email: email, password: pw})
             .then((response) => {
-                if (response.data && response.data.length === 1) {
-                    return response.data[0];
+                if (response.data && response.data.length > 0) {
+                    this.setState({
+                        userInfo: response.data[0]
+                    })
+                }
+                else {
+                    this.setState({
+                        userInfo: false,
+                        CurrentPage: 'EmployeeSignInPage'
+                    });
+                    alert("Invalid login. Please try again or contact the business owner for credentials.")
+                    return;
+                }
+                if (this.state.userInfo.user_type === "owner") {
+                    console.log("user is owner")
+                    this.setState({currentPage: 'OwnerDashboard'});
+                }
+                else if (this.state.userInfo.user_type === "employee") {
+                    console.log("user is employee")
+                    this.getJobsTodayForCrew(this.state.userInfo.crew_number)
+                    this.setState({currentPage: 'EmployeeDashboard'});
                 }
             })
-        return false;
+
     }
 
     // gets a list of today's jobs for the specified crew from the database

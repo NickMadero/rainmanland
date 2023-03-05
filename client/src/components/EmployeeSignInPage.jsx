@@ -10,8 +10,7 @@ class EmployeeSignInPage extends React.Component {
         // Initialize the component state
         this.state = {
             email: '',
-            password: '',
-            showWarning: props.showCredentialWarning
+            password: ''
         };
     }
 
