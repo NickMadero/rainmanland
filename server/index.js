@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
     res.send('Hello world')
 });
 
-// retrieve something from the database
+// [TEMPLATE] retrieve something from the database
 app.get('/get-something', (req, res) => {
     const SelectQuery = " SELECT * FROM table_name";
     db.query(SelectQuery, (err, result) => {
@@ -60,6 +60,17 @@ app.put('/update/:someId', (req, res) => {
     const UpdateQuery = "UPDATE table_name SET field_name = ? WHERE id = ?";
     db.query(UpdateQuery, [someField, someId], (err, result) => {
         if (err) console.log(err)
+    })
+})
+
+// Check credentials against db and return user info if credentials are good
+// TODO: make this secure. this is a placeholder for the demo
+app.get('/get-user-info', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const SelectQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
+    db.query(SelectQuery, [email, password], (err, result) => {
+        res.send(result)
     })
 })
 

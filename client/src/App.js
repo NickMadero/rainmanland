@@ -23,9 +23,11 @@ class App extends Component {
                 // state attribute that controls which page is rendered
                 currentPage: 'LandingPage',
 
-                // state attributes that handle what information the user can see
-                userIsEmployee: false,
-                userIsOwner: false,
+                // state attribute that controls user alerts
+                showCredentialWarning: false,
+
+                // state attribute that remembers the user's info
+                userInfo: false,
 
                 // other state attributes
                 setSomeField1: '',
@@ -37,15 +39,60 @@ class App extends Component {
             // Binds methods to App class so it re-renders each time they are called
             this.handleSetApptButtonClick = this.handleSetApptButtonClick.bind(this);
             this.handleGoToCalendarButtonClick = this.handleGoToCalendarButtonClick.bind(this);
+            this.handleEmployeeSignInButtonClick = this.handleEmployeeSignInButtonClick.bind(this);
+            this.handleEmpLoginButtonClick = this.handleEmpLoginButtonClick.bind(this);
     }
-    // changes "currentPage" state attribute to CustomerInfoPage, which renders the new page
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // The following handlers change the "currentPage" state attribute to a new page from the "components" directory,
+    // which triggers one of the bindings right up there^^^, which calls App.render() to render that page.
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // When the user clicks the "Book now" button on the landing page, this method brings up CustomerInfoPage
     handleSetApptButtonClick() {
         this.setState({currentPage: 'CustomerInfoPage'});
     }
 
-    // changes "currentPage" state attribute to Calendar
+    // When the user clicks the "go to calendar button" on CustomerInfoPage, this method brings up the Calendar page
     handleGoToCalendarButtonClick() {
         this.setState({currentPage: 'Calendar'});
+    }
+
+    // When the user clicks the "Employee sign in" button on LandingPage, this method brings up EmployeeSignInPage
+    handleEmployeeSignInButtonClick() {
+        this.setState({currentPage: 'EmployeeSignInPage'});
+    }
+
+    // When the user clicks the "Log in" button on EmployeeSignInPage, this method validates the credentials and brings
+    // up the appropriate dashboard for the employee
+    handleEmpLoginButtonClick(email, password) {
+        const userInfo = this.getUserInfo(email, password)  // returns either user fields from user table or false if bad credentials
+        if (!userInfo) {
+            this.setState({currentPage: 'EmployeeSignInPage', showCredentialWarning: true});
+            return;
+        }
+        else {
+            this.setState({userInfo: userInfo, showCredentialWarning: false})
+        }
+
+        if (this.state.userInfo.user_type === "owner") {
+            this.setState({currentPage: 'OwnerDashboard'});
+        }
+        else if (userInfo.user_type === "employee") {
+            this.setState({currentPage: 'EmployeeDashboard'});
+        }
+    }
+
+    // checks sign-in credentials against the MySQL database
+    getUserInfo(email, pw) {
+        axios.get("/api/get-user-info", {email: email, password: pw})
+            .then((response) => {
+                if (response.data && response.data.length === 1) {
+                    return response.data[0];
+                }
+            })
+        return false;
     }
 
     handleChange = (event) => {
@@ -95,9 +142,14 @@ class App extends Component {
 
         // a map containing the imported pages from the components directory
         const pages = {
-            LandingPage: <LandingPage onBookButtonClick={this.handleSetApptButtonClick}/>,
+            LandingPage: <LandingPage
+                onBookButtonClick={this.handleSetApptButtonClick}
+                onEmployeeSignInButtonClick={this.handleEmployeeSignInButtonClick}/>,
             CustomerInfoPage: <CustomerInfoPage onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>,
-            Calendar: <Calendar />
+            Calendar: <Calendar />,
+            EmployeeSignInPage: <EmployeeSignInPage
+                onLoginClick={this.handleEmpLoginButtonClick}
+                showCredentialWarning={this.state.showCredentialWarning}/>
         };
 
         // the render method will display whichever page is set as this.state.currentPage
