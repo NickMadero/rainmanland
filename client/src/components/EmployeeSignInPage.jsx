@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import {renderIntoDocument} from "react-dom/test-utils";
 
 class EmployeeSignInPage extends React.Component {
     constructor(props) {
@@ -47,10 +48,8 @@ class EmployeeSignInPage extends React.Component {
     };
 
     render() {
-        const warning = this.BadCredentialWarning();
         return (
             <div>
-                warning
                 <h1>Employee Login</h1>
                 <form onSubmit={this.handleSubmit}>
                     <label>
@@ -66,23 +65,6 @@ class EmployeeSignInPage extends React.Component {
             </div>
         );
     }
-
-
-    BadCredentialWarning() {
-        if (this.state.showWarning) {
-            return (
-                <Alert variant="danger" onClose={() => this.setState({showWarning: false})} dismissible>
-                    <Alert.Heading>Invalid Credentials</Alert.Heading>
-                    <p>
-                        The email and password you entered do not match our records.
-                        Please try again or contact the business owner to get credentials.
-                    </p>
-                </Alert>
-            );
-        }
-    }
-
-//render(<AlertDismissibleExample />);
 }
 
 export default EmployeeSignInPage;

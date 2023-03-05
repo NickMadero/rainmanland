@@ -7,8 +7,8 @@ function LandingPage(props) {
 			<h1>Rainmanland Self-Booking Calendar</h1>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus odio eget justo dictum, at vestibulum velit interdum. Integer euismod tellus et nisi commodo feugiat.</p>
 			<button onClick={props.onBookButtonClick}>Book an Appointment</button>
-			<p><a id="myLink" title="Click to do something"
-					  href="#" onClick={props.onEmployeeSignInButtonClick}>link text</a></p>
+			<p><a id="employeeLoginLink" title="Click to go to the employee login page"
+					  href="#" onClick={props.onEmployeeSignInButtonClick}>Employee Login</a></p>
 		</div>
 	);
 }

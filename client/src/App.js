@@ -87,9 +87,11 @@ class App extends Component {
 
     // checks sign-in credentials against the MySQL database
     getUserInfo(email, pw) {
-        axios.get("/api/get-user-info", {email: email, password: pw})
+        axios.post("/api/get-user-info", {email: email, password: pw})
             .then((response) => {
                 if (response.data && response.data.length === 1) {
+                    console.log(response.data)
+                    console.log(response.data[0])
                     return response.data[0];
                 }
             })
@@ -108,15 +110,6 @@ class App extends Component {
         this.setState({
             someFieldUpdate: event.target.value
         })
-    }
-
-    componentDidMount() {
-        axios.get("/api/get")
-            .then((response) => {
-                this.setState({
-                    fetchData: response.data
-                })
-            })
     }
 
     submit = () => {

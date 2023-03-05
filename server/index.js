@@ -65,12 +65,12 @@ app.put('/update/:someId', (req, res) => {
 
 // Check credentials against db and return user info if credentials are good
 // TODO: make this secure. this is a placeholder for the demo
-app.get('/get-user-info', (req, res) => {
+app.post('/get-user-info', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const SelectQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
     db.query(SelectQuery, [email, password], (err, result) => {
-        res.send(result)
+        res.send(result);
     })
 })
 
