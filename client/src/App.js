@@ -12,6 +12,7 @@ import { Button, Container, Card, Row } from 'react-bootstrap'
 import LandingPage from './components/LandingPage.jsx';
 import CustomerInfoPage from "./components/CustomerInfoPage";
 import Calendar from "./components/Calendar";
+import EmployeeSignInPage from "./components/EmployeeSignInPage";
 
 // The App class handles the components that appear on the front end and sends requests
 // to the node.js backend (index.js) each time the front end needs to interact with the
@@ -79,7 +80,7 @@ class App extends Component {
         if (this.state.userInfo.user_type === "owner") {
             this.setState({currentPage: 'OwnerDashboard'});
         }
-        else if (userInfo.user_type === "employee") {
+        else if (this.state.userInfo.user_type === "employee") {
             this.setState({currentPage: 'EmployeeDashboard'});
         }
     }
