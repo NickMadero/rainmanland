@@ -17,12 +17,12 @@
     position: absolute;
     align-self: center;
   }
+  /** For the Service Area and Pricing Forms **/
+  /** Red border is temporary for debugging purposes **/
   .top-container {
     top: 96px;
-    right: 0px;
-    width: auto;
+    width: 95%;
     height: 351px;
-    margin: auto;
     display: flex;
     align-items: center;
     margin-left: 2rem;
@@ -48,6 +48,8 @@
     border-radius: 8px;
     justify-content: space-between;
     box-sizing: border-box;
+    margin-left: auto;
+    margin: auto;
   }
   .confirm {
     color: #d6d3d3;
@@ -81,13 +83,14 @@
     margin-bottom: 0px;
     text-transform: capitalize;
   }
-  .heading-srvc-area {
+  .heading-srvc-area, .heading--controllers {
     top: -5px;
     margin-left: 1rem;
     font-family: Arial;
   }
   .service-area-wrapper {
     left: 1px;
+    float: right;
     width: 500px;
     height: auto;
     flex-wrap: wrap;
@@ -192,27 +195,57 @@
     margin-left: 1rem;
     margin-bottom: 0px;
   }
-
-/* Controller form Styling 
+/*********************************/
+/**** Controller form Styling ****/
 .form--controllers{
   display: flex;
   flex-wrap: wrap;
-  float: left;
+  width: 700px;
+  height: 87%;
+  margin-right: auto;
+  margin-left: auto;
+  border-color: #000000;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+}
 
+/**Brand and Cost Table**/
+.table--controllers{
+  table-layout: fixed;
+  border-color: green;
+  border-width: 1px;
+}
+.table-body--controllers {
+  display: table-header-group;
+  width: 100%;
+  overflow-y: auto;
+}
+tbody tr:nth-child(even){
+  background: slategrey;
+}
+ td,th {
+  padding: 2px;
+  min-width: 100px;
+}
+tbody thead tr{
+  background: rgb(57, 102, 117);
+  color: black;
+}
 
-}*/
-/*
-    float: right;
-    width: 1883px;
-    border: 2px dashed rgba(120, 120, 120, 0.4);
-    height: 446px;
-    display: flex;
-    margin-top: 1rem;
-    align-items: flex-start;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-  }*/
+.input--brand{
+  width: 170px;
+  height: 27px;
+  box-shadow: 5px 5px 10px 0px #d4d4d4;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  margin-right: auto;
+  margin-bottom: auto;
+  background-color: rgba(214, 202, 209, 0.35);
+  border-radius: 4px;
+
+}
+
   @media(max-width: 991px) {
     .container {
       box-shadow: 5px 5px 10px 0px #d4d4d4;

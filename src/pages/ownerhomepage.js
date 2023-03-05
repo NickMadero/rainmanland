@@ -12,6 +12,58 @@ const OwnerHomePage = (props) => {
       </h1>
       {/** Container for Service Area and Controller Pricing settings */}
       <div id="container--top" className={styles['top-container']}>
+        {/**Form for sprinkler controller pricing info */}
+        <form
+          id='form--controllers'
+          name='form--controllers'
+          className={styles['form--controllers']}
+          >
+            <h3 id="heading--controllers" className={styles['heading--controllers']}>
+              <span className={styles['heading--controllers']}>Controller Pricing</span>
+            </h3>
+            <table
+              id='table--controllers'
+              name='table--controllers'
+              className={styles['table--controlllers']}
+              >
+                <thead>
+                  <tr>
+                    <th>
+                      <h4>Brand</h4>
+                    </th>
+                    <th>
+                      <h4>Cost Multiplier</h4>
+                    </th>
+                  </tr>
+                </thead>
+                 {/** TO DO: Generate table with JavaScript function **/}
+                <tbody id='table-body--controllers' className={styles['table-body--controllers']}>
+                  <tr>
+                      <td>test brand 1</td>
+                      <td>1.5x</td>
+                  </tr>
+                  <tr>
+                      <td>test brand 2</td>
+                      <td>1.5x</td>
+                  </tr>
+                  <tr>
+                      <td>test brand 3</td>
+                      <td>1.5x</td>
+                  </tr>
+                  <tr>
+                      <td>test brand 4</td>
+                      <td>1.5x</td>
+                  </tr>
+                </tbody>
+              </table>
+              <input
+                id='input--brand'
+                name='input--brand'
+                className={styles['input--brand']}
+                placeholder='Controller Brand Name'
+                >
+              </input>
+          </form>
         {/*BEGIN SERVICE AREA SETTINGS*/}
         <form
           id="form--service-area"
@@ -75,7 +127,7 @@ const OwnerHomePage = (props) => {
                 <option value="20">20 miles</option>
                 <option value="25">25 miles</option>
           </select>
-          <button
+            <button
             id="btn--srvc-area"
             name="btn--srvc-area"
             className={` ${styles['confirm']} ${projectStyles['button']} `}
@@ -83,15 +135,12 @@ const OwnerHomePage = (props) => {
             <span id="btn-confirm-text" className={styles['btn-confirm-text']}>
               <span>Confirm</span>
             </span>
-          </button>
+            </button>
             </form>
+           </div>
             
-          </div>
-          
-        </form>
+          </form>
         {/** END SERVICE AREA SETTINGS */}
-        {/**Form for sprinkler controller pricing info */}
-        
       </div>
       {/** Container for time tracking */}
       <div id="container--bottom" className={styles['bottom-container']}></div>
