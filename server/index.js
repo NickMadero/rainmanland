@@ -64,13 +64,23 @@ app.put('/update/:someId', (req, res) => {
 })
 
 // Check credentials against db and return user info if credentials are good
-// TODO: make this secure. this is a placeholder for the demo
+// TODO: make this secure by storing hashed passwords instead of plaintext. this is a placeholder for the demo
 app.post('/get-user-info', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const SelectQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
     db.query(SelectQuery, [email, password], (err, result) => {
         res.send(result);
+    })
+})
+
+// get a list of today's jobs for the crew number passed as URL param
+app.get('/get-jobs/:crewNum', (req, res) => {
+    const crewNum = req.params.crewNum
+    // TODO: make this query actually do its job - this is just for the demo again
+    const GetJobsQuery = "SELECT * FROM appointments";
+    db.query(GetJobsQuery, (err, result) => {
+        if (err) console.log(err)
     })
 })
 

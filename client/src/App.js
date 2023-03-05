@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-restricted-globals */
 import React, { Component } from 'react';
-import './App.css';
+import '../style/App.css';
 import axios from 'axios';
 import { Button, Container, Card, Row } from 'react-bootstrap'
 
@@ -13,6 +13,8 @@ import LandingPage from './components/LandingPage.jsx';
 import CustomerInfoPage from "./components/CustomerInfoPage";
 import Calendar from "./components/Calendar";
 import EmployeeSignInPage from "./components/EmployeeSignInPage";
+import OwnerDashboard from "./components/OwnerDashboard";
+import EmployeeDashBoard from "./components/EmployeeDashboard";
 
 // The App class handles the components that appear on the front end and sends requests
 // to the node.js backend (index.js) each time the front end needs to interact with the
@@ -24,16 +26,13 @@ class App extends Component {
                 // state attribute that controls which page is rendered
                 currentPage: 'LandingPage',
 
-                // state attribute that controls user alerts
-                showCredentialWarning: false,
-
-                // state attribute that remembers the user's info
+                // state attribute that remembers the user's info (false means they are not logged in)
                 userInfo: false,
 
                 // other state attributes
                 setSomeField1: '',
                 setSomeField2: '',
-                fetchData: [],
+                fetchJobsTodayData: [],
                 someFieldUpdate: ''
             };
 
@@ -70,17 +69,19 @@ class App extends Component {
     handleEmpLoginButtonClick(email, password) {
         const userInfo = this.getUserInfo(email, password)  // returns either user fields from user table or false if bad credentials
         if (!userInfo) {
-            this.setState({currentPage: 'EmployeeSignInPage', showCredentialWarning: true});
+            this.setState({currentPage: 'EmployeeSignInPage'});
+            alert("Invalid login. Please try again or contact the business owner for credentials.")
             return;
         }
         else {
-            this.setState({userInfo: userInfo, showCredentialWarning: false})
+            this.setState({userInfo: userInfo})
         }
 
         if (this.state.userInfo.user_type === "owner") {
             this.setState({currentPage: 'OwnerDashboard'});
         }
         else if (this.state.userInfo.user_type === "employee") {
+            this.getJobsTodayForCrew(this.state.userInfo.crew_number)
             this.setState({currentPage: 'EmployeeDashboard'});
         }
     }
@@ -90,12 +91,20 @@ class App extends Component {
         axios.post("/api/get-user-info", {email: email, password: pw})
             .then((response) => {
                 if (response.data && response.data.length === 1) {
-                    console.log(response.data)
-                    console.log(response.data[0])
                     return response.data[0];
                 }
             })
         return false;
+    }
+
+    // gets a list of today's jobs for the specified crew from the database
+    getJobsTodayForCrew(crew_number) {
+        axios.get(`/api/get-jobs/${crew_number}`)
+            .then((response) => {
+                this.setState({
+                    fetchJobsTodayData: response.data
+                })
+            })
     }
 
     handleChange = (event) => {
@@ -142,8 +151,11 @@ class App extends Component {
             CustomerInfoPage: <CustomerInfoPage onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>,
             Calendar: <Calendar />,
             EmployeeSignInPage: <EmployeeSignInPage
-                onLoginClick={this.handleEmpLoginButtonClick}
-                showCredentialWarning={this.state.showCredentialWarning}/>
+                onLoginClick={this.handleEmpLoginButtonClick}/>,
+            OwnerDashboard: <OwnerDashboard/>,
+            EmployeeDashboard: <EmployeeDashboard
+                jobsToday={this.state.fetchJobsTodayData}
+                crewNum={this.state.userInfo.crew_number}/>
         };
 
         // the render method will display whichever page is set as this.state.currentPage
