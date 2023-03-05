@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-restricted-globals */
 import React, { Component } from 'react';
-import '../style/App.css';
+import './style/App.css';
 import axios from 'axios';
 import { Button, Container, Card, Row } from 'react-bootstrap'
 
@@ -14,7 +14,7 @@ import CustomerInfoPage from "./components/CustomerInfoPage";
 import Calendar from "./components/Calendar";
 import EmployeeSignInPage from "./components/EmployeeSignInPage";
 import OwnerDashboard from "./components/OwnerDashboard";
-import EmployeeDashBoard from "./components/EmployeeDashboard";
+import EmployeeDashboard from "./components/EmployeeDashboard";
 
 // The App class handles the components that appear on the front end and sends requests
 // to the node.js backend (index.js) each time the front end needs to interact with the
