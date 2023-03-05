@@ -21,6 +21,10 @@ const OwnerHomePage = (props) => {
             <h3 id="heading--controllers" className={styles['heading--controllers']}>
               <span className={styles['heading--controllers']}>Controller Pricing</span>
             </h3>
+            <div
+              id='container-controller-table'
+              name='container-controller-table'
+              className={styles['container-controller-table']}>
             <table
               id='table--controllers'
               name='table--controllers'
@@ -56,6 +60,7 @@ const OwnerHomePage = (props) => {
                   </tr>
                 </tbody>
               </table>
+              </div>
               <input
                 id='input--brand'
                 name='input--brand'

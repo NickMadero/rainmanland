@@ -211,27 +211,50 @@
 }
 
 /**Brand and Cost Table**/
+.container-controller-table{
+  display: flex;
+  flex-wrap: wrap;
+  border-color: black;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+  height:200px;
+  overflow-y: auto;
+  width: auto;
+}
 .table--controllers{
+  overflow: auto;
   table-layout: fixed;
   border-color: green;
   border-width: 1px;
+  width: 300px;
 }
-.table-body--controllers {
-  display: table-header-group;
-  width: 100%;
+
+table { 
+  border-collapse: collapse; 
+  width: 100%; 
+}
+th, td { 
+  background: #545f79; 
+  color: white;
+  overflow: hidden;
+  border: 1px solid #0000;
+  height: 27px;
+  white-space: nowrap;
+}
+
+
+.table--controllers {
   overflow-y: auto;
+  height: 100px;
 }
-tbody tr:nth-child(even){
-  background: slategrey;
+
+ thead th {
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
 }
- td,th {
-  padding: 2px;
-  min-width: 100px;
-}
-tbody thead tr{
-  background: rgb(57, 102, 117);
-  color: black;
-}
+
 
 .input--brand{
   width: 170px;
