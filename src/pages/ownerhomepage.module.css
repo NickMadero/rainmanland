@@ -25,15 +25,16 @@
     width: 95%;
     height: auto;
     display: flex;
-    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap-reverse;
     margin-left: 2rem;
     border-color: #f50f13;
     border-style: double;
-    border-width: 1px;
     margin-right: 2rem;
     justify-content: flex-end;
     box-sizing: border-box;
     position: absolute;
+    overflow-y: scroll;
   }
    /* Begin Styling for Service Area form */
   .form--service-area {
@@ -204,20 +205,43 @@
 }
 
 /**Brand and Cost Table**/
-/*.container-controller-table{
+.container-controller-table{
   display: flex;
   flex-wrap: wrap;
   border-color: black;
-  border-radius: 4px;
+  border-radius: .25rem;
   border-width: 1px;
   border-style: solid;
-  height:200px;
+  height: 12.5rem;
   overflow-y: auto;
   width: auto;
   margin: auto;
   box-sizing: border-box;
 }
-.table--controllers{
+.input--brand{
+  width: 10.5rem;
+  height: 2rem;
+  box-shadow: 5px 5px 10px 0px #d4d4d4;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  margin-right: auto;
+  margin-bottom: auto;
+  background-color: rgba(214, 202, 209, 0.35);
+  border-radius: .25rem;
+}
+.input--price{
+  width: 4.375rem;
+  height: 2rem;
+  box-shadow: 5px 5px 10px 0px #d4d4d4;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  margin-right: auto;
+  margin-bottom: auto;
+  background-color: rgba(214, 202, 209, 0.35);
+  border-radius: .25rem;
+  box-sizing: border-box;
+}
+.section{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -237,29 +261,25 @@ th, td {
   overflow: hidden;
   border: 1px solid #0000;
   height: 1rem;
-  white-space: nowrap;
 }
 
 h4 {
   text-align: center;
   line-height: 1;
+  margin: 0rem;
 }
 
-.table--controllers {
-  overflow-y: auto;
-  height: 100px;
-}
 
 th,
 td {
   position: sticky;
-  padding: 1rem;
+  padding: 0.5rem;
   text-align: center;
   background-color: #545F79;
   color: white;
-}*/
+}
 
-section {
+/*section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -267,6 +287,10 @@ section {
   padding: 2rem 0;
   border: 1px solid red;
   overflow: scroll;
+  border-collapse: collapse;
+  overflow-y: auto;
+  overflow:scroll;
+  height: 6rem;
 }
 
 h4 {
@@ -282,33 +306,34 @@ td {
   background-color: #545F79;
   color: white;
   position: sticky;
-}
+}*/
 
-
-
-.input--brand{
-  width: 170px;
-  height: 2rem;
-  box-shadow: 5px 5px 10px 0px #d4d4d4;
-  margin-top: 0.5rem;
-  margin-left: 1rem;
-  margin-right: auto;
-  margin-bottom: auto;
-  background-color: rgba(214, 202, 209, 0.35);
-  border-radius: .25rem;
-}
-.input--price{
-  width: 70px;
-  height: 2rem;
-  box-shadow: 5px 5px 10px 0px #d4d4d4;
-  margin-top: 0.5rem;
-  margin-left: 1rem;
-  margin-right: auto;
-  margin-bottom: auto;
-  background-color: rgba(214, 202, 209, 0.35);
-  border-radius: .25rem;
+.bottom-container{
+  bottom: 2rem;
+  justify-content: flex-end;
   box-sizing: border-box;
+  position: absolute;
+  width: 95%;
+  height: 40%;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  border-color: blue;
+  border-style: double;
+  justify-content: left;
+  overflow-y: scroll;
+  margin-top: 2rem;
 }
-  @media(max-width: 991px) {
-    
-  }
+
+.header-schedule{
+  font-size: 1.5rem;
+}
+.container--schedule{
+  display: flex;
+  width: 50rem;
+  height: 95%;
+  margin: auto;
+  border-color: orange;
+  border-style: solid;
+  border-width: 2px;
+}

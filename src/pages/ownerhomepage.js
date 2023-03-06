@@ -63,6 +63,10 @@ const OwnerHomePage = (props) => {
                       <td>test brand 4</td>
                       <td>1.5x</td>
                   </tr>
+                  <tr>
+                      <td>test brand 5</td>
+                      <td>1.5x</td>
+                  </tr>
                 </tbody>
               </section>
               </div>
@@ -160,7 +164,11 @@ const OwnerHomePage = (props) => {
         {/** END SERVICE AREA SETTINGS */}
       </div>
       {/** Container for time tracking */}
-      <div id="container--bottom" className={styles['bottom-container']}></div>
+      <div id="container--bottom" className={styles['bottom-container']}>
+        <div id="container--schedule" className={styles['container--schedule']}>
+          <h3 id='header-schedule' className ={styles['header-schedule']}>Schedule</h3>
+        </div>
+      </div>
     </div>
   )
 }
