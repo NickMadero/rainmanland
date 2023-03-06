@@ -250,7 +250,7 @@
   border: 1px solid red;
 }
 
-table { 
+/*table { 
   border-collapse: collapse; 
   width: auto; 
   text-align: center;
@@ -267,7 +267,7 @@ h4 {
   text-align: center;
   line-height: 1;
   margin: 0rem;
-}
+}*/
 
 
 th,
@@ -279,7 +279,7 @@ td {
   color: white;
 }
 
-/*section {
+section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -306,7 +306,7 @@ td {
   background-color: #545F79;
   color: white;
   position: sticky;
-}*/
+}
 
 .bottom-container{
   bottom: 2rem;
