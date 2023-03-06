@@ -1,12 +1,17 @@
 import React from 'react'
-
+import {Helmet} from "react-helmet"
 import projectStyles from './ownerhomepage.module.css'
 import styles from './ownerhomepage.module.css'
 
 const OwnerHomePage = (props) => {
   /*EVENT LISTENERS & HANDLERS GO HERE */
   return (
-    <div className={styles['container']}>
+    <div className={styles['page']}>
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    </head>
+      
+      
       <h1 className={styles['text']}>
         <span>Business Settings</span>
       </h1>
@@ -25,7 +30,7 @@ const OwnerHomePage = (props) => {
               id='container-controller-table'
               name='container-controller-table'
               className={styles['container-controller-table']}>
-            <table
+            <section
               id='table--controllers'
               name='table--controllers'
               className={styles['table--controlllers']}
@@ -59,7 +64,7 @@ const OwnerHomePage = (props) => {
                       <td>1.5x</td>
                   </tr>
                 </tbody>
-              </table>
+              </section>
               </div>
               <input
                 id='input--brand'
@@ -68,6 +73,13 @@ const OwnerHomePage = (props) => {
                 placeholder='Controller Brand Name'
                 >
               </input>
+              <input
+                id='input--price'
+                name='input--price'
+                className={styles['input--price']}
+                placeholder='Price'
+                >
+                </input>
           </form>
         {/*BEGIN SERVICE AREA SETTINGS*/}
         <form
