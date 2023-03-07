@@ -28,13 +28,13 @@
     gap: 2rem;
     flex-wrap: wrap-reverse;
     margin-left: 2rem;
+    margin-bottom: 2rem;
     border-color: #f50f13;
     border-style: double;
     margin-right: 2rem;
     justify-content: flex-end;
     box-sizing: border-box;
     position: absolute;
-    overflow-y: scroll;
   }
    /* Begin Styling for Service Area form */
   .form--service-area {
@@ -321,7 +321,6 @@ td {
   border-color: blue;
   border-style: double;
   justify-content: left;
-  overflow-y: scroll;
   margin-top: 2rem;
 }
 

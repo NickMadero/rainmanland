@@ -1,7 +1,12 @@
 import React from 'react'
 import projectStyles from './ownerhomepage.module.css'
 import styles from './ownerhomepage.module.css'
-import Button from 'react-bootsrap/Button'
+/**
+ *  TO-DO: Entry for lists of zipcodes for service areas
+ *         Service area map (Leaflet? Google Maps?)
+ * 
+ */
+
 
 const OwnerHomePage = (props) => {
   /*EVENT LISTENERS & HANDLERS GO HERE */
