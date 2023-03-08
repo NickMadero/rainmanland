@@ -7,10 +7,10 @@ const WelcomePage = (props) => {
   const navigate = useNavigate();
   // this small block is used navigate to loginform when login is clicked
   const gotoLogin = () => {
-    navigate("/rainmanland/src/pages/LoginForm.js");
+    navigate("/rainmanland/client/src/pages/LoginForm.js");
   };
   const gotoSignup = () => {
-    navigate("/rainmanland/src/pages/signupPage.js");
+    navigate("/rainmanland/client/src/pages/signupPage.js");
   };
   
   return (
