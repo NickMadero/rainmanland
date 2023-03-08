@@ -67,30 +67,35 @@ class App extends Component {
     // When the user clicks the "Log in" button on EmployeeSignInPage, this method validates the credentials and brings
     // up the appropriate dashboard for the employee
     handleEmpLoginButtonClick(email, pw) {
-        axios.post("/api/get-user-info", {email: email, password: pw})
+        axios.get("/api/get-user-info", {email: email, password: pw})
             .then((response) => {
-                if (response.data && response.data.length > 0) {
-                    this.setState({
-                        userInfo: response.data[0]
-                    })
-                }
-                else {
-                    this.setState({
-                        userInfo: false,
-                        CurrentPage: 'EmployeeSignInPage'
-                    });
-                    alert("Invalid login. Please try again or contact the business owner for credentials.")
-                    return;
-                }
-                if (this.state.userInfo.user_type === "owner") {
-                    console.log("user is owner")
-                    this.setState({currentPage: 'OwnerDashboard'});
-                }
-                else if (this.state.userInfo.user_type === "employee") {
-                    console.log("user is employee")
-                    this.getJobsTodayForCrew(this.state.userInfo.crew_number)
-                    this.setState({currentPage: 'EmployeeDashboard'});
-                }
+                console.log("response:::::::::::::::::")
+                console.log(response.data);
+                console.log(email);
+                console.log(pw);
+
+            //     if (response.data && response.data.length > 0) {
+            //         this.setState({
+            //             userInfo: response.data[0]
+            //         })
+            //     }
+            //     else {
+            //         this.setState({
+            //             userInfo: false,
+            //             CurrentPage: 'EmployeeSignInPage'
+            //         });
+            //         alert("Invalid login. Please try again or contact the business owner for credentials.")
+            //         return;
+            //     }
+            //     if (this.state.userInfo.user_type === "owner") {
+            //         console.log("user is owner")
+            //         this.setState({currentPage: 'OwnerDashboard'});
+            //     }
+            //     else if (this.state.userInfo.user_type === "employee") {
+            //         console.log("user is employee")
+            //         this.getJobsTodayForCrew(this.state.userInfo.crew_number)
+            //         this.setState({currentPage: 'EmployeeDashboard'});
+            //     }
             })
 
     }

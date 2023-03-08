@@ -1,9 +1,10 @@
 version: '3.8'
 
 x-common-variables: &common-variables
-  MYSQL_DATABASE: rainmanland-db
-  MYSQL_USER: admin 
-  MYSQL_PASSWORD: admin
+  MYSQL_DATABASE: rainmanland
+  MYSQL_USER: dev
+  MYSQL_HOST: 192.168.76.1
+  MYSQL_PORT: 3307
 
 services:
   mysql_db:
@@ -35,14 +36,14 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server
-    depends_on:
-      - mysql_db
+#    depends_on:
+
     volumes:
       - /app/node_modules
       - ./server:/app
     environment:
       <<: *common-variables
-      MYSQL_HOST_IP: mysql_db
+
 
   client:
     stdin_open: true

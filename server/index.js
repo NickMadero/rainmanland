@@ -3,14 +3,6 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 
-// add MySQL database connection
-const db = mysql.createPool({
-    host: 'mysql_db', // the host name
-    user: 'admin', // the database user
-    password: 'admin', // database user password
-    database: 'rainmanland-db' // database name
-})
-
 // initialize the Express app
 const app = express();
 
@@ -20,6 +12,33 @@ app.use(cors());
 // add an Express method to parse the POST method
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+// add MySQL database connection
+const db = mysql.createPool({
+    host: '192.168.76.1', // the host name
+    user: 'dev', // the database user
+    database: 'rainmanland', // database name
+    port: '3307'
+})
+
+
+
+
+
+
+//test connection to database
+// db.connect(function (err) {
+//     if(err) throw err;
+//     db.query("select * from rainmanland.user;", function(err, result, fields) {
+//         if (err) throw err;
+//         console.log(result);
+//     })
+//
+// })
+
+
+
 
 // add a home page route
 app.get('/', (req, res) => {
@@ -65,13 +84,18 @@ app.put('/update/:someId', (req, res) => {
 
 // Check credentials against db and return user info if credentials are good
 // TODO: make this secure by storing hashed passwords instead of plaintext. this is a placeholder for the demo
-app.post('/get-user-info', (req, res) => {
+app.get('/get-user-info', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    const SelectQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
-    db.query(SelectQuery, [email, password], (err, result) => {
+    const SelectQuery = "SELECT password_hash FROM rainmanland.user;";
+
+    db.query(SelectQuery,  (err, result) => {
+        if(err) console.log(err);
         res.send(result);
+        console.log(result);
     })
+
+
 })
 
 // get a list of today's jobs for the crew number passed as URL param
