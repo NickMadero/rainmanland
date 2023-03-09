@@ -94,12 +94,12 @@ app.put('/update/:someId', (req, res) => {
 
 // Check credentials against db and return user info if credentials are good
 // TODO: make this secure by storing hashed passwords instead of plaintext. this is a placeholder for the demo
-app.get('/get-user-info', (req, res) => {
+app.post('/get-user-info', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const SelectQuery = "SELECT password_hash FROM rainmanland.user;";
 
-    db.query(SelectQuery,  (err, result) => {
+    dbController.query(SelectQuery,  (err, result) => {
         if(err) console.log(err);
         res.send(result);
         console.log(result);

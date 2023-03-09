@@ -67,10 +67,10 @@ class App extends Component {
     // When the user clicks the "Log in" button on EmployeeSignInPage, this method validates the credentials and brings
     // up the appropriate dashboard for the employee
     handleEmpLoginButtonClick(email, pw) {
-        axios.get("/api/get-user-info", {email: email, password: pw})
+        axios.post("/api/get-user-info", {email: email, password: pw})
             .then((response) => {
                 console.log("response:::::::::::::::::")
-                console.log(response.data);
+                console.log(response);
                 console.log(email);
                 console.log(pw);
 

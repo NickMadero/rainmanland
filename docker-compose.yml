@@ -4,7 +4,7 @@ x-common-variables: &common-variables
   MYSQL_DATABASE: rainmanland
   MYSQL_USER: dev
   MYSQL_HOST: host.docker.internal
-  MYSQL_PORT: 3307
+  MYSQL_PORT: 3306
 
 services:
   mysql_db:
