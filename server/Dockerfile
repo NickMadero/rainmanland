@@ -4,5 +4,6 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY ./ ./
 RUN npm i
+EXPOSE 3307
 CMD ["npm", "run", "start"]
 

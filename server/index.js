@@ -3,6 +3,8 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 
+const dbController = require('./dbController');
+
 // initialize the Express app
 const app = express();
 
@@ -15,24 +17,23 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // add MySQL database connection
-const db = mysql.createConnection({
-    host: 'localhost', // the host name
-    user: 'dev', // the database user
-    database: 'rainmanland', // database name
-    port: '3307'
+// const db = mysql.createPool({
+//     host: 'localhost', // the host name
+//     user: 'dev', // the database user
+//     database: 'rainmanland', // database name
+//     port: '3307'
+// })
+
+
+
+// You can now use the `dbController` object to execute queries on the database
+dbController.query('SELECT * FROM rainmanland.user', function(err, results) {
+    if (err) {
+        console.error(err);
+        return;
+    }
+    console.log(results);
 })
-
-
-db.connect(function (err){
-    if(err) throw err;
-
-    db.query("select * from rainmanland.user", function(err, result){
-        console.log(result);
-    })
-
-    db.end();
-})
-
 
 
 
