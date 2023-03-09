@@ -15,14 +15,23 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // add MySQL database connection
-const db = mysql.createPool({
-    host: '192.168.76.1', // the host name
+const db = mysql.createConnection({
+    host: 'localhost', // the host name
     user: 'dev', // the database user
     database: 'rainmanland', // database name
     port: '3307'
 })
 
 
+db.connect(function (err){
+    if(err) throw err;
+
+    db.query("select * from rainmanland.user", function(err, result){
+        console.log(result);
+    })
+
+    db.end();
+})
 
 
 
@@ -43,7 +52,7 @@ const db = mysql.createPool({
 // add a home page route
 app.get('/', (req, res) => {
     res.send('Hello world')
-});
+})
 
 // [TEMPLATE] retrieve something from the database
 app.get('/get-something', (req, res) => {
