@@ -3,7 +3,7 @@ version: '3.8'
 x-common-variables: &common-variables
   MYSQL_DATABASE: rainmanland
   MYSQL_USER: dev
-  MYSQL_HOST: host.docker.internal
+  MYSQL_HOST: 172.31.8.49
   MYSQL_PORT: 3307
 
 services:
@@ -19,7 +19,7 @@ services:
     environment:
       <<: *common-variables
      # MYSQL_ROOT_PASSWORD: adminroot
-      MYSQL_HOST: host.docker.internal
+      MYSQL_HOST: 172.31.8.49
       MYSQL_PORT: 3307
   nginx:
     depends_on:
