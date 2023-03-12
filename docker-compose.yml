@@ -4,7 +4,7 @@ x-common-variables: &common-variables
   MYSQL_DATABASE: rainmanland
   MYSQL_USER: dev
   MYSQL_HOST: 172.17.0.1
-  MYSQL_PORT: 9906
+  MYSQL_PORT: 3306
 
 services:
   mysql_db:
@@ -20,7 +20,7 @@ services:
       <<: *common-variables
      # MYSQL_ROOT_PASSWORD: adminroot
       MYSQL_HOST: 172.17.0.1
-      MYSQL_PORT: 9906
+      MYSQL_PORT: 3306
   nginx:
     depends_on:
       - api
