@@ -6,10 +6,12 @@
     margin: 0 auto;
     display: flex;
     overflow: auto;
-    min-height: 100vh;
+    min-height: 100rem;
     align-items: center;
     flex-direction: column;
     box-sizing: border-box;
+    /*-webkit-overflow-scrolling: touch;*/
+    overflow-y: scroll;
   }
   .text {
     top: 1.5rem;
@@ -25,37 +27,31 @@
     width: 95%;
     height: auto;
     display: flex;
-    gap: 2rem;
+    position: relative;
     flex-wrap: wrap-reverse;
     margin-left: 2rem;
+    margin-bottom: 2rem;
     border-color: #f50f13;
     border-style: double;
     margin-right: 2rem;
     justify-content: flex-end;
     box-sizing: border-box;
-    position: absolute;
     overflow-y: scroll;
   }
    /* Begin Styling for Service Area form */
   .form--service-area {
     width: auto;
     height: auto;
-    margin: 3rem;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
-    align-items: center;
     border-color: #0e0100;
     border-style: double;
     border-width: 1px;
     border-radius: 8px;
-    justify-content: space-between;
     box-sizing: border-box;
-    margin-left: auto;
-    margin: auto;
   }
   .confirm {
     color: #d6d3d3;
     width: 9rem;
-    margin-left: 5rem;
     box-shadow: 5px 5px 10px 0px #8f8f90;
     transition: 0.3s;
     align-items: center;
@@ -79,9 +75,6 @@
     height: 100%;
     align-self: center;
     font-family: Source Sans Pro;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 0rem;
     text-transform: capitalize;
   }
   .heading-srvc-area, .heading--controllers {
@@ -90,26 +83,23 @@
     font-family: Arial;
   }
   .service-area-wrapper {
-    left: 1px;
     float: right;
     width: 30rem;
     height: auto;
     flex-wrap: wrap;
     align-items: center;
-    flex-direction: column;
     box-sizing: border-box;
   }
   .address-form {
     width: auto;
     height: 15rem;
     align-items: center;
-    margin-left: .5rem;
-    margin-right: .5rem;
-    margin-bottom: 0rem;
-    padding-bottom: .125rem;
-    justify-content: center;
+    display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
+    border: pink;
+    border-width: 2px;
+    border-style: solid;
   }
   
   .biz-address1:focus, .biz-address2:focus {
@@ -119,16 +109,14 @@
  
 
   .biz-address1, .biz-address2 {
-    left: 0rem;
     width: 20rem;
     height: 2rem;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
-    margin-top: .5rem;
     transition: 0.3s;
-    margin-left: 1rem;
+    
     border-style: solid;
     border-width: 1px;
-    margin-bottom: .5rem;
+   
     background-color: rgba(214, 202, 209, 0.35);
     border-radius: .25rem;
   }
@@ -137,10 +125,8 @@
     width: 6rem;
     height: 2rem;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
-    margin-top: .5rem;
     transition: 0.3s;
-    margin-left: .5rem;
-    margin-bottom: .5rem;
+   
     background-color: rgba(214, 202, 209, 0.35);
     border-radius: .25rem;
   }
@@ -151,18 +137,12 @@
     width: 10.5rem;
     height: 2rem;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
-    margin-top: 0.5rem;
-    margin-left: 1rem;
-    margin-right: auto;
-    margin-bottom: auto;
     background-color: rgba(214, 202, 209, 0.35);
     border-radius: .25rem;
   }
   .input-state {
     width: 4rem;
     height: 2rem;
-    margin-right: .5rem;
-    margin-left: .5rem;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
     background-color: rgba(214, 202, 209, 0.35);
     border-radius: .25rem;
@@ -170,9 +150,7 @@
   .select-radius {
     height: 2rem;
     box-shadow: 5px 5px 10px 0px #d4d4d4;
-    margin-top: .5rem;
     transition: 0.3s;
-    margin-left: 1rem;
     border-color: #080808;
     border-width: 1px;
     border-radius: .25rem;
@@ -182,10 +160,7 @@
     background-color: #92AFF9;
   }
   
-  .radius {
-    margin-top: 1rem;
-    margin-left: 1rem;
-  }
+  
 /*********************************/
 /**** Controller form Styling ****/
 .form--controllers{
@@ -202,6 +177,7 @@
   flex-direction: column;
   padding: 1rem;
   box-sizing: border-box;
+  gap: 0.5rem;
 }
 
 /**Brand and Cost Table**/
@@ -215,17 +191,14 @@
   height: 12.5rem;
   overflow-y: auto;
   width: auto;
-  margin: auto;
+  gap: 1rem;
   box-sizing: border-box;
 }
 .input--brand{
   width: 10.5rem;
   height: 2rem;
   box-shadow: 5px 5px 10px 0px #d4d4d4;
-  margin-top: 0.5rem;
-  margin-left: 1rem;
-  margin-right: auto;
-  margin-bottom: auto;
+ 
   background-color: rgba(214, 202, 209, 0.35);
   border-radius: .25rem;
 }
@@ -233,21 +206,9 @@
   width: 4.375rem;
   height: 2rem;
   box-shadow: 5px 5px 10px 0px #d4d4d4;
-  margin-top: 0.5rem;
-  margin-left: 1rem;
-  margin-right: auto;
-  margin-bottom: auto;
   background-color: rgba(214, 202, 209, 0.35);
   border-radius: .25rem;
   box-sizing: border-box;
-}
-.section{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 0;
-  border: 1px solid red;
 }
 
 table { 
@@ -256,11 +217,16 @@ table {
   text-align: center;
 }
 th, td { 
-  background: #545f79; 
-  color: white;
+  background: #95a394; 
+  color: rgb(0, 0, 0);
   overflow: hidden;
   border: 1px solid #0000;
   height: 1rem;
+  position: sticky;
+  padding: 0.5rem;
+  text-align: center;
+  background-color: #dad0d0a2;
+  color: rgb(12, 12, 12);
 }
 
 h4 {
@@ -269,14 +235,11 @@ h4 {
   margin: 0rem;
 }
 
-
-th,
-td {
-  position: sticky;
-  padding: 0.5rem;
-  text-align: center;
-  background-color: #545F79;
-  color: white;
+th{
+  background-color:#5c474785;
+}
+tr:nth-child(even){
+  background-color: #5c474785;
 }
 
 /*section {
@@ -312,9 +275,10 @@ td {
   bottom: 2rem;
   justify-content: flex-end;
   box-sizing: border-box;
-  position: absolute;
+  position: relative;
+  top: 5rem;
   width: 95%;
-  height: 40%;
+  height: 30rem;
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
@@ -322,18 +286,37 @@ td {
   border-style: double;
   justify-content: left;
   overflow-y: scroll;
-  margin-top: 2rem;
+  padding: 2rem;
 }
 
-.header-schedule{
+.heading-schedule{
   font-size: 1.5rem;
+  position: relative;
+  top: .5rem;
+  margin: 0rem;
+  left: 4rem;
 }
 .container--schedule{
   display: flex;
-  width: 50rem;
-  height: 95%;
+  width: auto;
+  height: 96%;
   margin: auto;
   border-color: orange;
   border-style: solid;
   border-width: 2px;
+  border-radius: 4px;
+}
+
+.table--appointments{
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  border-radius: .25rem;
+  width: auto;
+  height: 20rem;
+  overflow-y: scroll;
+  overflow: scroll;
+  position: relative;
+  top: 4rem;
+  left:-2rem;
 }

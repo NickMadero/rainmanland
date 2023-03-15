@@ -1,6 +1,4 @@
 import React from 'react'
-import {Helmet} from "react-helmet"
-import projectStyles from './ownerhomepage.module.css'
 import styles from './ownerhomepage.module.css'
 
 const OwnerHomePage = (props) => {
@@ -8,7 +6,7 @@ const OwnerHomePage = (props) => {
   return (
     <div className={styles['page']}>
     <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     </head>
       
       
@@ -104,27 +102,27 @@ const OwnerHomePage = (props) => {
                 type="text"
                 id="input--business-address1"
                 placeholder="Business Address 1"
-                className={` ${styles['biz-address1']} ${projectStyles['input']} `}
+                className={styles['biz-address1']}
               />
               <input
                 type="text"
                 id="input--business-address2"
                 placeholder="Business Address 2"
-                className={` ${styles['biz-address2']} ${projectStyles['input']} `}
+                className={styles['biz-address2']}
               />
               <input
                 type="text"
                 id="input--city"
                 name="input city"
                 placeholder="City"
-                className={` ${styles['input-city']} ${projectStyles['input']} `}
+                className={styles['input-city']}
               />
               <input
                 type="text"
                 id="input--state"
                 name="input-state"
                 placeholder="State"
-                className={` ${styles['input-state']} ${projectStyles['input']} `}
+                className={styles['input-state']}
               />
               <input
                 type="text"
@@ -132,7 +130,7 @@ const OwnerHomePage = (props) => {
                 name="zip code"
                 value="ZIP"
                 placeholder="ZIP"
-                className={` ${styles['input-zip']} ${projectStyles['input']} `}
+                className={styles['input-zip']}
               />
               <h4 className={styles['radius']}>
                 <span>Radius:</span>
@@ -151,7 +149,7 @@ const OwnerHomePage = (props) => {
             <button
             id="btn--srvc-area"
             name="btn--srvc-area"
-            className={` ${styles['confirm']} ${projectStyles['button']} `}
+            className={styles['confirm']}
           >
             <span id="btn-confirm-text" className={styles['btn-confirm-text']}>
               <span>Confirm</span>
@@ -166,7 +164,67 @@ const OwnerHomePage = (props) => {
       {/** Container for time tracking */}
       <div id="container--bottom" className={styles['bottom-container']}>
         <div id="container--schedule" className={styles['container--schedule']}>
-          <h3 id='header-schedule' className ={styles['header-schedule']}>Schedule</h3>
+          <h3 id='heading-schedule' className ={styles['heading-schedule']}>Schedule</h3>
+            <section 
+              id='table--appointments'
+              name='table--appointments'
+              className={styles['table--appointments']}
+              >
+                <thead>
+                  <tr>
+                    <th>
+                      <h4>AM/PM</h4>
+                    </th>
+                    <th>
+                      <h4>Name</h4>
+                    </th>
+                    <th>
+                      <h4>Address</h4>
+                    </th>
+                    <th>
+                      <h4>ZIP/Service Area</h4>
+                    </th>
+                    <th>
+                      <h4>Phone</h4>
+                    </th>
+                  </tr>
+                </thead>
+                {/**TO DO: Generate table with JavaScript function **/}
+                  <tbody id='table-body--appointments' className={styles['table-body--apointments']}>
+                      <tr>
+                        <td>AM</td>
+                        <td>Bo Jackson</td>
+                        <td>356 Haddon Ave Collingswood, NJ</td>
+                        <td>08107</td>
+                        <td>(856)555-7161</td>
+                      </tr>
+                      <tr>
+                        <td>AM</td>
+                        <td>Bo Jackson</td>
+                        <td>356 Haddon Ave Collingswood, NJ</td>
+                        <td>08107</td>
+                        <td>(856)555-7161</td>
+                      </tr>
+                      <tr>
+                        <td>AM</td>
+                        <td>Bo Jackson</td>
+                        <td>356 Haddon Ave Collingswood, NJ</td>
+                        <td>08107</td>
+                        <td>(856)555-7161</td>
+                      </tr>
+                      <tr>
+                        <td>AM</td>
+                        <td>Bo Jackson</td>
+                        <td>356 Haddon Ave Collingswood, NJ</td>
+                        <td>08107</td>
+                        <td>(856)555-7161</td>
+                      </tr>
+                  </tbody>
+              </section>
+              <button
+              id='btn--get-schedule'
+              name='btn--get-schedule'
+              className={``}></button>
         </div>
       </div>
     </div>
