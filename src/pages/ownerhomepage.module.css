@@ -36,7 +36,7 @@
     margin-right: 2rem;
     justify-content: flex-end;
     box-sizing: border-box;
-    overflow-y: scroll;
+    position: absolute;
   }
    /* Begin Styling for Service Area form */
   .form--service-area {
@@ -211,7 +211,7 @@
   box-sizing: border-box;
 }
 
-table { 
+/*table { 
   border-collapse: collapse; 
   width: auto; 
   text-align: center;
@@ -233,7 +233,7 @@ h4 {
   text-align: center;
   line-height: 1;
   margin: 0rem;
-}
+}*/
 
 th{
   background-color:#5c474785;
@@ -242,7 +242,7 @@ tr:nth-child(even){
   background-color: #5c474785;
 }
 
-/*section {
+section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -269,7 +269,7 @@ td {
   background-color: #545F79;
   color: white;
   position: sticky;
-}*/
+}
 
 .bottom-container{
   bottom: 2rem;

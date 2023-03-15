@@ -1,5 +1,11 @@
 import React from 'react'
 import styles from './ownerhomepage.module.css'
+/**
+ *  TO-DO: Entry for lists of zipcodes for service areas
+ *         Service area map (Leaflet? Google Maps?)
+ * 
+ */
+
 
 const OwnerHomePage = (props) => {
   /*EVENT LISTENERS & HANDLERS GO HERE */
