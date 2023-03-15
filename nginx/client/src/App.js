@@ -3,7 +3,8 @@
 import React, { Component } from 'react';
 import './style/App.css';
 import axios from 'axios';
-import { Button, Container, Card, Row } from 'react-bootstrap'
+import { Route, Routes } from 'react-router-dom';
+import { withRouter } from './components/withRouter'
 
 // These imports are where we get front end components from .jsx files so we don't have
 // to define them directly inside this file.
@@ -22,47 +23,40 @@ import EmployeeDashboard from "./components/EmployeeDashboard";
 class App extends Component {
     constructor(props) {
         super(props)
-            this.state = {
-                // state attribute that controls which page is rendered
-                currentPage: 'LandingPage',
+        this.state = {
+            // state attribute that controls which page is rendered
+            currentPage: 'LandingPage',
 
-                // state attribute that remembers the user's info (false means they are not logged in)
-                userInfo: false,
+            // state attribute that remembers the user's info (false means they are not logged in)
+            userInfo: false,
 
-                // other state attributes
-                setSomeField1: '',
-                setSomeField2: '',
-                fetchJobsTodayData: [],
-                someFieldUpdate: ''
-            };
+            // state attribute that remembers the info given in the Customer Info page
+            customerInfo: {
+                outside: null,
+                brand: null,
+                unitsPerZone: null,
+                numZones: null,
+                address: null
+            },
 
-            // Binds methods to App class so it re-renders each time they are called
-            this.handleSetApptButtonClick = this.handleSetApptButtonClick.bind(this);
-            this.handleGoToCalendarButtonClick = this.handleGoToCalendarButtonClick.bind(this);
-            this.handleEmployeeSignInButtonClick = this.handleEmployeeSignInButtonClick.bind(this);
-            this.handleEmpLoginButtonClick = this.handleEmpLoginButtonClick.bind(this);
-    }
+            // other state attributes
+            setSomeField1: '',
+            setSomeField2: '',
+            fetchJobsTodayData: [],
+            someFieldUpdate: ''
+        };
+
+        // The following bindings are set so the App component automatically updates itself whenever they are called
+        this.handleEmpLoginButtonClick = this.handleEmpLoginButtonClick.bind(this);
+        this.handleGoToCalendarButtonClick = this.handleGoToCalendarButtonClick.bind(this);
+    };
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // The following handlers change the "currentPage" state attribute to a new page from the "components" directory,
     // which triggers one of the bindings right up there^^^, which calls App.render() to render that page.
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // When the user clicks the "Book now" button on the landing page, this method brings up CustomerInfoPage
-    handleSetApptButtonClick() {
-        this.setState({currentPage: 'CustomerInfoPage'});
-    }
-
-    // When the user clicks the "go to calendar button" on CustomerInfoPage, this method brings up the Calendar page
-    handleGoToCalendarButtonClick() {
-        this.setState({currentPage: 'Calendar'});
-    }
-
-    // When the user clicks the "Employee sign in" button on LandingPage, this method brings up EmployeeSignInPage
-    handleEmployeeSignInButtonClick() {
-        this.setState({currentPage: 'EmployeeSignInPage'});
-    }
 
     // When the user clicks the "Log in" button on EmployeeSignInPage, this method validates the credentials and brings
     // up the appropriate dashboard for the employee
@@ -83,16 +77,23 @@ class App extends Component {
                     return;
                 }
                 if (this.state.userInfo.user_type === "owner") {
-                    console.log("user is owner")
-                    this.setState({currentPage: 'OwnerDashboard'});
+                    console.log("user is owner");
+                    this.props.navigate('/owner-dashboard');
                 }
                 else if (this.state.userInfo.user_type === "employee") {
                     console.log("user is employee")
                     this.getJobsTodayForCrew(this.state.userInfo.crew_number)
-                    this.setState({currentPage: 'EmployeeDashboard'});
+                    this.props.navigate('/employee-dashboard');
                 }
             })
+    }
 
+    // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered
+    handleGoToCalendarButtonClick(custInfo) {
+        this.setState({
+            customerInfo: custInfo
+        });
+        this.props.navigate('/calendar');
     }
 
     // gets a list of today's jobs for the specified crew from the database
@@ -141,28 +142,29 @@ class App extends Component {
 	// loads components from the landing_page.jsx file and renders them in the browser
     render() {
 
-        // a map containing the imported pages from the components directory
-        const pages = {
-            LandingPage: <LandingPage
-                onBookButtonClick={this.handleSetApptButtonClick}
-                onEmployeeSignInButtonClick={this.handleEmployeeSignInButtonClick}/>,
-            CustomerInfoPage: <CustomerInfoPage onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>,
-            Calendar: <Calendar />,
-            EmployeeSignInPage: <EmployeeSignInPage
-                onLoginClick={this.handleEmpLoginButtonClick}/>,
-            OwnerDashboard: <OwnerDashboard/>,
-            EmployeeDashboard: <EmployeeDashboard
-                jobsToday={this.state.fetchJobsTodayData}
-                crewNum={this.state.userInfo.crew_number}/>
-        };
-
-        // the render method will display whichever page is set as this.state.currentPage
-        return (
+        const App = () => (
             <div>
-                {pages[this.state.currentPage]}
+                <Routes>
+                    <Route path='/' element={<LandingPage propsWork={true}/>}/>
+                    <Route path='employee-login' element={<EmployeeSignInPage
+                        onLoginClick={this.handleEmpLoginButtonClick} />} />
+                    <Route path='appointment-info' element={<CustomerInfoPage
+                        onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>}/>
+                    <Route path='calendar' element={<Calendar
+                        custInfo={this.state.customerInfo} />} />
+                    <Route path='owner-dashboard' element={<OwnerDashboard />}/>
+                    <Route path='employee-dashboard' element={<EmployeeDashboard
+                        jobsToday={this.state.fetchJobsTodayData}
+                        crewNum={this.state.userInfo.crew_number} />} />
+                </Routes>
             </div>
+        )
+
+        // the render method will display whichever page is set as by the React router
+        return (
+            <App />
         );
 	}
 }
 
-export default App;
+export default withRouter(App);

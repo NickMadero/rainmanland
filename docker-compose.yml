@@ -23,7 +23,6 @@ services:
   nginx:
     depends_on:
       - api
-      - client
     restart: always
     build:
       dockerfile: Dockerfile
@@ -43,17 +42,8 @@ services:
     environment:
       <<: *common-variables
       MYSQL_HOST_IP: mysql_db
-
-  client:
-    stdin_open: true
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    build:
-      dockerfile: Dockerfile
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
+    ports:
+      - "3000:3001"
 
   adminer:
       image: adminer:latest

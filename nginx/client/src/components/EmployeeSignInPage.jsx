@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import {renderIntoDocument} from "react-dom/test-utils";
+import {withRouter} from "./withRouter";
 
 class EmployeeSignInPage extends React.Component {
     constructor(props) {
@@ -30,8 +31,7 @@ class EmployeeSignInPage extends React.Component {
         event.preventDefault();
 
         // TODO: handle login logic here
-        console.log('Email:', this.state.email);
-        console.log('Password:', this.state.password);
+        console.log('User credentials submitted.');
 
         // We can call the App.handleEmpLoginButtonClick() method from here (we renamed it to just "onLoginClick" inside
         // of this component) because the App class passed the method to this class (EmployeeSignInPage) as a prop in
@@ -66,4 +66,4 @@ class EmployeeSignInPage extends React.Component {
     }
 }
 
-export default EmployeeSignInPage;
+export default withRouter(EmployeeSignInPage);
