@@ -12,9 +12,8 @@ const OwnerHomePage = (props) => {
   /*EVENT LISTENERS & HANDLERS GO HERE */
   return (
     <>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-      </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  
     <div className={styles['page']}>
       <div id="container--top" className={styles['top-container']}>
 

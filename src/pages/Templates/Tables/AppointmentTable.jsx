@@ -4,10 +4,10 @@ import Button from '../../Templates/Button/Button';
 
 const SelectableAppointmentTable = () =>{
     return(
-        <div id="schedule-table" className={styles['schedule-table']}>
+        <>
             <AppointmentTable appointments={APPOINTMENTS}  />
             <Button variant={'remove'} text={'Remove Appointment'} type={"submit"} />
-        </div>
+        </>
     ); 
 }
 
