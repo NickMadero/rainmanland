@@ -1,0 +1,12 @@
+.remove, .form{
+    color: 'white';
+    background-color: 'Blue';
+    border: 0;
+    white-space: nowrap;
+    padding: 0.5em;
+    width: fit-content;
+}
+
+.remove:hover, .form:hover{
+    opacity: 0.95;
+}

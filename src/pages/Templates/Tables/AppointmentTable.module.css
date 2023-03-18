@@ -1,0 +1,33 @@
+.schedule-table{
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    border-radius: .25rem;
+    width: auto;
+    height: 20rem;
+    overflow-y: scroll;
+    overflow: scroll;
+    position: relative;
+}
+
+  h4 {
+    text-align: center;
+    line-height: 1;
+    margin: 0rem;
+  }
+  
+  th,
+  td {
+    padding: 1rem;
+    text-align: center;
+    background-color: #545F79;
+    color: white;
+    position: sticky;
+  }
+
+th{
+  background-color:#5c474785;
+}
+tr:nth-child(even){
+  background-color: #4f5d8385;
+}
