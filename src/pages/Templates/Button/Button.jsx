@@ -7,6 +7,7 @@ const Button = ({ variant, text, onClick, type="button"}) => {
 
     useEffect(() => {
         if (variant == "remove"){
+            console.log("useEffect = remove");
             setClassName(styles.remove);
         }
 

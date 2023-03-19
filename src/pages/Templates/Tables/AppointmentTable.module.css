@@ -1,16 +1,9 @@
-.schedule-table{
-    border-style: solid;
-    border-color: black;
-    border-width: 1px;
-    border-radius: .25rem;
-    width: auto;
-    height: 20rem;
-    overflow-y: scroll;
-    overflow: scroll;
-    position: relative;
-}
 
-  h4 {
+.appt-heading{
+  color: #000000;
+  white-space:nowrap;
+}
+h4 {
     text-align: center;
     line-height: 1;
     margin: 0rem;
@@ -18,16 +11,21 @@
   
   th,
   td {
-    padding: 1rem;
+    padding: 0.75rem;
     text-align: center;
-    background-color: #545F79;
     color: white;
     position: sticky;
   }
-
-th{
-  background-color:#5c474785;
+tr {
+  background-color: #253c72;
+}
+th {
+  background-color:#447c4496;
 }
 tr:nth-child(even){
-  background-color: #4f5d8385;
+  background-color: #13369785;
+}
+
+table{
+  border-color: #49dd0e;
 }
