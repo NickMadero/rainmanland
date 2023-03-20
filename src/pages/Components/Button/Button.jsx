@@ -4,10 +4,8 @@ import styles from "./Button.module.css";
 
 const Button = ({ variant, text, onClick, type="button"}) => {
     const [className, setClassName] = useState(styles.button);
-
     useEffect(() => {
         if (variant == "remove"){
-            console.log("useEffect = remove");
             setClassName(styles.remove);
         }
 
