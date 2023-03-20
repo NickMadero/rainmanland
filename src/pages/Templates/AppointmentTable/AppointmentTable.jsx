@@ -1,14 +1,14 @@
 import React from 'react';
 import styles from './AppointmentTable.module.css';
-import Button from '../../Templates/Button/Button';
+import Button from '../../Components/Button/Button';
 
 const SelectableAppointmentTable = () =>{
     return(
-        <>
+        <div id='wrapper' name='wrapper' className={styles.wrapper}>
             <h2 id='heading-appt' className={styles['appt-heading']}>Today's Appointments</h2>
             <AppointmentTable appointments={APPOINTMENTS}  />
             <Button variant={'remove'} text={'Remove Appointment'} type={"submit"} />
-        </>
+        </div>
     ); 
 }
 
@@ -56,8 +56,6 @@ function AppointmentTable({ appointments={APPOINTMENTS}  }){
     );
     }
     
-   
-    
     function AppointmentRow({ appointment }){
         return (
         <tr>
@@ -69,7 +67,7 @@ function AppointmentTable({ appointments={APPOINTMENTS}  }){
         </tr>
         );
     }
-    
+    /** Test Data */
     const APPOINTMENTS = [
         {time: "PM", name: "Raekwon", phone: "(347)378-6671", address: "22A Julie Ct, Staten Island, NY", zip: "10306"},
         {time: "AM", name: "GZA", phone: "(917)327-2254", address: "212 Lamberts Ln, Staten Island, NY", zip: "10304"},

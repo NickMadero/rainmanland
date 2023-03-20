@@ -16,27 +16,21 @@
   .text {
     top: 1.5rem;
     left: 6rem;
-    float: right;
-    position: absolute;
+    display: flex;
+    flex-direction: column;
     align-self: center;
   }
   /** For the Service Area and Pricing Forms **/
   /** Red border is temporary for debugging purposes **/
   .top-container {
-    top: 6rem;
+    margin: 2rem;
     width: 95%;
-    height: auto;
     display: flex;
-    position: relative;
-    flex-wrap: wrap-reverse;
-    margin-left: 2rem;
-    margin-bottom: 2rem;
+    flex-direction: column;
     border-color: #f50f13;
     border-style: double;
-    margin-right: 2rem;
-    justify-content: flex-end;
+    justify-content: center;
     box-sizing: border-box;
-    position: absolute;
   }
    /* Begin Styling for Service Area form */
   
@@ -46,6 +40,10 @@
   flex-direction: column;
   border-color: #2ad324;
   border-width: 2px;
-  border-style: solid;
+  border-style: double;
+  margin: 2rem;
   gap: 1rem;
+  box-sizing: border-box;
+  width: auto;
+  justify-content: center;
 }

@@ -1,7 +1,6 @@
 
 .appt-heading{
   color: #000000;
-  white-space:nowrap;
 }
 h4 {
     text-align: center;
@@ -27,5 +26,12 @@ tr:nth-child(even){
 }
 
 table{
-  border-color: #49dd0e;
+  overflow-y:scroll;
+}
+
+.wrapper {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
