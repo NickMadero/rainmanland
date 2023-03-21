@@ -17,8 +17,8 @@ const OwnerHomePage = (props) => {
   
     <div className={styles['page']}>
         <AvailabilitySettings />
-    <div id="container--bottom" className={styles['bottom-container']}>
-        <SelectableAppointmentTable />
+        <div id="container--bottom" className={styles['bottom-container']}>
+          <SelectableAppointmentTable />
       </div>
     </div>
     </>
