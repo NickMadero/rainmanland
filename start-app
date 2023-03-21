@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# Initialize variables to store flag values
+arg_d=false
+arg_p=false
+arg_s=false
+
+# Loop to parse command-line options using getopts
+while getopts ":dps" opt; do
+  case $opt in
+    d)
+      arg_d=true
+      ;;
+    p)
+      arg_p=true
+      ;;
+    s)
+      arg_s=true
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
+# Check if neither or both flags are set
+if { [ "$arg_d" = "false" ] && [ "$arg_p" = "false" ]; } || { [ "$arg_d" = "true" ] && [ "$arg_p" = "true" ]; }; then
+  echo "Error: Either -d or -p must be specified, but not both." >&2
+  exit 1
+fi
+
+# If -p flag is set, check if the current git branch is "prod"
+if [ "$arg_p" = "true" ]; then
+  current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+  if [ $? -ne 0 ]; then
+    echo "Error: Failed to determine the current Git branch." >&2
+    exit 1
+  elif [ "$current_branch" != "prod" ]; then
+    echo "Error: The -p option can only be used when the current Git branch is named 'prod'." >&2
+    exit 1
+  fi
+fi
+
+# Remove the flags that have already been parsed
+shift $((OPTIND-1))
+
+# Set.start-app-environment variables based on the selected flag
+if [[ "$arg_d" == "true" ]]; then
+  # Extract the development section from the .start-app-env file and save them to the .env file
+  grep -A1000 '^# Development' .start-app-env | grep -B1000 '^# Production' | sed -e '1d;$d' > .env
+  sed -i '/^$/d' .env
+  echo "" >> .env
+  echo "The following environment variables have been given to the docker-compose.dev.yml file:"
+  echo ""
+  cat .env
+
+elif [[ "$arg_p" == "true" ]]; then
+  # Extract the production section from the .start-app-env file and save them to the .env file
+  grep -A1000 '^# Production' .start-app-env | sed -e '/^# /d' > .env
+  sed -i '/^$/d' .env
+
+  # Fetch the local IPv4 address using the AWS Metadata Service
+  LOCAL_IPV4=$(curl -s --connect-timeout 5 http://169.254.169.254/latest/meta-data/local-ipv4)
+  # Check if the curl command was successful
+  if [[ $? -eq 0 ]] && [[ -n "$LOCAL_IPV4" ]]; then
+	echo "MYSQL_HOST_IP_OR_HOSTNAME=$LOCAL_IPV4" >> .env
+	echo "" >> .env
+  else
+    # Print an error message and exit with status code 1
+    echo "Error: Unable to fetch the local IPv4 address from the AWS Metadata Service." >&2
+    exit 1
+  fi
+
+  # Temporarily move the private key to the api folder so it can be copied to the container
+  cp ~/.ssh/id_rsa ./api/id_rsa
+  chmod 600 ./api/id_rsa
+
+  echo "The following environment variables have been given to the docker-compose.prod.yml file:"
+  echo ""
+  cat .env
+fi
+
+# Remove any Docker containers that aren't in use
+if [[ "$arg_s" == "true" ]]; then
+  sudo docker-compose -f docker-compose.prod.yml down
+  sudo docker-compose -f docker-compose.dev.yml down
+else
+  docker-compose -f docker-compose.prod.yml down
+  docker-compose -f docker-compose.dev.yml down
+fi
+
+# Run the sudo docker-compose command based on the selected flag
+if [[ "$arg_d" == "true" ]]; then
+  if [[ "$arg_s" == "true" ]]; then
+    sudo docker-compose -f docker-compose.dev.yml up --build 
+  else
+	docker-compose -f docker-compose.dev.yml up --build 
+  fi
+elif [[ "$arg_p" == "true" ]]; then
+  if [[ "$arg_s" == "true" ]]; then
+    sudo docker-compose -f docker-compose.prod.yml up --build 
+  else
+    docker-compose -f docker-compose.prod.yml up --build 
+  fi
+fi
+
+# Remove the temporary environment file and copy of the private key
+rm .env
+rm ./api/id_rsa
+

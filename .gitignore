@@ -1,23 +1,34 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+*
+!*/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+!README.md
+!docker-compose.prod.yml
+!docker-compose.dev.yml
+!pull-latest-and-deploy
+!start-app
+!start-app.ps1
+!compose-with-env
+!.gitignore
+!.gitattributes
+!create-dummy-db.sql
 
-# testing
-/coverage
+!nginx/default.dev.conf
+!nginx/default.prod.conf
+!nginx/Dockerfile.dev
+!nginx/Dockerfile.prod
 
-# production
-/build
+!nginx/client/Dockerfile.dev
+!nginx/client/package.json
+!nginx/client/package-lock.json
+!nginx/client/public/**
+!nginx/client/src/**
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+!api/Dockerfile.dev
+!api/Dockerfile.prod
+!api/index.js
+!api/dbController.js
+!api/package.json
+!api/package-lock.json
+!api/pm2.json
+!api/entrypoint.sh
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*

@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  mysql_db:
+    image: mysql:latest
+    restart: always
+    cap_add:
+      - SYS_NICE
+    volumes:
+      - "./create-dummy-db.sql:/docker-entrypoint-initdb.d/setup.sql" 
+    ports:
+      - "9906:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - "80:80"
+
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./api
+    depends_on:
+      - mysql_db
+    volumes:
+      - /app/node_modules
+      - ./api:/app
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST_IP_OR_HOSTNAME: ${MYSQL_HOST_IP_OR_HOSTNAME}
+      MYSQL_PORT: ${MYSQL_PORT}
+      NODE_ENV: ${NODE_ENV}
+
+  client:
+    stdin_open: true
+    environment:
+      CHOKIDAR_USEPOLLING: ${CHOKIDAR_USEPOLLING}
+      WDS_SOCKET_HOST: ${WDS_SOCKET_HOST}
+      WDS_SOCKET_PORT: ${WDS_SOCKET_PORT}
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx/client
+    volumes:
+      - /app/node_modules
+      - ./nginx/client:/app
+
+  adminer:
+      image: adminer:latest
+      restart: unless-stopped
+      ports:
+        - "8000:8080"
+      depends_on:
+        - mysql_db
+      environment:
+        ADMINER_DEFAULT_SERVER: ${ADMINER_DEFAULT_SERVER}
+
