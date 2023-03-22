@@ -61,11 +61,12 @@ class App extends Component {
     // When the user clicks the "Log in" button on EmployeeSignInPage, this method validates the credentials and brings
     // up the appropriate dashboard for the employee
     handleEmpLoginButtonClick(email, pw) {
-        axios.post("/api/verify-user", {email: email, password: pw})
+        axios.post("/api/verify-user", {sentEmail: email, sentPw: pw})
             .then((response) => {
-                if (response.data && response.data.length > 0) {
+				console.log(response);
+                if (response.data) {
                     this.setState({
-                        userInfo: response.data[0]
+                        userInfo: response.data;
                     })
                 }
                 else {
@@ -73,16 +74,16 @@ class App extends Component {
                         userInfo: false,
                         CurrentPage: 'EmployeeSignInPage'
                     });
-                    alert("Invalid login. Please try again or contact the business owner for credentials.")
+                    alert("Invalid login. Please try again or contact the business owner for credentials.");
                     return;
                 }
-                if (this.state.userInfo.user_type === "owner") {
-                    console.log("user is owner");
+                if (this.state.userInfo.user_type === "boss") {
+                    console.log("user is boss");
                     this.props.navigate('/owner-dashboard');
                 }
-                else if (this.state.userInfo.user_type === "employee") {
-                    console.log("user is employee")
-                    this.getJobsTodayForCrew(this.state.userInfo.crew_number)
+                else if (this.state.userInfo.user_type === "crew_member") {
+                    console.log("user is crew member");
+                    this.getJobsTodayForCrew(this.state.userInfo.crew_id);
                     this.props.navigate('/employee-dashboard');
                 }
             })

@@ -3,6 +3,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const dbController = require('./dbController');
 
@@ -63,20 +64,28 @@ app.get('/api/get-all-users', (req, res) => {
 
 // Check user credentials and return the user's info if credential are valid, else return false
 app.post('/api/verify-user', (req, res) => {
-    const email = req.body.email;
-    const pass = req.body.pass;
-	// TODO: get a hash of the provided plaintext password
-	const tryHash = null
-    const verifyQuery = "SELECT * FROM user WHERE password_hash = ? AND email = ?";
-    dbController.query(verifyQuery, [tryHash, email], (err, result) => {
+    const email = req.body.sentEmail;
+    const pass = req.body.sentPw;
+    const verifyQuery = "SELECT * FROM user INNER JOIN placed_on ON placed_on.user_id = user.user_id WHERE email = ?";
+    dbController.query(verifyQuery, [email], (err, result) => {
         console.log(result)
 		if (! result.length === 1) {
 			console.log("Verification failed.");
 			res.send(false);
 		}
 		else {
-			console.log("Verification success.");
-			res.send(result[0]);
+			console.log("User email exists.");
+			bcrypt.compare(pass, result[0]["password_hash"], function(err, hashResult) {
+				if (hashResult) {
+					console.log("User verified.");
+					res.send(result[0]);
+				}
+				else {
+					console.log("Bad password");
+					console.log(err);
+					res.send(false);
+				}
+			})
 		}
     })
 })
