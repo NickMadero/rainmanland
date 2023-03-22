@@ -97,5 +97,12 @@ app.post('/api/get-controller-brand', (req, res) => {
     })
 })
 
+app.post('/api/insert-newcustomer', (req, res) => {
+    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?,?);";
+    dbController.call(new_appointment,['test11@test.com', 'first', 'last', '837 Amerige Rd.', '2023-03-23', 3, 'second_test', 0],  (err, result) => {
+        res.send(result)
+    })
+})
+
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })

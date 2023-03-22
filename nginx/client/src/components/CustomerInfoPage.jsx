@@ -37,6 +37,7 @@ class CustomerInfoPage extends React.Component {
 
         this.setState({
             [name]: value
+
         });
     };
 
@@ -44,16 +45,20 @@ class CustomerInfoPage extends React.Component {
     handleSubmit = event => {
         event.preventDefault();
 
-        // TODO: handle login logic here
-        console.log('Customer info saved before going to calendar.');
+        const { email, First_Name, Last_Name } = this.state;
 
-        // We can call the App.handleEmpLoginButtonClick() method from here (we renamed it to just "onLoginClick" inside
-        // of this component) because the App class passed the method to this class (EmployeeSignInPage) as a prop in
-        // App.render(). This is one of the main ways components can work together in React. It sounds confusing, but
-        // take a quick look at the render() method in App.js and it will make sense.
-
-        this.props.onGoToCalendarButtonClick(this.state);
+        axios.post('/api/insert-newcustomer', {
+            email: email,
+            first_name: First_Name,
+            last_name: Last_Name
+        })
+            .then(res => {
+                console.log('Customer info saved before going to calendar.');
+                this.props.onGoToCalendarButtonClick(this.state);
+            })
+            .catch(err => console.log(err));
     };
+
 
 
     render() {
@@ -64,7 +69,7 @@ class CustomerInfoPage extends React.Component {
                 margin: '0 auto',
                 border: '1px solid black',
                 padding: '20px'
-            }} onSubmit={this.props.onGoToCalendarButtonClick}>
+            }} onSubmit={this.handleSubmit}>
                 <Row>
                     <Col>
                         <Form.Group controlId="formIsControllerOutside">
@@ -101,6 +106,10 @@ class CustomerInfoPage extends React.Component {
                 <Form.Group controlId="formAddress">
                     <Form.Label>What is your address?</Form.Label>
                     <Form.Control name="address" type="text" placeholder="enter address" required/>
+                </Form.Group>
+                <Form.Group controlId="formEmailAddress">
+                    <Form.Label>What is your Email address?</Form.Label>
+                    <Form.Control name="EmailAddress" type="text" placeholder="enter Email address" required/>
                 </Form.Group>
                 <Form.Group controlId="formFirstName">
                     <Form.Label>What is First Name?</Form.Label>
