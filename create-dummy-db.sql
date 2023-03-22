@@ -29,7 +29,7 @@ CREATE TABLE `appointment` (
   `is_complete` tinyint NOT NULL DEFAULT '0',
   `zone_amount` int DEFAULT NULL,
   `head_per_zone` int DEFAULT NULL,
-  `controller_brand` enum('test_controller') DEFAULT NULL,
+  `controller_brand` enum('test_controller', 'second_test') DEFAULT NULL,
   `controller_is_outside` tinyint DEFAULT '0',
   PRIMARY KEY (`appointment_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -395,6 +395,21 @@ CREATE TABLE `user` (
   `user_type` enum('boss','crew_member') NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DELIMITER $$
+CREATE DEFINER=`dev` PROCEDURE `get_controller_enum`()
+BEGIN
+
+SELECT
+  TRIM(TRAILING ')' FROM TRIM(LEADING '(' FROM TRIM(LEADING 'enum' FROM column_type))) column_type
+FROM
+  information_schema.columns
+WHERE
+  table_schema = 'rainmanland-dev' AND table_name = 'appointment' AND column_name = 'controller_brand';
+
+END$$
+DELIMITER ;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

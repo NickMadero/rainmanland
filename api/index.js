@@ -82,6 +82,13 @@ app.get('/api/get-jobs/:crewNum', (req, res) => {
         res.send(result);
     })
 })
+app.post('/api/get-controller-brand', (req, res) => {
+    const getController = "call get_controller_enum();";
+    dbController.query(getController,  (err, result) => {
+        res.send(result);
+        console.log(result);
+    })
+})
 
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })
