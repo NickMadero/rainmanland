@@ -410,6 +410,66 @@ WHERE
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE  DEFINER=`dev` PROCEDURE `insert_new_customer`(email varchar(100), first_name varchar(45), last_name varchar(45))
+BEGIN
+
+INSERT INTO `rainmanland-dev`.`customer`
+(
+`email`,
+`first_name`,
+`last_name`,
+`date_joined`)
+VALUES
+(email, first_name, last_name, curDate());
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE  DEFINER=`dev`  PROCEDURE `create_new_appointment`(email varchar(100), first_name varchar(45), last_name varchar(45), address varchar(255), zone_amount int,
+												 controller_brand varchar(45) , controller_is_outside TINYINT)
+BEGIN
+
+declare cus_id int;
+declare appoint_id int;
+
+call insert_new_customer(email, first_name, last_name);
+
+
+INSERT INTO `rainmanland-dev`.`appointment`
+(
+`address`,
+`zone_amount`,
+`controller_brand`,
+`controller_is_outside`)
+VALUES
+(address,zone_amount,controller_brand,controller_is_outside);
+
+set appoint_id = last_insert_id();
+
+
+set cus_id = (select c.customer_id
+from `rainmanland-dev`.`customer` c
+where c.email=email);
+
+INSERT INTO `rainmanland-dev`.`assigned_by`
+(
+`date_time_created`,
+`customer_id`,
+`appointment_id`)
+VALUES
+(
+now(),
+cus_id,
+appoint_id);
+
+
+
+END$$
+DELIMITER ;
+
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
