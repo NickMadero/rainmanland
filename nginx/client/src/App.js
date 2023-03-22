@@ -66,7 +66,7 @@ class App extends Component {
 				console.log(response);
                 if (response.data) {
                     this.setState({
-                        userInfo: response.data;
+                        userInfo: response.data
                     })
                 }
                 else {
