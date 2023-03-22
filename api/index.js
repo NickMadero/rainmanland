@@ -61,6 +61,27 @@ app.get('/api/get-all-users', (req, res) => {
     })
 })
 
+// Check user credentials and return the user's info if credential are valid, else return false
+app.post('/api/verify-user', (req, res) => {
+    const email = req.body.email;
+    const pass = req.body.pass;
+	// TODO: get a hash of the provided plaintext password
+	const tryHash = null
+    const verifyQuery = "SELECT * FROM user WHERE password_hash = ? AND email = ?";
+    dbController.query(verifyQuery, [tryHash, email], (err, result) => {
+        console.log(result)
+		if (! result.length === 1) {
+			console.log("Verification failed.");
+			res.send(false);
+		}
+		else {
+			console.log("Verification success.");
+			res.send(result[0]);
+		}
+    })
+})
+
+
 // Check credentials against db and return user info if credentials are good
 // TODO: make this secure by storing hashed passwords instead of plaintext. this is a placeholder for the demo
 app.post('/api/get-user-info', (req, res) => {
