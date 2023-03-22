@@ -427,7 +427,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE  DEFINER=`dev`  PROCEDURE `create_new_appointment`(email varchar(100), first_name varchar(45), last_name varchar(45), address varchar(255), date_occ DATE, zone_amount int,
+CREATE  DEFINER=`dev`  PROCEDURE `create_new_appointment`(email varchar(100), first_name varchar(45), last_name varchar(45), address varchar(255), zone_amount int,
 												 controller_brand varchar(45) , controller_is_outside TINYINT)
 BEGIN
 
@@ -440,18 +440,17 @@ call insert_new_customer(email, first_name, last_name);
 INSERT INTO `rainmanland-dev`.`appointment`
 (
 `address`,
-`date_occuring`,
 `zone_amount`,
 `controller_brand`,
 `controller_is_outside`)
 VALUES
-(address,date_occ,zone_amount,controller_brand,controller_is_outside);
+(address,zone_amount,controller_brand,controller_is_outside);
 
 set appoint_id = last_insert_id();
 
 
 set cus_id = (select c.customer_id
-from rainmanland.customer c
+from `rainmanland-dev`.`customer` c
 where c.email=email);
 
 INSERT INTO `rainmanland-dev`.`assigned_by`
