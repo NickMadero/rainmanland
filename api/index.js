@@ -83,5 +83,19 @@ app.get('/api/get-jobs/:crewNum', (req, res) => {
     })
 })
 
+// get a list of the available controller brand options
+app.post('/api/get-controller-brand', (req, res) => {
+    const getController = "call get_controller_enum();";
+    dbController.query(getController,  (err, result) => {
+        console.log(result);
+		// parse the result before sending it to the frontend
+		const unparsedString = result[0][0]["column_type"];
+		console.log(`Got unparsed string: ${unparsedString}.`);
+		const parsedArray = unparsedString.slice(1, -1).split("','");
+		console.log(`Parsed string into array: ${parsedArray}`);
+        res.send(parsedArray);
+    })
+})
+
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })

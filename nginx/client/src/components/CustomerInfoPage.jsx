@@ -3,7 +3,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import Dropdown from 'react-bootstrap/Dropdown';
+import {DropdownButton} from "react-bootstrap";
+import axios from "axios";
 class CustomerInfoPage extends React.Component {
 
     constructor(props) {
@@ -11,13 +13,22 @@ class CustomerInfoPage extends React.Component {
 
         this.state = {
             outside: false,
+            controllerBrands: [],
             brand: '',
             unitsPerZone: '',
             numZones: '',
             address: ''
         }
     }
-
+    componentDidMount() {
+        axios.post('/api/get-controller-brand')
+            .then(res => {
+                this.setState({
+                    controllerBrands: res.data
+                });
+            })
+            .catch(err => console.log(err));
+    }
     // Update the state whenever the user enters information in the form
     handleInputChange = event => {
         const target = event.target;
@@ -46,6 +57,7 @@ class CustomerInfoPage extends React.Component {
 
 
     render() {
+        const { controllerBrands } = this.state;
         return (
             <Form style={{
                 width: '50%',
@@ -62,18 +74,23 @@ class CustomerInfoPage extends React.Component {
                     </Col>
                     <Col>
                         <Form.Group controlId="formControllerBrand">
-                            <Form.Label>What brand is your controller?</Form.Label>
-                            <Form.Control name="brand" type="text" placeholder="brand" required pattern="[A-Za-z ]+"/>
+                            <DropdownButton id="dropdown-basic-button" title="brand of controller">
+                                {controllerBrands.map((brand, index) => (
+                                    <Dropdown.Item key={index} eventKey={index} onSelect={(eventKey, event) => { this.setState({ brand: brand }); }}>
+                                        {brand}
+                                    </Dropdown.Item>
+                                ))}
+                            </DropdownButton>
                         </Form.Group>
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <Form.Group controlId="formUnitsPerZone">
-                            <Form.Label>How many units per zone?</Form.Label>
-                            <Form.Control name="unitsPerZone" type="number" placeholder="# of units" required min="0"/>
-                        </Form.Group>
-                    </Col>
+                    {/*<Col>*/}
+                    {/*    <Form.Group controlId="formUnitsPerZone">*/}
+                    {/*        <Form.Label>How many units per zone?</Form.Label>*/}
+                    {/*        <Form.Control name="unitsPerZone" type="number" placeholder="# of units" required min="0"/>*/}
+                    {/*    </Form.Group>*/}
+                    {/*</Col>*/}
                     <Col>
                         <Form.Group controlId="formNumZones">
                             <Form.Label>How many zones?</Form.Label>
@@ -84,6 +101,14 @@ class CustomerInfoPage extends React.Component {
                 <Form.Group controlId="formAddress">
                     <Form.Label>What is your address?</Form.Label>
                     <Form.Control name="address" type="text" placeholder="enter address" required/>
+                </Form.Group>
+                <Form.Group controlId="formFirstName">
+                    <Form.Label>What is First Name?</Form.Label>
+                    <Form.Control name="First_Name" type="text" placeholder="First Name" required/>
+                </Form.Group>
+                <Form.Group controlId="formLastName">
+                    <Form.Label>What is Last Name?</Form.Label>
+                    <Form.Control name="Last_Name" type="text" placeholder="Last Name" required/>
                 </Form.Group>
                 <Button variant="primary" type="submit"
                         style={{margin: '30px', color: 'white', backgroundColor: 'blue'}}>
