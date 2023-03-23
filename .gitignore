@@ -30,5 +30,6 @@
 !api/package.json
 !api/package-lock.json
 !api/pm2.json
-!api/entrypoint.sh
+!api/entrypoint.dev.sh
+!api/entrypoint.prod.sh
 
