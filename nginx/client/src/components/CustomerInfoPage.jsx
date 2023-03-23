@@ -74,7 +74,11 @@ class CustomerInfoPage extends React.Component {
             .catch(err => console.log(err));
     };
 
-
+    handleIsControllerOutsideClick = () => {
+        this.setState((prevState) => ({
+            outside: !prevState.outside
+        }));
+    };
 
 
     render() {
@@ -90,13 +94,23 @@ class CustomerInfoPage extends React.Component {
                     <Col>
                         <Form.Group controlId="formIsControllerOutside">
                             <Form.Label>Is the controller outside?</Form.Label>
-                            <Form.Control name="outside" type="text" placeholder="0 or 1" required onChange={this.handleInputChange}/>
+                            <Form.Label>Is the controller outside?</Form.Label>
+                            <div>
+                                <Form.Check
+                                    name="outside"
+                                    type="checkbox"
+                                    label="Yes"
+                                    checked={this.state.outside}
+                                    onChange={this.handleIsControllerOutsideClick}
+
+                                />
+                            </div>
                         </Form.Group>
                     </Col>
                     <Col>
                         <Form.Group controlId="formControllerBrand">
-                            <DropdownButton id="dropdown-basic-button" title="brand of controller" required onSelect={(eventKey, event) => { this.setState({ brand: eventKey }); }}>
-                                {controllerBrands.map((brand, index) => (
+                            <DropdownButton id="dropdown-basic-button" title={this.state.selectedBrandName || "brand of controller"} required onSelect={(eventKey, event) => { this.setState({ brand: eventKey, selectedBrandName: event.target.innerText }); }}>
+                            {controllerBrands.map((brand, index) => (
                                     <Dropdown.Item key={index} eventKey={brand}>
                                         {brand}
                                     </Dropdown.Item>
