@@ -9,9 +9,9 @@ Interacting with the database:
 
 ***************************************************************
 **********************************************************
-Stored Procedures:
+# Stored Procedures:
 
-Get Controller Brands:
+### Get Controller Brands:
 
 The controller brands are an enum datatype in the `appointment` table.
         To get the controller brands make a call to the stored procedure:
@@ -23,7 +23,7 @@ table.
 
 *********************************
 
-Create a new Appointment
+### Create a new Appointment
 
 This will take the information required by the customer to set rates and to store themselves
 as a customer. It also bridges all appointments associated with a specific user in the `assigned_by`
@@ -33,7 +33,7 @@ table.
 
 ********************************************************
 
-Set Date of Appointment
+### Set Date of Appointment
 
 This is used after the customer pays. This sets the date that the appointment is to take place.
 It takes a customer and finds the last appointment row that is associated with the customer and
@@ -44,4 +44,21 @@ sets the date.
 *************************************************************
   
 
-    
+## Get All Appointments with Customers
+
+This is used to get all relevant information about an appointment and the associcated
+customer
+
+    CALL `rainmanland`.`get_all_appointments_with_customer`();
+
+*********************************
+
+## Get All Appointments on specific day
+
+This is used to get all the appointments that occur on the date provided. 
+the format for date should be `YYYY-MM-DD`.
+
+    CALL `rainmanland`.`get_all_appointments_on_date`(<{date_occur DATE}>);
+
+******************************************************
+
