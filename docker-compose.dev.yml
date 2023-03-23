@@ -1,21 +1,6 @@
 version: '3.8'
 
 services:
-  mysql_db:
-    image: mysql:latest
-    restart: always
-    cap_add:
-      - SYS_NICE
-    volumes:
-      - "./create-dummy-db.sql:/docker-entrypoint-initdb.d/setup.sql" 
-    ports:
-      - "9906:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
-      MYSQL_HOST: ${MYSQL_HOST}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
   nginx:
     depends_on:
@@ -63,8 +48,6 @@ services:
       restart: unless-stopped
       ports:
         - "8000:8080"
-      depends_on:
-        - mysql_db
       environment:
         ADMINER_DEFAULT_SERVER: ${ADMINER_DEFAULT_SERVER}
 
