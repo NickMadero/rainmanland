@@ -83,5 +83,34 @@ app.get('/api/get-jobs/:crewNum', (req, res) => {
     })
 })
 
+// get a list of the available controller brand options
+app.post('/api/get-controller-brand', (req, res) => {
+    const getController = "call get_controller_enum();";
+    dbController.query(getController,  (err, result) => {
+        console.log(result);
+		// parse the result before sending it to the frontend
+		const unparsedString = result[0][0]["column_type"];
+		console.log(`Got unparsed string: ${unparsedString}.`);
+		const parsedArray = unparsedString.slice(1, -1).split("','");
+		console.log(`Parsed string into array: ${parsedArray}`);
+        res.send(parsedArray);
+    })
+})
+
+app.post('/api/insert-newcustomer', (req, res) => {
+    console.log(req.body); // added console.log statement
+
+    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?);";
+    dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address, req.body.numZones,req.body.brand, req.body.outside],  (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.send(result);
+        }
+    })
+})
+
+
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })

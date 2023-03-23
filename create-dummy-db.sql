@@ -29,7 +29,7 @@ CREATE TABLE `appointment` (
   `is_complete` tinyint NOT NULL DEFAULT '0',
   `zone_amount` int DEFAULT NULL,
   `head_per_zone` int DEFAULT NULL,
-  `controller_brand` enum('test_controller') DEFAULT NULL,
+  `controller_brand` enum('test_controller', 'second_test') DEFAULT NULL,
   `controller_is_outside` tinyint DEFAULT '0',
   PRIMARY KEY (`appointment_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -395,6 +395,81 @@ CREATE TABLE `user` (
   `user_type` enum('boss','crew_member') NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DELIMITER $$
+CREATE DEFINER=`dev` PROCEDURE `get_controller_enum`()
+BEGIN
+
+SELECT
+  TRIM(TRAILING ')' FROM TRIM(LEADING '(' FROM TRIM(LEADING 'enum' FROM column_type))) column_type
+FROM
+  information_schema.columns
+WHERE
+  table_schema = 'rainmanland-dev' AND table_name = 'appointment' AND column_name = 'controller_brand';
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE  DEFINER=`dev` PROCEDURE `insert_new_customer`(email varchar(100), first_name varchar(45), last_name varchar(45))
+BEGIN
+
+INSERT INTO `rainmanland-dev`.`customer`
+(
+`email`,
+`first_name`,
+`last_name`,
+`date_joined`)
+VALUES
+(email, first_name, last_name, curDate());
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE  DEFINER=`dev`  PROCEDURE `create_new_appointment`(email varchar(100), first_name varchar(45), last_name varchar(45), address varchar(255), zone_amount int,
+												 controller_brand varchar(45) , controller_is_outside TINYINT)
+BEGIN
+
+declare cus_id int;
+declare appoint_id int;
+
+call insert_new_customer(email, first_name, last_name);
+
+
+INSERT INTO `rainmanland-dev`.`appointment`
+(
+`address`,
+`zone_amount`,
+`controller_brand`,
+`controller_is_outside`)
+VALUES
+(address,zone_amount,controller_brand,controller_is_outside);
+
+set appoint_id = last_insert_id();
+
+
+set cus_id = (select c.customer_id
+from `rainmanland-dev`.`customer` c
+where c.email=email);
+
+INSERT INTO `rainmanland-dev`.`assigned_by`
+(
+`date_time_created`,
+`customer_id`,
+`appointment_id`)
+VALUES
+(
+now(),
+cus_id,
+appoint_id);
+
+
+
+END$$
+DELIMITER ;
+
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
