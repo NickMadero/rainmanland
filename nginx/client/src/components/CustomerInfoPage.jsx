@@ -57,8 +57,9 @@ class CustomerInfoPage extends React.Component {
             Last_Name
         } = this.state;
 
-        axios
-            .post('/api/insert-newcustomer', {
+        const outsideValue = outside ? 1 : 0;
+
+        axios.post('/api/insert-newcustomer', {
                 outside: outside,
                 brand: brand,
                 numZones: numZones,
@@ -74,12 +75,10 @@ class CustomerInfoPage extends React.Component {
             .catch(err => console.log(err));
     };
 
-    handleIsControllerOutsideClick = () => {
-        this.setState((prevState) => ({
-            outside: !prevState.outside
-        }));
-    };
 
+    handleCheckboxChange = (event) => {
+        this.setState({ outside: !this.state.outside });
+    };
 
     render() {
         const { controllerBrands } = this.state;
@@ -94,15 +93,13 @@ class CustomerInfoPage extends React.Component {
                     <Col>
                         <Form.Group controlId="formIsControllerOutside">
                             <Form.Label>Is the controller outside?</Form.Label>
-                            <Form.Label>Is the controller outside?</Form.Label>
                             <div>
                                 <Form.Check
-                                    name="outside"
                                     type="checkbox"
+                                    id="checkbox-outside"
                                     label="Yes"
                                     checked={this.state.outside}
-                                    onChange={this.handleIsControllerOutsideClick}
-
+                                    onChange={this.handleCheckboxChange}
                                 />
                             </div>
                         </Form.Group>
