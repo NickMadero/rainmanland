@@ -61,6 +61,18 @@ class EmployeeSignInPage extends React.Component {
                     </label>
                     <button type="submit">Log In</button>
                 </form>
+				<form onSubmit={this.handleNewEmpSubmit}>
+                    <label>
+                        Email:
+                        <input type="text" name="email" value={this.state.newEmail} onChange={this.handleInputChange} />
+                    </label>
+                    <label>
+                        Password:
+                        <input type="password" name="password" value={this.state.newPassword} onChange={this.handleInputChange} />
+                    </label>
+                    <button type="submit">Log In</button>
+                </form>
+
             </div>
         );
     }

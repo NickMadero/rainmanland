@@ -87,7 +87,12 @@ class App extends Component {
                     this.props.navigate('/employee-dashboard');
                 }
             })
-    }
+			.catch((error) => {
+				console.error(error);
+				alert("An error occurred while logging in. Please try again.");
+			})
+	}	
+
 
     // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered
     handleGoToCalendarButtonClick(custInfo) {
