@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './Templates/ownerhomepage.module.css'
+import styles from './Templates/ownerdashboard.module.css'
 import SelectableAppointmentTable from './Templates/AppointmentTable/AppointmentTable.jsx'
 import AvailabilitySettings from './Templates/Availability/AvailabilitySettings.jsx'
 /**
