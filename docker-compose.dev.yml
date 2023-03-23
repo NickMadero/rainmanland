@@ -17,8 +17,6 @@ services:
     build:
       dockerfile: Dockerfile.dev
       context: ./api
-    depends_on:
-      - mysql_db
     volumes:
       - /app/node_modules
       - ./api:/app
@@ -29,6 +27,9 @@ services:
       MYSQL_HOST_IP_OR_HOSTNAME: ${MYSQL_HOST_IP_OR_HOSTNAME}
       MYSQL_PORT: ${MYSQL_PORT}
       NODE_ENV: ${NODE_ENV}
+      SSH_TUNNEL_CLIENT_PORT: ${SSH_TUNNEL_CLIENT_PORT}
+      SSH_USERNAME: ${SSH_USERNAME}
+      PRIVATE_KEY: ${PRIVATE_KEY}
 
   client:
     stdin_open: true

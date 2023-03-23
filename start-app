@@ -72,15 +72,21 @@ elif [[ "$arg_p" == "true" ]]; then
     echo "Error: Unable to fetch the local IPv4 address from the AWS Metadata Service." >&2
     exit 1
   fi
-
-  # Temporarily move the private key to the api folder so it can be copied to the container
-  cp ~/.ssh/id_rsa ./api/id_rsa
-  chmod 600 ./api/id_rsa
-
+  
   echo "The following environment variables have been given to the docker-compose.prod.yml file:"
   echo ""
   cat .env
 fi
+
+# Extract the path to the private key from the .env file
+SSH_KEY_PATH=$(grep 'PATH_TO_SSH_PRIVATE_KEY' .env | cut -d '=' -f 2)
+
+# Expand the tilde (if present) to the actual home directory path
+eval SSH_KEY_PATH="$SSH_KEY_PATH"
+
+# Temporarily move the private key to the api folder so it can be copied to the container
+cp $SSH_KEY_PATH ./api/id_rsa
+chmod 600 ./api/id_rsa
 
 # Remove any Docker containers that aren't in use
 if [[ "$arg_s" == "true" ]]; then
