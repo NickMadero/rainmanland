@@ -1,0 +1,20 @@
+.remove,.form {
+    color: #ffffff;
+    border: 0;
+    white-space: nowrap;
+    padding: 0.5em;
+    width: fit-content;
+    height: 2.5rem;
+    border-radius: .25rem;
+}
+.remove {
+    background-color: #598299;
+}
+.form {
+    background-color: #00c22086;
+}
+
+.remove:hover, .form:hover{
+    opacity: 0.90;
+    transition: 0.25s;
+}
