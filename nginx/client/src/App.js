@@ -76,7 +76,7 @@ class App extends Component {
                     alert("Invalid login. Please try again or contact the business owner for credentials.")
                     return;
                 }
-                if (this.state.userInfo.user_type === "owner") {
+                if (this.state.userInfo.user_type === "boss") {
                     console.log("user is owner");
                     this.props.navigate('/owner-dashboard');
                 }
