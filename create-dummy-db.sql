@@ -465,6 +465,19 @@ cus_id,
 appoint_id);
 
 
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`dev` PROCEDURE `get_all_appointments_on_date`(date_occur DATE)
+BEGIN
+
+select a.appointment_id, a.address, a.date_occuring, a.is_complete, a.zone_amount, a.controller_brand, a.controller_is_outside,
+			c.customer_id, c.first_name, c.last_name, c.email
+from `rainmanland-dev`.`appointment` a
+	join `rainmanland-dev`.`assigned_by` ab on ab.appointment_id=a.appointment_id
+    join `rainmanland-dev`.`customer` c on c.customer_id = ab.customer_id
+where a.date_occuring=date_occur;
 
 END$$
 DELIMITER ;

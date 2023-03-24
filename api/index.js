@@ -112,5 +112,17 @@ app.post('/api/insert-newcustomer', (req, res) => {
 })
 
 
+app.post('/api/show-appoinments', (req,res) => {
+
+    const show_appointments = "call get_all_appointments_on_date(?);";
+    dbController.query(show_appointments,['2023-03-23'], (err, result) =>{
+        if (err) {
+            console.log(err);
+        } else{
+            res.send(result)
+        }
+    })
+
+})
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })
