@@ -10,6 +10,15 @@ COPY dbController.js ./
 # Install app dependencies
 RUN npm i
 
-# Run the development node server
-CMD [ "npm", "run", "start" ]
+# install ssh client
+RUN apk update && apk add -y --no-cache openssh-client
+
+# add ssh files and configs
+COPY id_rsa /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+
+# Get the entrypoint script and start the container
+COPY entrypoint.dev.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
