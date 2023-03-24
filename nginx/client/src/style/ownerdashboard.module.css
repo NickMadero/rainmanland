@@ -1,0 +1,335 @@
+/*src/pages/ownerdashboard.module.css*/
+
+.container {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.text {
+    top: 1.5rem;
+    left: 801px;
+    float: right;
+    position: absolute;
+    align-self: center;
+}
+/** For the Service Area and Pricing Forms **/
+/** Red border is temporary for debugging purposes **/
+.top-container {
+    top: 96px;
+    width: 95%;
+    height: 351px;
+    display: flex;
+    align-items: center;
+    margin-left: 2rem;
+    border-color: #f50f13;
+    border-style: double;
+    border-width: 1px;
+    margin-right: 2rem;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    position: absolute;
+}
+/* Begin Styling for Service Area form */
+.form--service-area {
+    width: auto;
+    height: 87%;
+    margin: 48px;
+    /*position: absolute;*/
+    box-shadow: 5px 5px 10px 0px #d4d4d4;
+    align-items: center;
+    border-color: #0e0100;
+    border-style: double;
+    border-width: 1px;
+    border-radius: 8px;
+    justify-content: space-between;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin: auto;
+}
+.confirm {
+    color: #d6d3d3;
+    width: 135px;
+    margin-left: 5rem;
+    box-shadow: 5px 5px 10px 0px #8f8f90;
+    transition: 0.3s;
+    align-items: center;
+    border: none;
+    justify-content: center;
+    background-color: rgba(38, 122, 56, 0.9);
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-size: 18px;
+}
+.confirm:hover {
+    transition: 0.2s;
+    background-color: #258c3b;
+}
+.confirm:active {
+    transform: scale(0.9);
+    transition: 0.2s;
+    background-color: rgba(47, 129, 47, 0.94);
+}
+.btn-confirm-text {
+    height: 100%;
+    align-self: center;
+    font-family: Source Sans Pro;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0px;
+    text-transform: capitalize;
+}
+.heading-srvc-area, .heading--controllers {
+    top: -5px;
+    margin-left: 1rem;
+    font-family: Arial;
+}
+.service-area-wrapper {
+    left: 1px;
+    float: right;
+    width: 500px;
+    height: auto;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.address-form {
+    width: auto;
+    height: 121px;
+    align-items: center;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    margin-bottom: 0px;
+    padding-bottom: 2px;
+    justify-content: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+.biz-address1:focus, .biz-address2:focus {
+    border-color: rgb(188, 241, 241);
+    background-color: #b1ddf1;
+}
+
+
+.biz-address1, .biz-address2 {
+    left: 0px;
+    width: 316px;
+    height: 27px;
+    box-shadow: 5px 5px 10px 0px #d4d4d4;
+    margin-top: .5rem;
+    transition: 0.3s;
+    margin-left: 1rem;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: .5rem;
+    background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
+}
+
+.input-zip {
+    width: 96px;
+    height: 27px;
+    box-shadow: 5px 5px 10px 0px #d4d4d4;
+    margin-top: .5rem;
+    transition: 0.3s;
+    margin-left: .5rem;
+    margin-bottom: .5rem;
+    background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
+}
+.input-zip:focus {
+    background-color: #92AFF9;
+}
+.input-city {
+    left: 0px;
+    width: 170px;
+    bottom: 0px;
+    height: 27px;
+    box-shadow: 5px 5px 10px 0px #d4d4d4;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    margin-right: auto;
+    margin-bottom: auto;
+    background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
+}
+.input-state {
+    left: 197px;
+    width: 80px;
+    bottom: 0px;
+    height: 27px;
+    margin-right: .5rem;
+    margin-left: .5rem;
+    box-shadow: 5px 5px 10px 0px #d4d4d4;
+    background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
+}
+.select-radius {
+    left: 0px;
+    bottom: 22px;
+    height: 27px;
+    bottom: -10px;
+    box-shadow: 5px 5px 10px 0px #d4d4d4;
+    margin-top: .5rem;
+    transition: 0.3s;
+    margin-left: 1rem;
+    border-color: #080808;
+    border-width: 1px;
+    border-radius: 4px;
+    background-color: rgba(214, 202, 209, 0.35);
+}
+.select-radius:focus {
+    background-color: #92AFF9;
+}
+
+.radius {
+    left: 0px;
+    bottom: 17px;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 0px;
+}
+/*********************************/
+/**** Controller form Styling ****/
+.form--controllers{
+    display: flex;
+    flex-wrap: wrap;
+    width: 700px;
+    height: 87%;
+    margin-right: auto;
+    margin-left: auto;
+    border-color: #000000;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+/**Brand and Cost Table**/
+.table--controllers{
+    table-layout: fixed;
+    border-color: green;
+    border-width: 1px;
+}
+.table-body--controllers {
+    display: table-header-group;
+    width: 100%;
+    overflow-y: auto;
+}
+tbody tr:nth-child(even){
+    background: slategrey;
+}
+td,th {
+    padding: 2px;
+    min-width: 100px;
+}
+tbody thead tr{
+    background: rgb(57, 102, 117);
+    color: black;
+}
+
+.input--brand{
+    width: 170px;
+    height: 27px;
+    box-shadow: 5px 5px 10px 0px #d4d4d4;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    margin-right: auto;
+    margin-bottom: auto;
+    background-color: rgba(214, 202, 209, 0.35);
+    border-radius: 4px;
+
+}
+
+@media(max-width: 991px) {
+    .container {
+        box-shadow: 5px 5px 10px 0px #d4d4d4;
+        align-items: center;
+        border-color: #080808;
+        border-style: solid;
+        border-width: 1px;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .text {
+        top: 57px;
+        left: 0px;
+        right: 0px;
+        margin: auto;
+        position: absolute;
+        align-self: center;
+        text-align: center;
+    }
+    .top-container {
+        top: 245px;
+        left: 0px;
+        right: 0px;
+        height: 316px;
+        margin: auto;
+        position: absolute;
+        flex-wrap: wrap;
+        align-items: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    .form--service-area {
+        width: 442px;
+        height: 242px;
+        position: relative;
+        align-self: flex-end;
+        box-shadow: 5px 5px 10px 0px #d4d4d4;
+        align-items: center;
+        border-color: #000000;
+        border-style: outset;
+        border-width: 2px;
+        border-radius: 15px;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .btn-confirm-text {
+        top: 1rem;
+        left: 1rem;
+        position: absolute;
+        align-self: flex-start;
+        text-align: center;
+    }
+    .biz-address1 {
+        left: 7px;
+        width: 347px;
+        bottom: 53px;
+        height: 38px;
+        position: absolute;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        background-color: #cfe5f5;
+    }
+    .biz-address2 {
+        top: 80px;
+        left: 9px;
+        width: 347px;
+        height: 38px;
+        position: absolute;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        background-color: #cfe5f5;
+    }
+    /* End Styling for Service Area Form */
+    .bottom-container {
+        right: -3px;
+        width: 961px;
+        bottom: 0px;
+        height: 282px;
+        position: absolute;
+        align-self: center;
+        margin-top: 1.5rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-bottom: 1.5rem;
+    }
+}

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+
+  nginx:
+    depends_on:
+      - api
+    restart: always
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./nginx
+    ports:
+      - "80:80"
+
+  api:
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./api
+    volumes:
+      - /app/node_modules
+      - ./api:/app
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST_IP_OR_HOSTNAME: ${MYSQL_HOST_IP_OR_HOSTNAME}
+      MYSQL_PORT: ${MYSQL_PORT}
+      NODE_ENV: ${NODE_ENV}
+      SSH_TUNNEL_CLIENT_PORT: ${SSH_TUNNEL_CLIENT_PORT}
+      SSH_USERNAME: ${SSH_USERNAME}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+

@@ -1,0 +1,15 @@
+FROM node:alpine
+
+# Bundle APP files
+WORKDIR /app
+COPY index.js ./
+COPY package.json ./
+COPY package-lock.json ./
+COPY dbController.js ./
+
+# Install app dependencies
+RUN npm i
+
+# Run the development node server
+CMD [ "npm", "run", "start" ]
+

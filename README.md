@@ -1,86 +1,21 @@
-# rainmanland
-A self-scheduling calendar and route-optimization web application for rainmanland.com
+# RML Smart Calendar
 
-## Deploying changes to the live site
-We will use pull deployments to safely update the live site. With a React app hosted using nginx, the process looks something like this:
-1. A team member commits new changes on their local machine
-2. They push or submit a pull request to the GitHub repo, depending on the branch you made changes to (*main* requires pull request).
-3. Somebody will ssh into the EC2 instance and pull the changes from GitHub into the repo on the EC2 instance (`~/team-wallaby/rainmanland`)
-4. Inside the repo on the EC2 instance, use the command `npm run build` to compile the app into a build folder
-5. Copy the contents from `build` into `/var/www/rainmanland/html`
-6. Test all the nginx config files with `nginx -t`
-7. Restart the nginx server with `sudo systemctl restart nginx`
-8. The changes should now be live.
+## Quick-Start Guide (I will write better docs as soon as I can)
 
-**Note**: this doesn't need to be done very often. To check how changes look, we will usually just run `npm start` on our local machines to take a look in the browser.
+#### Overview
+This repo has two main branches, and they contain all the same files. There are now two different docker-compose files, and they each launch a different type of environment. To make things simple, there is a bash script called `start-app` in the root directory. It chooses the right files, sets environment variables, and launches the necessary docker containers in one command.
 
-## Getting Started with Create React App
+To run the script on a new machine (yours), you'll need to get a secret file called `.start-app-env`, then put it in the root directory of the repo. It is in the .gitignore file so it doesn't get uploaded to the public repo and our passwords and sensitive info are hidden. I put it in the Discord. When you pull changes to your local repo, it will stay right where it is.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Once you have the secret file, you can run this script by going to the root directory and running `./start-app` with the right flags set. The -p flag sets up a production environment by compiling the frontend into a static Build folder which gets copied to an nginx container, running the api in a separate container that uses the PM2 process manager to handle load-balancing and minimize downtime, and connects the api to the real database running on the EC2 instance. It is not meant for testing changes - only commits that we have already tested can be merged into prod. The script will only work with the -p flag if its run on the EC2 instance and the current branch is "prod".
 
-### Available Scripts
+The -d flag sets up a development environment, which will work on your local computer. (You might need to install WSL if you don't use Linux). The dev environment sets you up with a lil test database that runs locally on your machine in a Docker container. It also runs nginx, the frontend, and the api in their own containers running on development servers, which allows you to hot-update so you can see your changes in the browser instantly whenever you save changes to a frontend file.
 
-In the project directory, you can run:
+The -s flag runs docker commands with sudo, which is necessary on the EC2 instance (and possibly your local machine... check).
 
-#### `npm start`
+**So to ship the app on the EC2 server, checkout the prod branch, pull the latest changes, then run `./start-app -ps`.**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### Things to be careful about
+1. There are now two versions of all the Dockerfiles and docker-compose files. Also the default.conf files for the nginx server. Please be really careful before making changes to these. They work right now, but it took me literal days to get everything working and if it breaks I probably already forgot how it works.
+2. The .gitignore file is using a "whitelist" approach, so rather than naming files to ignore, it names the files that are covered under the version control. If you add a new file, make sure you add it to the .gitignore whitelist first. To add a whole directory and its contents, use `!path/to/dir/**`.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-#### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-#### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-#### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-### Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-#### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-#### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-#### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-#### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-#### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-#### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
