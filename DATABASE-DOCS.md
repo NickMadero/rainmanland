@@ -99,5 +99,45 @@ that they were hired
 
 **********************************************
 
-    
+## Appointment add Zip Code
 
+This is used to add a new zip code (default not an active zip code) to keep track of where appointments
+are for scheduling and servicing.
+This will use a function to parse the address and retrieve the last numbers (zip code)
+
+
+    
+    
+*****************************
+
+## Get Password Hash from email
+
+This will return the password hash from a given email of a user
+
+    CALL `rainmanland`.`get_password_hash`(<{email varchar(100)}>);
+
+***********************************
+    
+## Get all user info
+
+Returns all the information about a user given their email
+
+    CALL `rainmanland`.`get_user_info`(<{email varchar(100)}>);
+
+***********************************
+
+## Get all Crews and Users
+
+This will return all the crews and the crew members
+
+    CALL `rainmanland`.`get_all_crews_and_members`();
+
+*********************************
+
+## Get all members on a crew
+
+Takes a crew name and return all of information and users placed on the crew
+
+    CALL `rainmanland`.`get_all_crews_and_members`();
+
+***************************************
