@@ -77,5 +77,17 @@ This is for adding a new setting or changing the value of an existing setting
 
     CALL `rainmanland`.`put_setting`(<{key_ varchar(100)}>, <{value_ varchar(100)}>);
 ********************************
+
+## Add New User
+
+This is used as a helper method to insert rows when adding either a crew_member or boss.
+can be used but recomended not to be used.
+
+    CALL `rainmanland`.`add_new_user`(<{first_name varchar(45)}>, <{last_name varchar(45)}>, <{email varchar(100)}>, <{password_hash varchar(255)}>, <{phone varchar(45)}>, <{is_working tinyint}>, <{user_type varchar(45)}>);
+
+****************************************
+
+
+
     
 
