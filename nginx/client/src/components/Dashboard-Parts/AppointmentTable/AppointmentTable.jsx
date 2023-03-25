@@ -1,92 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import styles from './AppointmentTable.module.css';
-import Button from '../Components/Button/Button';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Table, Form, Button } from 'react-bootstrap';
 
-const SelectableAppointmentTable = () => {
+function SelectableAppointmentTable() {
     const [appointments, setAppointments] = useState([]);
+    const [selectedDate, setSelectedDate] = useState('');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios.post('/api/show-appointments', { date: '2023-03-23' });
-            setAppointments(result.data);
-        };
-        fetchData();
-    }, []);
+    const fetchAppointments = () => {
+        const formattedDate =  new Date(selectedDate).toISOString().split('T')[0];
+        console.log('Formatted date:', formattedDate);
+
+        axios.post('/api/show-appointments', {
+            date:  formattedDate
+        })
+            .then(response => {
+                console.log(response.data);
+                setAppointments(response.data);
+            })
+            .catch(error => console.log(error));
+    }
+
+    const renderYesNo = (value) => {
+        return value ? "Yes" : "No";
+    }
 
     return (
-        <div id='wrapper' name='wrapper' className={styles.wrapper}>
-            <h2 id='heading-appt' className={styles['appt-heading']}>
-                Today's Appointments
-            </h2>
-            <AppointmentTable appointments={appointments} />
-            <Button variant={'remove'} text={'Remove Appointment'} type={'submit'} />
+        <div style={{ display: 'flex', height: '100vh' }}>
+            <div style={{ flex: 1 }}></div>
+            <div style={{ flex: 2, overflowY: 'scroll' }}>
+                <Form.Group controlId="formDate">
+                    <Form.Label>Select Date:</Form.Label>
+                    <Form.Control
+                        type="date"
+                        value={selectedDate}
+                        onChange={(e) => setSelectedDate(e.target.value)}
+                    />
+                </Form.Group>
+                <Button onClick={fetchAppointments}>Show Appointments</Button>
+                <Table striped bordered hover>
+                    <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th>Date</th>
+                        <th>Finished</th>
+                        <th>Num Zones</th>
+                        <th>Controller Brands</th>
+                        <th>Outside</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {appointments.map(appointment => (
+                        <tr key={appointment.id}>
+                            <td>{appointment.address}</td>
+                            <td>{appointment.date}</td>
+                            <td>{renderYesNo(appointment.finished)}</td>
+                            <td>{appointment.numZones}</td>
+                            <td>{appointment.controller_Brands}</td>
+                            <td>{renderYesNo(appointment.outside)}</td>
+                            <td>{appointment.firstName}</td>
+                            <td>{appointment.lastName}</td>
+                            <td>{appointment.email}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </Table>
+            </div>
         </div>
-    );
-};
-
-function AppointmentTable({ appointments = [] }) {
-    const rows = [];
-    appointments.sort((a, b) => {
-        return a.time.localeCompare(b.time);
-    });
-    appointments.forEach((appointment) => {
-        rows.push(<AppointmentRow appointment={appointment} key={appointment.name} />);
-    });
-
-    return (
-        <table id='table--appointments' name='table--appointments' className={styles['table--appointments']}>
-            <thead>
-            <tr>
-                <th>
-                    <h4>address</h4>
-                </th>
-                <th>
-                    <h4>date</h4>
-                </th>
-                <th>
-                    <h4>finished</h4>
-                </th>
-                <th>
-                    <h4># of zones</h4>
-                </th>
-                <th>
-                    <h4>controller brand</h4>
-                </th>
-                <th>
-                    <h4>controller outside</h4>
-                </th>
-                <th>
-                    <h4>first name</h4>
-                </th>
-                <th>
-                    <h4>last name</h4>
-                </th>
-                <th>
-                    <h4>email</h4>
-                </th>
-            </tr>
-            </thead>
-            <tbody id='table-body--appointments' className={styles['table-body--apointments']}>
-            {rows}
-            </tbody>
-        </table>
-    );
-}
-
-function AppointmentRow({ appointment }) {
-    return (
-        <tr>
-            <td>{appointment.address}</td>
-            <td>{appointment.date}</td>
-            <td>{appointment.finished}</td>
-            <td>{appointment.numZones}</td>
-            <td>{appointment.controllerBrands}</td>
-            <td>{appointment.outside}</td>
-            <td>{appointment.first_name}</td>
-            <td>{appointment.last_name}</td>
-            <td>{appointment.email}</td>
-        </tr>
     );
 }
 

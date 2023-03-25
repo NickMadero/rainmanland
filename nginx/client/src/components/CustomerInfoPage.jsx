@@ -13,7 +13,7 @@ class CustomerInfoPage extends React.Component {
 
         this.state = {
             outside: false,
-            controllerBrands: [],
+            controller_brand: [],
             brand: '',
             unitsPerZone: '',
             numZones: '',
@@ -26,7 +26,7 @@ class CustomerInfoPage extends React.Component {
         axios.post('/api/get-controller-brand')
             .then(res => {
                 this.setState({
-                    controllerBrands: res.data
+                    controller_brand: res.data
                 });
             })
             .catch(err => console.log(err));
@@ -81,7 +81,7 @@ class CustomerInfoPage extends React.Component {
     };
 
     render() {
-        const { controllerBrands } = this.state;
+        const { controller_brand } = this.state;
         return (
             <Form style={{
                 width: '50%',
@@ -107,7 +107,7 @@ class CustomerInfoPage extends React.Component {
                     <Col>
                         <Form.Group controlId="formControllerBrand">
                             <DropdownButton id="dropdown-basic-button" title={this.state.selectedBrandName || "brand of controller"} required onSelect={(eventKey, event) => { this.setState({ brand: eventKey, selectedBrandName: event.target.innerText }); }}>
-                            {controllerBrands.map((brand, index) => (
+                            {controller_brand.map((brand, index) => (
                                     <Dropdown.Item key={index} eventKey={brand}>
                                         {brand}
                                     </Dropdown.Item>

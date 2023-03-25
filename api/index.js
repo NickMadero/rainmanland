@@ -83,7 +83,7 @@ app.get('/api/get-jobs/:crewNum', (req, res) => {
     })
 })
 
-// get a list of the available controller brand options
+// get a list of the available controller brand options author: Nick Madero / Steve Piccolo
 app.post('/api/get-controller-brand', (req, res) => {
     const getController = "call get_controller_enum();";
     dbController.query(getController,  (err, result) => {
@@ -97,6 +97,7 @@ app.post('/api/get-controller-brand', (req, res) => {
     })
 })
 
+//author : Nick Madero
 app.post('/api/insert-newcustomer', (req, res) => {
     console.log(req.body); // added console.log statement
 
@@ -111,18 +112,31 @@ app.post('/api/insert-newcustomer', (req, res) => {
     })
 })
 
-
-app.post('/api/show-appoinments', (req,res) => {
-
+//author : Nick Madero
+app.post('/api/show-appointments', (req, res) => {
     const show_appointments = "call get_all_appointments_on_date(?);";
-    dbController.query(show_appointments,['2023-03-23'], (err, result) =>{
+    dbController.query(show_appointments, [req.body.date], (err, result) => {
         if (err) {
             console.log(err);
-        } else{
-            res.send(result)
+        } else {
+            console.log(result);
+            const appointments = result[0].map(appointment => ({
+
+                address: appointment.address,
+                date: new Date(appointment.date_occuring).toLocaleDateString(),
+                finished: appointment.is_complete,
+                numZones: appointment.zone_amount,
+                controller_Brands: appointment.controller_brand,
+                outside: appointment.controller_is_outside,
+                firstName: appointment.first_name,
+                lastName: appointment.last_name,
+                email: appointment.email
+            }));
+            res.send(appointments);
         }
     })
+});
 
-})
+
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })

@@ -32,14 +32,16 @@ class App extends Component {
 
             // state attribute that remembers the info given in the Customer Info page
             customerInfo: {
-                outside: null,
-                controllerBrands:[],
+                controller_is_outside: null,
+                controller_brand:null,
                 brand: null,
                 unitsPerZone: null,
-                numZones: null,
+                zone_amount: null,
                 address: null,
                 first_name: null,
-                last_name: null
+                last_name: null,
+                date_occuring : null,
+                is_complete : null,
             },
 
             // other state attributes

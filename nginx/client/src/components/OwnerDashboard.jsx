@@ -16,7 +16,7 @@ const OwnerHomePage = (props) => {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
             <div className={styles['page']}>
-                <AvailabilitySettings />
+
                 <div id="container--bottom" className={styles['bottom-container']}>
                     <SelectableAppointmentTable />
                 </div>
