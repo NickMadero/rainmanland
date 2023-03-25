@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from '../style/ownerdashboard.module.css'
+import SortedEmployeesTable from './Dashboard-Parts/EmployeesTable/SortedEmployeesTable.jsx'
 import SelectableAppointmentTable from './Dashboard-Parts/AppointmentTable/AppointmentTable.jsx'
 import AvailabilitySettings from '../components/Dashboard-Parts/Availabilty/AvailablilitySetting'
 /**
@@ -16,9 +17,12 @@ const OwnerHomePage = (props) => {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
             <div className={styles['page']}>
-                <AvailabilitySettings />
+                <div id="container--top" className={styles['top-container']}>
+                  <SelectableAppointmentTable />
+                  </div>
                 <div id="container--bottom" className={styles['bottom-container']}>
-                    <SelectableAppointmentTable />
+                    <SortedEmployeesTable />
+                    <AvailabilitySettings />
                 </div>
             </div>
         </>

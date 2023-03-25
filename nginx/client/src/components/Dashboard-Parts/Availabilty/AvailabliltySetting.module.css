@@ -1,9 +1,11 @@
 .wrapper{
     display: flex;
     flex-direction: row;
-    border: 2px solid blue;
+    border: 2px solid rgb(0, 0, 0);
     width: 40rem;
     gap: 1rem;
+    margin: 1rem;
+    border-radius: .25rem;
 }
 
 .heading{

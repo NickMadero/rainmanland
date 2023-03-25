@@ -8,10 +8,10 @@
     border-radius: .25rem;
 }
 .remove {
-    background-color: #598299;
+    background-color: #c02323;
 }
 .form {
-    background-color: #00c22086;
+    background-color: #157025;
 }
 
 .remove:hover, .form:hover{
