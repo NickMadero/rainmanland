@@ -80,14 +80,24 @@ This is for adding a new setting or changing the value of an existing setting
 
 ## Add New User
 
+Function
+
 This is used as a helper method to insert rows when adding either a crew_member or boss.
 can be used but recomended not to be used.
 
     CALL `rainmanland`.`add_new_user`(<{first_name varchar(45)}>, <{last_name varchar(45)}>, <{email varchar(100)}>, <{password_hash varchar(255)}>, <{phone varchar(45)}>, <{is_working tinyint}>, <{user_type varchar(45)}>);
+Returns ID of last employee
 
 ****************************************
 
+## Add New Crew Member
 
+This uses the add new user fuction to generate a user_id and then inserts the date
+that they were hired
+
+    CALL `rainmanland`.`add_new_crew_member`(<{date_hired_set Date}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{email varchar(100)}>, <{password_hash varchar(255)}>, <{phone varchar(45)}>, <{is_working tinyint}>, <{user_type varchar(45)}>);
+
+**********************************************
 
     
 
