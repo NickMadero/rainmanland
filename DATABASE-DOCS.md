@@ -28,8 +28,9 @@ table.
 This will take the information required by the customer to set rates and to store themselves
 as a customer. It also bridges all appointments associated with a specific user in the `assigned_by`
 table.
-    
-        CALL `rainmanland`.`create_new_appointment`(<{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{address varchar(255)}>, <{zone_amount int}>, <{controller_brand varchar(45)}>, <{controller_is_outside TINYINT}>);
+
+    CALL `rainmanland`.`create_new_appointment`(<{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{address varchar(255)}>, <{zone_amount int}>, <{controller_brand varchar(45)}>, <{controller_is_outside TINYINT}>, <{zip_code char(5)}>);
+
 
 ********************************************************
 
@@ -106,8 +107,9 @@ are for scheduling and servicing.
 This will use a function to parse the address and retrieve the last numbers (zip code)
 
 
-    
-    
+    CALL `rainmanland`.`appointment_put_zip_code`(<{appointment_id int}>, <{zip_code varchar(5)}>);
+
+
 *****************************
 
 ## Get Password Hash from email
@@ -141,3 +143,12 @@ Takes a crew name and return all of information and users placed on the crew
     CALL `rainmanland`.`get_all_crews_and_members`();
 
 ***************************************
+
+## Appointment put zip code
+
+This is used by create new appointment. This upserts a zipcode to the zip_code table
+and associates an appointment with that zipcode
+
+    CALL `rainmanland`.`appointment_put_zip_code`(<{appointment_id int}>, <{zip_code char(5)}>);
+
+***********************************************
