@@ -62,3 +62,20 @@ the format for date should be `YYYY-MM-DD`.
 
 ******************************************************
 
+## Get Settings
+
+This will return all of the key=value pairs for settings
+
+
+    CALL `rainmanland`.`get_settings`();
+
+***************************
+
+## Put Settings
+
+This is for adding a new setting or changing the value of an existing setting
+
+    CALL `rainmanland`.`put_setting`(<{key_ varchar(100)}>, <{value_ varchar(100)}>);
+********************************
+    
+
