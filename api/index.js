@@ -83,7 +83,7 @@ app.get('/api/get-jobs/:crewNum', (req, res) => {
     })
 })
 
-// get a list of the available controller brand options
+// get a list of the available controller brand options author: Nick Madero / Steve Piccolo
 app.post('/api/get-controller-brand', (req, res) => {
     const getController = "call get_controller_enum();";
     dbController.query(getController,  (err, result) => {
@@ -97,11 +97,12 @@ app.post('/api/get-controller-brand', (req, res) => {
     })
 })
 
+//author : Nick Madero
 app.post('/api/insert-newcustomer', (req, res) => {
     console.log(req.body); // added console.log statement
 
-    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?);";
-    dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address, req.body.numZones,req.body.brand, req.body.outside],  (err, result) => {
+    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?,?);";
+    dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address, req.body.numZones,req.body.brand, req.body.outside,req.body.zip_code],  (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send(err);
@@ -110,6 +111,32 @@ app.post('/api/insert-newcustomer', (req, res) => {
         }
     })
 })
+
+//author : Nick Madero
+app.post('/api/show-appointments', (req, res) => {
+    const show_appointments = "call get_all_appointments_on_date(?);";
+    dbController.query(show_appointments, [req.body.date], (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result);
+            const appointments = result[0].map(appointment => ({
+
+                address: appointment.address,
+                date: new Date(appointment.date_occuring).toLocaleDateString(),
+                finished: appointment.is_complete,
+                numZones: appointment.zone_amount,
+                controller_Brands: appointment.controller_brand,
+                outside: appointment.controller_is_outside,
+                firstName: appointment.first_name,
+                lastName: appointment.last_name,
+                email: appointment.email,
+                zipcode: appointment.zip_code,
+            }));
+            res.send(appointments);
+        }
+    })
+});
 
 
 // add a port to expose the API when the server is running

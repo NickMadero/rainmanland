@@ -1,38 +1,11 @@
 
-.appt-heading{
-  color: #000000;
-}
 h4 {
     text-align: center;
     line-height: 1;
     margin: 0rem;
-  }
-  
-  th,
-  td {
+
     padding: 0.75rem;
     text-align: center;
     color: white;
     position: sticky;
-  }
-tr {
-  background-color: #253c72;
-}
-th {
-  background-color:#447c4496;
-}
-tr:nth-child(even){
-  background-color: #13369785;
-}
-
-table{
-  overflow-y:scroll;
-}
-
-.wrapper {
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
 
