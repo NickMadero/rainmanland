@@ -160,3 +160,11 @@ This can be used for switching to another crew or to stop working
 
     CALL `rainmanland`.`remove_user_from_crew`(<{email varchar(100)}>, <{crew_name varchar(45)}>);
 *****************************************
+
+## Put User on a Crew
+
+This is used when you want to add a user to an existing crew
+
+    CALL `rainmanland`.`put_user_on_crew`(<{email varchar(100)}>, <{crew_name varchar(45)}>);
+
+**************************
