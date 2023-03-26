@@ -152,3 +152,11 @@ and associates an appointment with that zipcode
     CALL `rainmanland`.`appointment_put_zip_code`(<{appointment_id int}>, <{zip_code char(5)}>);
 
 ***********************************************
+
+## Remove User from Crew
+
+This is used to take an employee off of a crew. 
+This can be used for switching to another crew or to stop working
+
+    CALL `rainmanland`.`remove_user_from_crew`(<{email varchar(100)}>, <{crew_name varchar(45)}>);
+*****************************************
