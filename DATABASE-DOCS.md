@@ -28,8 +28,9 @@ table.
 This will take the information required by the customer to set rates and to store themselves
 as a customer. It also bridges all appointments associated with a specific user in the `assigned_by`
 table.
-    
-        CALL `rainmanland`.`create_new_appointment`(<{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{address varchar(255)}>, <{zone_amount int}>, <{controller_brand varchar(45)}>, <{controller_is_outside TINYINT}>);
+
+    CALL `rainmanland`.`create_new_appointment`(<{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{address varchar(255)}>, <{zone_amount int}>, <{controller_brand varchar(45)}>, <{controller_is_outside TINYINT}>, <{zip_code char(5)}>);
+
 
 ********************************************************
 
@@ -62,3 +63,92 @@ the format for date should be `YYYY-MM-DD`.
 
 ******************************************************
 
+## Get Settings
+
+This will return all of the key=value pairs for settings
+
+
+    CALL `rainmanland`.`get_settings`();
+
+***************************
+
+## Put Settings
+
+This is for adding a new setting or changing the value of an existing setting
+
+    CALL `rainmanland`.`put_setting`(<{key_ varchar(100)}>, <{value_ varchar(100)}>);
+********************************
+
+## Add New User
+
+Function
+
+This is used as a helper method to insert rows when adding either a crew_member or boss.
+can be used but recomended not to be used.
+
+    CALL `rainmanland`.`add_new_user`(<{first_name varchar(45)}>, <{last_name varchar(45)}>, <{email varchar(100)}>, <{password_hash varchar(255)}>, <{phone varchar(45)}>, <{is_working tinyint}>, <{user_type varchar(45)}>);
+Returns ID of last employee
+
+****************************************
+
+## Add New Crew Member
+
+This uses the add new user fuction to generate a user_id and then inserts the date
+that they were hired
+
+    CALL `rainmanland`.`add_new_crew_member`(<{date_hired_set Date}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{email varchar(100)}>, <{password_hash varchar(255)}>, <{phone varchar(45)}>, <{is_working tinyint}>, <{user_type varchar(45)}>);
+
+**********************************************
+
+## Appointment add Zip Code
+
+This is used to add a new zip code (default not an active zip code) to keep track of where appointments
+are for scheduling and servicing.
+This will use a function to parse the address and retrieve the last numbers (zip code)
+
+
+    CALL `rainmanland`.`appointment_put_zip_code`(<{appointment_id int}>, <{zip_code varchar(5)}>);
+
+
+*****************************
+
+## Get Password Hash from email
+
+This will return the password hash from a given email of a user
+
+    CALL `rainmanland`.`get_password_hash`(<{email varchar(100)}>);
+
+***********************************
+    
+## Get all user info
+
+Returns all the information about a user given their email
+
+    CALL `rainmanland`.`get_user_info`(<{email varchar(100)}>);
+
+***********************************
+
+## Get all Crews and Users
+
+This will return all the crews and the crew members
+
+    CALL `rainmanland`.`get_all_crews_and_members`();
+
+*********************************
+
+## Get all members on a crew
+
+Takes a crew name and return all of information and users placed on the crew
+
+    CALL `rainmanland`.`get_all_crews_and_members`();
+
+***************************************
+
+## Appointment put zip code
+
+This is used by create new appointment. This upserts a zipcode to the zip_code table
+and associates an appointment with that zipcode
+
+    CALL `rainmanland`.`appointment_put_zip_code`(<{appointment_id int}>, <{zip_code char(5)}>);
+
+***********************************************
