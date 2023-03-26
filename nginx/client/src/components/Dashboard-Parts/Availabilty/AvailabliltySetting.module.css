@@ -1,0 +1,12 @@
+.wrapper{
+    display: flex;
+    flex-direction: row;
+    border: 2px solid blue;
+    width: 40rem;
+    gap: 1rem;
+}
+
+.heading{
+    position: relative;
+    top: 0;
+}

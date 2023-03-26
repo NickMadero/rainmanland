@@ -32,11 +32,17 @@ class App extends Component {
 
             // state attribute that remembers the info given in the Customer Info page
             customerInfo: {
-                outside: null,
+                controller_is_outside: null,
+                controller_brand:null,
                 brand: null,
                 unitsPerZone: null,
-                numZones: null,
-                address: null
+                zone_amount: null,
+                address: null,
+                first_name: null,
+                last_name: null,
+                date_occuring : null,
+                is_complete : null,
+                zip_code : null
             },
 
             // other state attributes
@@ -76,7 +82,7 @@ class App extends Component {
                     alert("Invalid login. Please try again or contact the business owner for credentials.")
                     return;
                 }
-                if (this.state.userInfo.user_type === "owner") {
+                if (this.state.userInfo.user_type === "boss") {
                     console.log("user is owner");
                     this.props.navigate('/owner-dashboard');
                 }
