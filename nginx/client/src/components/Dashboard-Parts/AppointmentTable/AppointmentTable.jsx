@@ -49,6 +49,7 @@ function SelectableAppointmentTable() {
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
+                        <th>zip code</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -63,6 +64,7 @@ function SelectableAppointmentTable() {
                             <td>{appointment.firstName}</td>
                             <td>{appointment.lastName}</td>
                             <td>{appointment.email}</td>
+                            <td>{appointment.zipcode}</td>
                         </tr>
                     ))}
                     </tbody>

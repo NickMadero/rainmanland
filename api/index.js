@@ -101,8 +101,8 @@ app.post('/api/get-controller-brand', (req, res) => {
 app.post('/api/insert-newcustomer', (req, res) => {
     console.log(req.body); // added console.log statement
 
-    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?);";
-    dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address, req.body.numZones,req.body.brand, req.body.outside],  (err, result) => {
+    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?,?);";
+    dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address, req.body.numZones,req.body.brand, req.body.outside,req.body.zip_code],  (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send(err);
@@ -130,7 +130,8 @@ app.post('/api/show-appointments', (req, res) => {
                 outside: appointment.controller_is_outside,
                 firstName: appointment.first_name,
                 lastName: appointment.last_name,
-                email: appointment.email
+                email: appointment.email,
+                zipcode: appointment.zip_code,
             }));
             res.send(appointments);
         }
