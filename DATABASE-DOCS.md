@@ -190,3 +190,9 @@ This will add an existing zip code. Decide if its available or not
     CALL `rainmanland`.`add_zip_code`(<{zip_codee varchar(5)}>, <{is_availablee tinyint}>);
 
 ************************************************
+## Remove a zip from a crew
+
+This removed a given zip code from the servie area of a crew
+
+    CALL `rainmanland`.`remove_zip_from_crew`(<{zip_code char(5)}>, <{crew_name varchar(45)}>);
+************************************
