@@ -61,16 +61,36 @@ app.get('/api/get-all-users', (req, res) => {
     })
 })
 
-// Check credentials against db and return user info if credentials are good
-// TODO: make this secure by storing hashed passwords instead of plaintext. this is a placeholder for the demo
-app.post('/api/get-user-info', (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const SelectQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
-    dbController.query(SelectQuery, [email, password], (err, result) => {
-        res.send(result);
+// Check user credentials and return the user's info if credential are valid, else return false
+app.post('/api/verify-user', (req, res) => {
+    const email = req.body.sentEmail;
+    const pass = req.body.sentPw;
+    if (!email || !pass) {
+        res.status(400).send("Email and password are required");
+        return;
+    const verifyQuery = "SELECT * FROM user INNER JOIN placed_on ON placed_on.user_id = user.user_id WHERE email = ?";
+    dbController.query(verifyQuery, [email], (err, result) => {
+        console.log(result)
+        if (result.length !== 1) {
+            console.log("Verification failed.");
+            res.send(false);
+        }
+        else {
+            console.log("User email exists.");
+            bcrypt.compare(pass, result[0]["password_hash"], function(err, hashResult) {
+                if (hashResult) {
+                    console.log("User verified.");
+                    res.send(result[0]);
+                }
+                else {
+                    console.log("Bad password");
+                    console.log(err);
+                    res.send(false);
+                }
+            })
+        }
     })
-})
+}})
 
 // get a list of today's jobs for the crew number passed as URL param
 app.get('/api/get-jobs/:crewNum', (req, res) => {
