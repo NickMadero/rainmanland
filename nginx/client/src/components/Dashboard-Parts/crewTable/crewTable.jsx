@@ -24,6 +24,28 @@ function CrewTable() {
         setShowModal(true);
     }
 
+    const handleRemoveMember = (memberEmail, crewName) => {
+        axios.post('/api/remove-crewmember', { email: memberEmail, crew_name: crewName })
+            .then(response => {
+                console.log(response.data);
+                // Update the crew list to reflect the removal of the crew member
+                const updatedCrews = crews.map(crew => {
+                    if (crew.crew_name === selectedCrew.crew_name) {
+                        return {
+                            ...crew,
+                            members: crew.members.filter(member => member.emailaddress !== memberEmail)
+                        };
+                    }
+                    return crew;
+                });
+                setCrews(updatedCrews);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+
     return (
         <div style={{ position: "absolute", top: 15, left: 0, width: '50%', height: '50%', overflowY: 'scroll' }}>
             <FormGroup>
@@ -58,12 +80,10 @@ function CrewTable() {
                             <li key={member.id} className="row">
                                 <div className="col" style={{ whiteSpace: 'nowrap' }}>{member.first_name} {member.last_name} {member.emailaddress}</div>
                                 <div className="col-auto"><Form.Check>
-                                    <Form.Check.Input type="checkbox" />
+                                    <Form.Check.Input type="checkbox" onChange={() => handleRemoveMember(member.emailaddress, selectedCrew.crew_name)} />
                                     <Form.Check.Label style={{ fontSize: '12px' }}>Remove</Form.Check.Label>
                                 </Form.Check></div>
                             </li>
-
-
                         ))}
                     </ul>
                 </Modal.Body>
