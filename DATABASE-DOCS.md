@@ -168,3 +168,11 @@ This is used when you want to add a user to an existing crew
     CALL `rainmanland`.`put_user_on_crew`(<{email varchar(100)}>, <{crew_name varchar(45)}>);
 
 **************************
+
+## Get all appointments serviced by a specific crew
+
+This will return all appointments that a crew is responsible for
+
+    CALL `rainmanland`.`get_all_appointments_serviced_by_crew`(<{crew_name varchar(45)}>);
+
+***********************************
