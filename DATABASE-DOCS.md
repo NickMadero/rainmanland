@@ -183,3 +183,10 @@ This allows the user to add a zip code to a crew's serviceable area
     CALL `rainmanland`.`add_zip_to_crew`(<{crew_name varchar(45)}>, <{zip_code varchar(5)}>);
 
 ****************************************
+## Add zip code to list
+
+This will add an existing zip code. Decide if its available or not 
+
+    CALL `rainmanland`.`add_zip_code`(<{zip_codee varchar(5)}>, <{is_availablee tinyint}>);
+
+************************************************
