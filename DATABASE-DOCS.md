@@ -176,3 +176,10 @@ This will return all appointments that a crew is responsible for
     CALL `rainmanland`.`get_all_appointments_serviced_by_crew`(<{crew_name varchar(45)}>);
 
 ***********************************
+## Add a zip code to a specific crew
+
+This allows the user to add a zip code to a crew's serviceable area
+
+    CALL `rainmanland`.`add_zip_to_crew`(<{crew_name varchar(45)}>, <{zip_code varchar(5)}>);
+
+****************************************
