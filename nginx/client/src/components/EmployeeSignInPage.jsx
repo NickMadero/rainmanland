@@ -11,7 +11,15 @@ class EmployeeSignInPage extends React.Component {
         // Initialize the component state
         this.state = {
             email: '',
-            password: ''
+            password: '',
+			addEmail: '',
+			addPassword: '',
+			addPasswordConfirm: '',
+			pwSame: false,
+			addFirstName: '',
+			addLastName: '',
+			addPhoneNum: '',
+			addCurrentlyWorking: false
         };
     }
 
@@ -24,6 +32,14 @@ class EmployeeSignInPage extends React.Component {
         this.setState({
             [name]: value
         });
+
+		// check if the password and password confirmation match
+		if (name === 'addPassword' || name === 'addPasswordConfirm') {
+			if (this.state.addPassword == this.state.addPasswordConfirm) {
+				this.setState({pwSame: true});
+			}
+			else this.setState({pwSame: false});
+		}
     };
 
     // Handle form submission
@@ -42,7 +58,15 @@ class EmployeeSignInPage extends React.Component {
         // Clear the form fields after submission
         this.setState({
             email: '',
-            password: ''
+            password: '',
+			addEmail: '',
+			addPassword: '',
+			addPasswordConfirm: '',
+			pwSame: false,
+			addFirstName: '',
+			addLastName: '',
+			addPhoneNum: '',
+			addCurrentlyWorking: false
         });
     };
 	render() {
