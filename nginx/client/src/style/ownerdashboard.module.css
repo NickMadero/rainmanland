@@ -20,8 +20,7 @@
     flex-direction: column;
     align-self: center;
   }
-  /** For the Service Area and Pricing Forms **/
-  /** Red border is temporary for debugging purposes **/
+ 
   .top-container {
     margin: 2rem;
     width: 95%;
@@ -32,7 +31,7 @@
     justify-content: center;
     box-sizing: border-box;
   }
-   /* Begin Styling for Service Area form */
+
   
 
 .bottom-container{

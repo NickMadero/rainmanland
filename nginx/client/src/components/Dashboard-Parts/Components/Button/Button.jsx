@@ -14,6 +14,10 @@ const Button = ({ variant, text, onClick, type="button"}) => {
         if(variant == "form"){
             setClassName(styles.form);
         }
+
+        if(variant == "cancel"){
+            setClassName(styles.cancel)
+        }
     }, []);
 
     return (

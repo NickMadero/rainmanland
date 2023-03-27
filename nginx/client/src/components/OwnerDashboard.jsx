@@ -1,8 +1,7 @@
 import React from 'react'
 import styles from '../style/ownerdashboard.module.css'
-import SortedEmployeesTable from './Dashboard-Parts/EmployeesTable/SortedEmployeesTable.jsx'
+import SelectableEmployeesTable from './Dashboard-Parts/EmployeesTable/SelectableEmployeesTable.jsx'
 import SelectableAppointmentTable from './Dashboard-Parts/AppointmentTable/AppointmentTable.jsx'
-import AvailabilitySettings from '../components/Dashboard-Parts/Availabilty/AvailablilitySetting'
 /**
  *  TO-DO: Entry for lists of zipcodes for service areas
  *         Service area map (Leaflet? Google Maps?)
@@ -21,8 +20,8 @@ const OwnerHomePage = (props) => {
                   <SelectableAppointmentTable />
                   </div>
                 <div id="container--bottom" className={styles['bottom-container']}>
-                    <SortedEmployeesTable />
-                    <AvailabilitySettings />
+                    <SelectableEmployeesTable />
+                    {/*<AvailabilitySettings />*/}
                 </div>
             </div>
         </>

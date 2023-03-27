@@ -7,14 +7,19 @@
     height: 2.5rem;
     border-radius: .25rem;
 }
-.remove {
+.remove,.cancel {
     background-color: #c02323;
 }
 .form {
     background-color: #157025;
 }
 
-.remove:hover, .form:hover{
+.remove:hover, .form:hover, .cancel:hover{
     opacity: 0.90;
     transition: 0.25s;
+}
+
+.remove:active, .form:active, .cancel:active{
+    transform: scale(0.90);
+    transition: 0.20s;
 }

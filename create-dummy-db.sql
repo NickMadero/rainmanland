@@ -469,6 +469,19 @@ appoint_id);
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE DEFINER=`dev` PROCEDURE `get_all_crews_and_members`()
+BEGIN
+#returns all of the crews and their members
+select u.user_id,c.crew_name, u.first_name, u.last_name, u.email, u.phone_number, u.currently_working, u.user_type, 
+		 c.is_active, c.starting_location
+from `rainmanland-dev`.`user` u
+	join `rainmanland-dev`.`placed_on` po on po.user_id=u.user_id
+    join `rainmanland-dev`.`crew` c on c.crew_id=po.crew_id
+;
+END$$
+DELIMITER ;
+
 
 /*!40101 SET character_set_client = @saved_cs_client */;
 

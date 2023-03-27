@@ -1,3 +1,4 @@
+/**Author: Thomas Dougherty */
 .heading{
     color: #000000;
 }
@@ -17,6 +18,16 @@ td {
 tr {
     background-color: #253c72;
 }
+tr:hover {
+    opacity: .90;
+    border-color: rgb(8, 9, 14);
+}
+
+tr.selected-row {
+    border: 2px solid rgb(52, 156, 87);
+    opacity: .90;
+  }
+
 th {
     background-color:#253c7293;
 }
@@ -24,13 +35,19 @@ tr:nth-child(even){
     background-color: #13369785;
 }
 
-table{
+.table-div{
     overflow-y:scroll;
+    overflow: scroll;
+    height: 25rem;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 3px;
 }
-
 .wrapper {
     justify-content: center;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    padding: 1rem;
 }
