@@ -112,6 +112,9 @@ app.post('/api/insert-newcustomer', (req, res) => {
     })
 })
 
+
+
+
 //author : Nick Madero
 app.post('/api/show-appointments', (req, res) => {
     const show_appointments = "call get_all_appointments_on_date(?);";
@@ -138,6 +141,80 @@ app.post('/api/show-appointments', (req, res) => {
     })
 });
 
+app.post('/api/add-crewmember' , (req,res) => {
+    const add_member = "call put_user_on_crew(?,?);";
+    dbController.query(add_member,[req.body.email,req.body.crew_name],(err,result) =>{
+        if (err){
+            console.log(err)
+        }else{
+            console.log("successfully added a crew member")
+        }
+    })
+})
+app.post('/api/remove-crewmember', (req,res) => {
+    const remove_member = "call remove_user_from_crew(?,?);";
+    if (!req.body.crew_name) {
+        res.status(400).send("Missing crew name parameter");
+    } else {
+        dbController.query(remove_member,[req.body.email,req.body.crew_name],(err,result) =>{
+            if (err){
+                console.log(err);
+                res.status(500).send("Error removing crew member");
+            }else {
+                res.status(200).send("Crew member removed successfully");
+            }
+        })
+    }
+
+})
+// author Nick
+app.post('/api/get-crew', (req, res) => {
+    const getCrew = "call get_all_crews_and_members();";
+    //const crewName = req.body.name;
+    dbController.query(getCrew, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error retrieving crew data');
+        } else {
+            console.log(result);
+            const crewData = {};
+            result[0].forEach(crew => {
+                const crewName = crew.crew_name;
+                const crewMember = {
+
+                    first_name: crew.first_name,
+                    last_name: crew.last_name,
+                    emailaddress: crew.email,
+                    crewName : crew.crew_name
+                };
+                if (!crewData[crewName]) {
+                    crewData[crewName] = {
+                        name: crewName,
+                        members: [crewMember]
+                    };
+                } else {
+                    crewData[crewName].members.push(crewMember);
+                }
+            });
+            const crews = Object.values(crewData);
+            res.send(crews);
+        }
+    });
+});
+
+
+
+//author Nick
+app.post('/api/add-crewmember', (req,res) => {
+    const addCrewMember =   "call add_new_crew_member(?,?,?,?,?,?);";
+    dbController.query(addCrewMember,['2023-04-21','nick','madero','email','password','123456789'],(err,result) =>{
+        if(err)  {
+            console.log(err)
+        } else{
+            console.log(result);
+        }
+    })
+})
 
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })

@@ -42,7 +42,10 @@ class App extends Component {
                 last_name: null,
                 date_occuring : null,
                 is_complete : null,
-                zip_code : null
+                zip_code : null,
+                //for crews
+                crew_name: null,
+
             },
 
             // other state attributes
