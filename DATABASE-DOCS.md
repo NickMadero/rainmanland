@@ -214,3 +214,12 @@ responsible for a crew on a given date
     CALL `rainmanland`.`get_appointments_on_half_day_from_date_crew`(<{crew_name varchar(45)}>, <{date_occur date}>);
 
 **********************************************************
+## Put appointment on a half day
+
+this is used when confirmation that the apppointment is set 
+This takes an appointment and associated it with a halfday which is associated with a specific crew
+this also sets the date the appointment is to occur
+
+    CALL `rainmanland`.`put_appointment_on_half_day`(<{crew_name varchar(45)}>, <{date_occuring date}>, <{which_half enum('first', 'second')}>, <{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{appointment_id int}>);
+
+********************************************************
