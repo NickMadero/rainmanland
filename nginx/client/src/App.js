@@ -92,10 +92,22 @@ class App extends Component {
                     this.props.navigate('/employee-dashboard');
                 }
             })
-        axios.post("/api/insert-newcustomer").then((response)=> {
-            console.log(response);
-        })
     }
+
+	// Add a new user (called when user clicks "submit" on the add employee form)
+	onNewEmployeeSubmit(childComponentState) {
+		axios.post("/api/add-user", childComponentState)
+			.then((response) => {
+				if (response.data.success) {
+					console.log(response.data.message);
+					alert("Employee added successfully.");
+				}
+				else {
+					console.log(response.data.message);
+					alert("Error while adding employee.");
+				}
+			}
+	}
 
     // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered
     handleGoToCalendarButtonClick(custInfo) {

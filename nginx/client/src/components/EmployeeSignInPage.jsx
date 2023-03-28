@@ -19,6 +19,7 @@ class EmployeeSignInPage extends React.Component {
 			addFirstName: '',
 			addLastName: '',
 			addPhoneNum: '',
+			addCrewNum: '',
 			addCurrentlyWorking: false
         };
     }
@@ -28,6 +29,15 @@ class EmployeeSignInPage extends React.Component {
         const target = event.target;
         const name = target.name;
         const value = target.value;
+
+		if (target.name === "addCurrentlyWorking") {
+			if (target.checked) {
+				this.setState({addCurrentlyWorking: true});
+			} else {
+				this.setState({addCurrentlyWorking: false});
+			}
+			return;
+		}
 
         this.setState({
             [name]: value
@@ -42,7 +52,7 @@ class EmployeeSignInPage extends React.Component {
 		}
     };
 
-    // Handle form submission
+    // Handle login form submission
     handleSubmit = event => {
         event.preventDefault();
 
@@ -59,6 +69,26 @@ class EmployeeSignInPage extends React.Component {
         this.setState({
             email: '',
             password: '',
+        });
+    };
+
+	// Handle new employee form submission
+	handleAddEmployee = event => {
+		event.preventDefault();
+
+		// Alert user if password entries don't match
+		if (!this.state.pwSame) {
+			alert("Password and password confirmation don't match.");
+			return;
+		};
+
+		console.log('New employee info submitted.');
+
+		// Call the handler defined in App.js which was passed to this component as a prop
+		this.props.onNewEmployeeSubmit(this.state);
+
+		// Clear the form fields after submission
+		this.setState({
 			addEmail: '',
 			addPassword: '',
 			addPasswordConfirm: '',
@@ -66,17 +96,23 @@ class EmployeeSignInPage extends React.Component {
 			addFirstName: '',
 			addLastName: '',
 			addPhoneNum: '',
+			addCrewNum: '',
 			addCurrentlyWorking: false
-        });
-    };
+		});
+	};
+
+
 	render() {
 		return (
 			<Container>
+
 				<Row className="justify-content-md-center">
 					<Col md="auto">
 						<Card className="mt-4 mb-4 p-4">
 							<Card.Title>Employee Login</Card.Title>
+
 							<Form onSubmit={this.handleSubmit}>
+
 								<Form.Group controlId="email">
 									<Form.Label>Email</Form.Label>
 									<Form.Control type="text" name="email" value={this.state.email} onChange={this.handleInputChange} />
@@ -88,54 +124,67 @@ class EmployeeSignInPage extends React.Component {
 								<Button variant="primary" type="submit">
 									Log In
 								</Button>
+
 							</Form>
 						</Card>
 					</Col>
 				</Row>
+
 				<Row className="justify-content-md-center">
 					<Col md="auto">
 						<Card className="mt-4 mb-4 p-4">
 							<Card.Title>Add New Employee</Card.Title>
+
 							<Form onSubmit={this.handleAddEmployee}>
 								<Row>
 									<Col>
 										<Form.Group controlId="firstName">
 											<Form.Label>First Name</Form.Label>
-											<Form.Control type="text" placeholder="First Name" />
+											<Form.Control type="text" name="addFirstName" placeholder="First Name" value={this.state.addFirstName} onChange={this.handleInputChange} />
 										</Form.Group>
 									</Col>
 									<Col>
 										<Form.Group controlId="lastName">
 											<Form.Label>Last Name</Form.Label>
-											<Form.Control type="text" placeholder="Last Name" />
+											<Form.Control type="text" name="addLastName"  placeholder="Last Name" value={this.state.addLastName} onChange={this.handleInputChange} />
 										</Form.Group>
 									</Col>
 								</Row>
 
 								<Form.Group controlId="email">
 									<Form.Label>Email</Form.Label>
-									<Form.Control type="email" placeholder="Email" />
+									<Form.Control type="email" name="addEmail" placeholder="Email" value={this.state.addEmail} onChange={this.handleInputChange} />
 								</Form.Group>
 
 								<Form.Group controlId="password">
 									<Form.Label>Password</Form.Label>
-									<Form.Control type="password" placeholder="Password" />
+									<Form.Control type="password" name="addPassword" placeholder="Password" value={this.state.addPassword} onChange={this.handleInputChange} />
 								</Form.Group>
 
 								<Form.Group controlId="confirmPassword">
 									<Form.Label>Confirm Password</Form.Label>
-									<Form.Control type="password" placeholder="Confirm Password" />
+									<Form.Control type="password" name="addPasswordConfirm" placeholder="Confirm Password" value={this.state.addPasswordConfirm} onChange={this.handleInputChange} />
 								</Form.Group>
 
 								<Form.Group controlId="phoneNumber">
 									<Form.Label>Phone Number</Form.Label>
-									<Form.Control type="tel" placeholder="Phone Number" />
+									<Form.Control type="tel" name="addPhoneNum" placeholder="Phone Number" value={this.state.addPhoneNum} onChange={this.state.addPhoneNum} />
 								</Form.Group>
-
-								<Form.Group controlId="currentlyActive">
-									<Form.Check type="checkbox" label="Currently Active" />
-								</Form.Group>
-
+								<Row>
+									<Col>
+										<Form.Group controlId="currentlyActive">
+											<Form.Check type="checkbox" name="addCurrentlyWorking" value={this.state.addCurrentlyWorking} onChange={this.handleInputChange} label="Currently Active" />
+										</Form.Group>
+										<Form.Group controlId="crewNumber">
+											<Form.Label>Crew Number</Form.Label>
+											<Form.Select name="addCrewNum" value={this.state.addCrewNum} onChange={this.handleInputChange} >
+												<option value="">Select Crew</option>
+												<option value="1">Crew 1</option>
+												<option value="2">Crew 2</option>
+											</Form.Select>
+										</Form.Group>
+									</Col>
+								</Row>
 								<Button variant="primary" type="submit">
 									Add Employee
 								</Button>

@@ -3,8 +3,12 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const dbController = require('./dbController');
+
+// Set constants
+const saltRounds = 10;  // complexity of bcrypt hash
 
 // initialize the Express app
 const app = express();
@@ -68,8 +72,9 @@ app.post('/api/verify-user', (req, res) => {
     if (!email || !pass) {
         res.status(400).send("Email and password are required");
         return;
-    const verifyQuery = "SELECT * FROM user INNER JOIN placed_on ON placed_on.user_id = user.user_id WHERE email = ?";
-    dbController.query(verifyQuery, [email], (err, result) => {
+	}
+    const getHashQuery = "CALL get_password_hash(?);";
+    dbController.query(getHashQuery, [email], (err, result) => {
         console.log(result)
         if (result.length !== 1) {
             console.log("Verification failed.");
@@ -80,7 +85,17 @@ app.post('/api/verify-user', (req, res) => {
             bcrypt.compare(pass, result[0]["password_hash"], function(err, hashResult) {
                 if (hashResult) {
                     console.log("User verified.");
-                    res.send(result[0]);
+					// now get the relevant user info
+					const userInfoQuery = "CALL get_user_info(?);";
+					dbController.query(userInfoQuery, [email], (err, result) => {
+						console.log(result);
+						if (err) {
+							res.status(500).send("Error getting user info");
+							return;
+						} else {
+                    		res.send(result[0]);
+						}
+					})
                 }
                 else {
                     console.log("Bad password");
@@ -90,7 +105,49 @@ app.post('/api/verify-user', (req, res) => {
             })
         }
     })
-}})
+})
+
+// Add a new employee to the user table
+app.post('/api/add-user', (req, res) => {
+	// raw info from request
+	const email = req.body.addEmail;
+	const plaintextPass = req.body.addPassword;
+	const firstName = req.body.addFirstName;
+	const lastName = req.body.addLastName;
+	const phone = req.body.addPhoneNum;
+	const crewNum = req.body.addCrewNum;
+	const currentlyWorking = req.body.addCurrentlyWorking;
+
+	// generate password hash
+	const passHash = bcrypt.hash(plaintextPass, saltRounds, (err, hashedPassword) => {
+		if (err) {
+			console.error('Error hashing password: ', err);
+		} else {
+			console.log('Hashed password: ', hashedPassword);
+		}
+	}
+	// convert currentlyWorking boolean value to 0 or 1 for database
+	var isWorking;
+	if (currentlyWorking) {
+		isWorking = 1;
+	} else {
+		isWorking = 0;
+	}
+	// hardcoding this, sue me
+	const userType = "crew_member";
+
+	// add to database using stored procedure
+	const addCustQuery = "CALL add_new_crew_member(CURDATE(),?,?,?,?,?,?,?);";
+	const params = [firstName, lastName, email, passHash, phone, isWorking, userType];
+	dbController.query(addCustQuery, params, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).send(err);
+		} else {
+			res.send(result);
+		}
+	}
+}
 
 // get a list of today's jobs for the crew number passed as URL param
 app.get('/api/get-jobs/:crewNum', (req, res) => {
