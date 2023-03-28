@@ -205,16 +205,7 @@ app.post('/api/get-crew', (req, res) => {
 
 
 //author Nick
-app.post('/api/add-crewmember', (req,res) => {
-    const addCrewMember =   "call add_new_crew_member(?,?,?,?,?,?);";
-    dbController.query(addCrewMember,['2023-04-21','nick','madero','email','password','123456789'],(err,result) =>{
-        if(err)  {
-            console.log(err)
-        } else{
-            console.log(result);
-        }
-    })
-})
+
 
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })
