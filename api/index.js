@@ -125,7 +125,7 @@ app.post('/api/add-user', (req, res) => {
 		} else {
 			console.log('Hashed password: ', hashedPassword);
 		}
-	}
+	})
 	// convert currentlyWorking boolean value to 0 or 1 for database
 	var isWorking;
 	if (currentlyWorking) {

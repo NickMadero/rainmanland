@@ -106,7 +106,7 @@ class App extends Component {
 					console.log(response.data.message);
 					alert("Error while adding employee.");
 				}
-			}
+			})
 	}
 
     // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered

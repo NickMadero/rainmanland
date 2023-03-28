@@ -45,7 +45,7 @@ class EmployeeSignInPage extends React.Component {
 
 		// check if the password and password confirmation match
 		if (name === 'addPassword' || name === 'addPasswordConfirm') {
-			if (this.state.addPassword == this.state.addPasswordConfirm) {
+			if (this.state.addPassword === this.state.addPasswordConfirm) {
 				this.setState({pwSame: true});
 			}
 			else this.setState({pwSame: false});
@@ -78,7 +78,7 @@ class EmployeeSignInPage extends React.Component {
 
 		// Alert user if password entries don't match
 		if (!this.state.pwSame) {
-			alert("Password and password confirmation don't match.");
+			Alert("Password and password confirmation don't match.");
 			return;
 		};
 
