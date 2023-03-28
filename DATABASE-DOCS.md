@@ -196,3 +196,21 @@ This removed a given zip code from the servie area of a crew
 
     CALL `rainmanland`.`remove_zip_from_crew`(<{zip_code char(5)}>, <{crew_name varchar(45)}>);
 ************************************
+
+## Get all half days on a date and crew
+
+This will return all of the half days that a crew is responsible for on a half day
+This does not return the appointments on the given half days
+
+    CALL `rainmanland`.`get_half_day_by_crew_name_and_date`(<{crew_name varchar(45)}>, <{date_occur date}>);
+
+********************************************
+
+## Get all appointments occuring on day by date and crew name
+
+This will return all the appointment information and crew name that is 
+responsible for a crew on a given date
+
+    CALL `rainmanland`.`get_appointments_on_half_day_from_date_crew`(<{crew_name varchar(45)}>, <{date_occur date}>);
+
+**********************************************************
