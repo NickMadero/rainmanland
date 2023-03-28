@@ -223,3 +223,11 @@ this also sets the date the appointment is to occur
     CALL `rainmanland`.`put_appointment_on_half_day`(<{crew_name varchar(45)}>, <{date_occuring date}>, <{which_half enum('first', 'second')}>, <{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{appointment_id int}>);
 
 ********************************************************
+## Add new crew
+
+This adds a new crew given a unique name and starting location
+
+    CALL `rainmanland`.`add_new_crew`(<{crew_name varchar(45)}>, <{starting_location varchar(255)}>);
+
+**************************************************
+
