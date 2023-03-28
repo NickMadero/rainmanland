@@ -6,6 +6,9 @@ function CrewTable() {
     const [crews, setCrews] = useState([]);
     const [selectedCrew, setSelectedCrew] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showAddMemberModal, setShowAddMemberModal] = useState(false);
+    const [newMemberEmail, setNewMemberEmail] = useState('');
+
 
     useEffect(() => {
         // Fetch crew data from backend API
@@ -39,12 +42,38 @@ function CrewTable() {
                     return crew;
                 });
                 setCrews(updatedCrews);
+                window.alert(`${memberEmail} has been removed from the crew.`);
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
+    const handleAddMember = (newMemberEmail) => {
+        axios.post('/api/add-crewmember', { email: newMemberEmail, crew_name: selectedCrew.name })
+            .then(response => {
+                console.log(response.data);
+                // Update the crew list to reflect the addition of the crew member
+                const updatedCrews = crews.map(crew => {
+                    if (crew.crew_name === selectedCrew.crew_name) {
+                        return {
+                            ...crew,
+                            members: [
+                                ...crew.members,
+                                { emailaddress: newMemberEmail }
+                            ]
+                        };
+                    }
+                    return crew;
+                });
+                setCrews(updatedCrews);
+                setNewMemberEmail('');
+                window.alert(`${newMemberEmail} has been added to the crew.`);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
     return (
         <div style={{ position: "absolute", top: 15, left: 0, width: '50%', height: '50%', overflowY: 'scroll' }}>
@@ -72,7 +101,12 @@ function CrewTable() {
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Crew Members for {selectedCrew?.name}</Modal.Title>
+                    <Modal.Title>
+                        Crew Members for {selectedCrew?.name}
+                        <Button variant="primary" onClick={() => setShowAddMemberModal(true)}>
+                            Add Member
+                        </Button>
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <ul>
@@ -87,6 +121,24 @@ function CrewTable() {
                         ))}
                     </ul>
                 </Modal.Body>
+                {/* New modal for adding crew members */}
+                <Modal show={showAddMemberModal} onHide={() => setShowAddMemberModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Add Member to {selectedCrew?.name}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form.Group>
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" value={newMemberEmail} onChange={(event) => setNewMemberEmail(event.target.value)} />
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={() => handleAddMember(newMemberEmail)}>
+                            Add
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
             </Modal>
         </div>
     );

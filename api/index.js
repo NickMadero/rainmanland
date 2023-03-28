@@ -141,8 +141,18 @@ app.post('/api/show-appointments', (req, res) => {
     })
 });
 
+app.post('/api/add-crewmember' , (req,res) => {
+    const add_member = "call put_user_on_crew(?,?);";
+    dbController.query(add_member,[req.body.email,req.body.crew_name],(err,result) =>{
+        if (err){
+            console.log(err)
+        }else{
+            console.log("successfully added a crew member")
+        }
+    })
+})
 app.post('/api/remove-crewmember', (req,res) => {
-    const remove_member = "call remove_user_from_crew(?,?)";
+    const remove_member = "call remove_user_from_crew(?,?);";
     if (!req.body.crew_name) {
         res.status(400).send("Missing crew name parameter");
     } else {

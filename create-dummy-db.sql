@@ -1069,8 +1069,8 @@ declare us_id int;
 declare cr_id int;
 
 
-select `rainmanland-dev`.`get_user_id_from_email(email)` into us_id;
-select `rainmanland-dev`.`get_crew_id_from_crew_name(crew_name)` into cr_id;
+select `rainmanland-dev`.get_user_id_from_email(email) into us_id;
+select `rainmanland-dev`.get_crew_id_from_crew_name(crew_name) into cr_id;
 
 
 insert ignore into `rainmanland-dev`.`placed_on`
@@ -1112,8 +1112,8 @@ declare us_id int;
 declare cr_id int;
 
 
-select `rainmanland-dev`.`get_user_id_from_email(email)` into us_id;
-select `rainmanland-dev`.`get_crew_id_from_crew_name(crew_name)` into cr_id;
+select `rainmanland-dev`.get_user_id_from_email(email) into us_id;
+select `rainmanland-dev`.get_crew_id_from_crew_name(crew_name) into cr_id;
 
 DELETE FROM `rainmanland-dev`.`placed_on` p
 WHERE p.user_id=us_id and p.crew_id=cr_id;
