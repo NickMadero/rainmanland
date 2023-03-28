@@ -238,6 +238,12 @@ This will remove a crew given a unique crew name
 
 ***************************************************
 
+## Get all zip codes associated with a crew
+This will return all zip codes that a crew services
+
+    CALL `rainmanland-test`.`get_all_zip_codes_serviced_by_crew`(<{crew_name varchar(45)}>);
+
+*******************************************************
 
 
 
