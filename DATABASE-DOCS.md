@@ -230,4 +230,15 @@ This adds a new crew given a unique name and starting location
     CALL `rainmanland`.`add_new_crew`(<{crew_name varchar(45)}>, <{starting_location varchar(255)}>);
 
 **************************************************
+## Remove crew
+
+This will remove a crew given a unique crew name
+
+    CALL `rainmanland`.`remove_crew`(<{crew_name varchar(45)}>);
+
+***************************************************
+
+
+
+
 
