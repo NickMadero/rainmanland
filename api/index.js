@@ -165,8 +165,50 @@ app.post('/api/remove-crewmember', (req,res) => {
             }
         })
     }
-
 })
+
+
+
+// author Nick
+app.post('api/add-zip-to-crew', (req,res) =>{
+    const add_zip_to_crew = "call add_zip_to_crew(?,?);";
+    dbController.query(add_zip_to_crew,[req.body.crew_name,req.body.zip_code],(err,result) =>{
+        if (err){
+            console.log(err)
+        }else {
+            console.log("added zip code succesfully")
+        }
+    })
+})
+
+// author Nick
+app.post('/api/get-zip-by-crew', (req,res) =>{
+    const add_zip_to_crew = "call get_all_zip_codes_serviced_by_crew(?);";
+    dbController.query(add_zip_to_crew,[req.body.crew_name],(err,result) =>{
+        if (err){
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(result);
+            const zipData = {};
+            result[0].forEach(zip => {
+                const Zip = zip.zip_code;
+                const zipInfo = {
+                    zipcode: zip.zip_code
+                };
+                if (!zipData[Zip]) {
+                    zipData[Zip] = { zip: [Zip] };
+                } else {
+                    zipData[Zip].zip.push(zipInfo);
+                }
+            });
+            const zips = Object.values(zipData);
+            res.send(zips);
+        }
+    });
+});
+
+
 // author Nick
 app.post('/api/get-crew', (req, res) => {
     const getCrew = "call get_all_crews_and_members();";
