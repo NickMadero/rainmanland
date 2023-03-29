@@ -13,4 +13,3 @@ const AvailabilitySettings = () => {
 }
 
 export default AvailabilitySettings;
-

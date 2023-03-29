@@ -27,7 +27,6 @@ Button.propTypes = {
     variant: PropTypes.oneOf(["remove", "form"]),
     text: PropTypes.string.isRequired,
     onClick: PropTypes.func,
-  };
+};
 
 export default Button;
-
