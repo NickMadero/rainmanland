@@ -3,8 +3,12 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const dbController = require('./dbController');
+
+// Set constants
+const saltRounds = 10;  // complexity of bcrypt hash
 
 // initialize the Express app
 const app = express();
@@ -61,16 +65,125 @@ app.get('/api/get-all-users', (req, res) => {
     })
 })
 
-// Check credentials against db and return user info if credentials are good
-// TODO: make this secure by storing hashed passwords instead of plaintext. this is a placeholder for the demo
-app.post('/api/get-user-info', (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const SelectQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
-    dbController.query(SelectQuery, [email, password], (err, result) => {
-        res.send(result);
+// Check user credentials and return the user's info if credential are valid, else return false
+app.post('/api/verify-user', (req, res) => {
+    const email = req.body.sentEmail;
+    const pass = req.body.sentPw;
+    if (!email || !pass) {
+        res.json({
+			success: false,
+			message: "Email and password are required"
+		});
+        return;
+	}
+    const getHashQuery = "CALL get_password_hash(?);";
+    dbController.query(getHashQuery, [email], (err, result) => {
+        console.log(result)
+        if (err) {
+            console.log("Error while retrieving password hash.");
+            res.json({
+				success: false,
+				message: 'Error while retrieving password hash.'
+			});
+			return;
+        }
+        else {
+            console.log("User email exists.");
+            bcrypt.compare(pass, result[0][0].password_hash, function(err, hashResult) {
+                if (hashResult) {
+                    console.log("User verified.");
+					// now get the relevant user info
+					const userInfoQuery = "CALL get_user_info(?);";
+					dbController.query(userInfoQuery, [email], (err, result) => {
+						console.log(result);
+						if (err) {
+							res.json({
+								success: false,
+								message: "Error getting user info"
+							});
+							return;
+						} else {
+                    		res.json({
+								success: true,
+								message: "User info sent.",
+								queryResult: result[0]
+							});
+						}
+					})
+                }
+                else {
+                    console.log("Bad password");
+                    console.log(err);
+                    res.json({
+						success: true,
+						message: "Password doesn't match.",
+						queryResult: false
+					});
+                }
+            })
+        }
     })
 })
+
+// Add a new employee to the user table
+app.post('/api/add-user', (req, res) => {
+	// raw info from request
+	const email = req.body.addEmail;
+	const plaintextPass = req.body.addPassword;
+	const firstName = req.body.addFirstName;
+	const lastName = req.body.addLastName;
+	const phone = req.body.addPhoneNum;
+	const crewNum = req.body.addCrewNum;
+	const currentlyWorking = req.body.addCurrentlyWorking ? 1 : 0;
+
+	// generate password hash
+	const passHash = bcrypt.hash(plaintextPass, saltRounds, (err, hashedPassword) => {
+		if (err) {
+			console.error('Error hashing password: ', err);
+			res.json({
+				success: false,
+				message: 'Error hashing password.'
+			});
+			return;
+		} else {
+			console.log('Hashed password: ', hashedPassword);
+			// add to database using stored procedure
+			const addCustQuery = "CALL add_new_crew_member(CURDATE(),?,?,?,?,?,?);";
+			const params = [firstName, lastName, email, hashedPassword, phone, currentlyWorking];
+			dbController.query(addCustQuery, params, (err, result) => {
+				if (err) {
+					console.log("error while adding crew member: ", err);
+					res.json({
+						success: false,
+						message: 'Error while adding crew member.'
+					});
+					return;
+				} else {
+					console.log("successfully added new employee");
+				}
+				// if a crew number was given while adding the employee, add them to the crew
+				if (crewNum) {
+					const addToCrewQuery = "CALL put_user_on_crew(?,?);";
+					dbController.query(addToCrewQuery, [email, crewNum], (err, result) => {
+						if (err) {
+							console.log("error while adding new crew member to crew: ", err);
+							res.json({
+								success: false,
+								message: 'Error while adding new crew member to crew.'
+							});
+						} else {
+							console.log("successfully added employee to crew");
+							res.json({
+								success: true,
+								message: 'successfully added employee to crew'
+							})
+						}
+					})
+				}
+			})
+		}
+	})
+});
 
 // get a list of today's jobs for the crew number passed as URL param
 app.get('/api/get-jobs/:crewNum', (req, res) => {

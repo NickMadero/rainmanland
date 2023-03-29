@@ -70,35 +70,46 @@ class App extends Component {
     // When the user clicks the "Log in" button on EmployeeSignInPage, this method validates the credentials and brings
     // up the appropriate dashboard for the employee
     handleEmpLoginButtonClick(email, pw) {
-        axios.post("/api/get-user-info", {email: email, password: pw})
+        axios.post("/api/verify-user", {sentEmail: email, sentPw: pw})
             .then((response) => {
-                if (response.data && response.data.length > 0) {
+                if (response.data.success) {
                     this.setState({
-                        userInfo: response.data[0]
+                        userInfo: response.data.queryResult[0]
                     })
                 }
                 else {
                     this.setState({
                         userInfo: false,
-                        CurrentPage: 'EmployeeSignInPage'
                     });
-                    alert("Invalid login. Please try again or contact the business owner for credentials.")
+                    alert(response.data.message)
                     return;
                 }
                 if (this.state.userInfo.user_type === "boss") {
                     console.log("user is owner");
                     this.props.navigate('/owner-dashboard');
                 }
-                else if (this.state.userInfo.user_type === "employee") {
+                else if (this.state.userInfo.user_type === "crew_member") {
                     console.log("user is employee")
                     this.getJobsTodayForCrew(this.state.userInfo.crew_number)
                     this.props.navigate('/employee-dashboard');
                 }
             })
-        axios.post("/api/insert-newcustomer").then((response)=> {
-            console.log(response);
-        })
     }
+
+	// Add a new user (called when user clicks "submit" on the add employee form)
+	onNewEmployeeSubmit(childComponentState) {
+		axios.post("/api/add-user", childComponentState)
+			.then((response) => {
+				if (response.data.success) {
+					console.log(response.data.message);
+					alert("Employee added successfully.");
+				}
+				else {
+					console.log(response.data.message);
+					alert("Error while adding employee.");
+				}
+			})
+	}
 
     // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered
     handleGoToCalendarButtonClick(custInfo) {
@@ -159,7 +170,8 @@ class App extends Component {
                 <Routes>
                     <Route path='/' element={<LandingPage propsWork={true}/>}/>
                     <Route path='employee-login' element={<EmployeeSignInPage
-                        onLoginClick={this.handleEmpLoginButtonClick} />} />
+                        onLoginClick={this.handleEmpLoginButtonClick} 
+						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='appointment-info' element={<CustomerInfoPage
                         onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>}/>
                     <Route path='calendar' element={<Calendar
