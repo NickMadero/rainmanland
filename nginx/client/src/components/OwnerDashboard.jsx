@@ -4,6 +4,7 @@ import SelectableAppointmentTable from './Dashboard-Parts/AppointmentTable/Appoi
 import crewTable from "./Dashboard-Parts/crewTable/crewTable";
 import AvailabilitySettings from '../components/Dashboard-Parts/Availabilty/AvailablilitySetting'
 import CrewTable from "./Dashboard-Parts/crewTable/crewTable";
+import SettingsTable from './Dashboard-Parts/SettingsTable/SettingsTable.jsx'
 /**
  *  TO-DO: Entry for lists of zipcodes for service areas
  *         Service area map (Leaflet? Google Maps?)
@@ -21,6 +22,7 @@ const OwnerHomePage = (props) => {
                 <CrewTable />
                 <div id="container--bottom" className={styles['bottom-container']}>
                     <SelectableAppointmentTable />
+                    <SettingsTable />
                 </div>
             </div>
         </>
