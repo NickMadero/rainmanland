@@ -357,6 +357,36 @@ app.post('/api/get-crew', (req, res) => {
     });
 });
 
+app.post('/api/get-settings', (req, res) => {
+    const getSettings = "call get_settings();";
+    dbController.query(getSettings, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            const appointments = result[0].map(appointment => ({
+                name: appointment.setting_name,
+                value: appointment.setting_value,
+                //id: appointment.setting_id,
+            }));
+            console.log(appointments);
+            res.send(appointments);
+        }
+    })
+})
+
+
+app.post('/api/put-setting', (req, res) => {
+    const putSetting = "call put_setting(?, ?);";
+
+    dbController.query(putSetting, [req.body.setting_name,req.body.setting_value], (err, result) => {
+        if (err){
+            console.log(err);
+            res.status(500).send("Error changing setting");
+        }else {
+            res.status(200).send("Setting changed successfully");
+        }
+    })
+})
 
 
 //author Nick
