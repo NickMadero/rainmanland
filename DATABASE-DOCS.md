@@ -29,7 +29,7 @@ This will take the information required by the customer to set rates and to stor
 as a customer. It also bridges all appointments associated with a specific user in the `assigned_by`
 table.
 
-    CALL `rainmanland`.`create_new_appointment`(<{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{address varchar(255)}>, <{zone_amount int}>, <{controller_brand varchar(45)}>, <{controller_is_outside TINYINT}>, <{zip_code char(5)}>);
+    CALL `rainmanland`.`create_new_appointment`(<{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{address varchar(255)}>, <{zone_amount int}>, <{controller_brand varchar(45)}>, <{controller_is_outside TINYINT}>, <{zip_code char(5)}>, <{phone_number varchar(45)}>);
 
 
 ********************************************************
