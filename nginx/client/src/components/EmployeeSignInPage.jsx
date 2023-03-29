@@ -22,7 +22,10 @@ class EmployeeSignInPage extends React.Component {
 			addCrewNum: '',
 			addCurrentlyWorking: false
         };
+
+		this.handleInputChange = this.handleInputChange.bind(this);
     }
+
 
     // Update the state whenever the user types in the username or password fields
     handleInputChange = event => {
@@ -31,26 +34,35 @@ class EmployeeSignInPage extends React.Component {
         const value = target.value;
 
 		if (target.name === "addCurrentlyWorking") {
-			if (target.checked) {
-				this.setState({addCurrentlyWorking: true});
-			} else {
-				this.setState({addCurrentlyWorking: false});
-			}
+			this.setState(({ addCurrentlyWorking }) => (
+				{
+					addCurrentlyWorking: !addCurrentlyWorking
+				}
+			), function () {
+				console.log('currently working: ', this.state.addCurrentlyWorking);
+			});
 			return;
 		}
 
-        this.setState({
-            [name]: value
-        });
-
-		// check if the password and password confirmation match
-		if (name === 'addPassword' || name === 'addPasswordConfirm') {
-			if (this.state.addPassword === this.state.addPasswordConfirm) {
-				this.setState({pwSame: true});
+		console.log(`Setting state.${name} to ${value}`); 
+        this.setState(prevState => (
+			{
+				...prevState,
+				[name]: value
 			}
-			else this.setState({pwSame: false});
-		}
-    };
+		), function () {
+			console.log(name, value);
+			if (name === 'addPassword' || name === 'addPasswordConfirm') {
+				this.setState(({ pwSame }) => (
+					{
+						pwSame: this.state.addPassword === this.state.addPasswordConfirm
+					}
+				), function () {
+					console.log('passwords match? ', this.state.pwSame);
+				});
+			}
+		});
+	};
 
     // Handle login form submission
     handleSubmit = event => {
@@ -78,7 +90,7 @@ class EmployeeSignInPage extends React.Component {
 
 		// Alert user if password entries don't match
 		if (!this.state.pwSame) {
-			Alert("Password and password confirmation don't match.");
+			alert("Password and password confirmation don't match.");
 			return;
 		};
 
@@ -151,12 +163,12 @@ class EmployeeSignInPage extends React.Component {
 									</Col>
 								</Row>
 
-								<Form.Group controlId="email">
+								<Form.Group controlId="addEmail">
 									<Form.Label>Email</Form.Label>
 									<Form.Control type="email" name="addEmail" placeholder="Email" value={this.state.addEmail} onChange={this.handleInputChange} />
 								</Form.Group>
 
-								<Form.Group controlId="password">
+								<Form.Group controlId="addPassword">
 									<Form.Label>Password</Form.Label>
 									<Form.Control type="password" name="addPassword" placeholder="Password" value={this.state.addPassword} onChange={this.handleInputChange} />
 								</Form.Group>
@@ -165,20 +177,31 @@ class EmployeeSignInPage extends React.Component {
 									<Form.Label>Confirm Password</Form.Label>
 									<Form.Control type="password" name="addPasswordConfirm" placeholder="Confirm Password" value={this.state.addPasswordConfirm} onChange={this.handleInputChange} />
 								</Form.Group>
-
 								<Form.Group controlId="phoneNumber">
 									<Form.Label>Phone Number</Form.Label>
-									<Form.Control type="tel" name="addPhoneNum" placeholder="Phone Number" value={this.state.addPhoneNum} onChange={this.state.addPhoneNum} />
+									<Form.Control
+										type="tel"
+										inputMode="numeric"
+										pattern="\(?(\d{3})\)?[-\s]?(\d{3})[-\s]?(\d{4})"
+										name="addPhoneNum"
+										placeholder="Phone Number"
+										value={this.state.addPhoneNum}
+										onChange={this.handleInputChange}
+									/>
+									<Form.Text className="text-muted">
+										Please enter 10 numerical characters. Hyphens and parentheses are allowed but not required.
+									</Form.Text>
 								</Form.Group>
+
 								<Row>
 									<Col>
 										<Form.Group controlId="currentlyActive">
-											<Form.Check type="checkbox" name="addCurrentlyWorking" value={this.state.addCurrentlyWorking} onChange={this.handleInputChange} label="Currently Active" />
+											<Form.Check type="checkbox" name="addCurrentlyWorking" onChange={this.handleInputChange} label="Currently Active" />
 										</Form.Group>
 										<Form.Group controlId="crewNumber">
 											<Form.Label>Crew Number</Form.Label>
 											<Form.Select name="addCrewNum" value={this.state.addCrewNum} onChange={this.handleInputChange} >
-												<option value="">Select Crew</option>
+												<option value="" >Select Crew</option>
 												<option value="1">Crew 1</option>
 												<option value="2">Crew 2</option>
 											</Form.Select>

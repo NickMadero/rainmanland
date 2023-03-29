@@ -168,7 +168,8 @@ class App extends Component {
                 <Routes>
                     <Route path='/' element={<LandingPage propsWork={true}/>}/>
                     <Route path='employee-login' element={<EmployeeSignInPage
-                        onLoginClick={this.handleEmpLoginButtonClick} />} />
+                        onLoginClick={this.handleEmpLoginButtonClick} 
+						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='appointment-info' element={<CustomerInfoPage
                         onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>}/>
                     <Route path='calendar' element={<Calendar

@@ -146,8 +146,8 @@ app.post('/api/add-user', (req, res) => {
 		} else {
 			res.send(result);
 		}
-	}
-}
+	})
+});
 
 // get a list of today's jobs for the crew number passed as URL param
 app.get('/api/get-jobs/:crewNum', (req, res) => {
