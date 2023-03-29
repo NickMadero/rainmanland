@@ -18,8 +18,8 @@ const	connection = mysql.createPool({
     	host            : 'localhost',
     	user            : 'dev',
     	password        : 'dev',
-    	database        : 'rainmanland',
-		port			: '3307'
+    	database        : 'rainmanland-test',
+		port			: '3306'
 	});
 
 
