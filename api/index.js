@@ -186,8 +186,9 @@ app.post('/api/add-user', (req, res) => {
 });
 
 // get a list of today's jobs for the crew number passed as URL param
-app.get('/api/get-jobs/:crewNum', (req, res) => {
+app.get('/api/get-jobs/:crewName', (req, res) => {
     const crewNum = req.params.crewNum
+	const 
     // TODO: make this query actually do its job - this is just for the demo again
     const GetJobsQuery = "SELECT * FROM appointments";
     dbController.query(GetJobsQuery, (err, result) => {
@@ -226,6 +227,50 @@ app.post('/api/insert-newcustomer', (req, res) => {
     })
 })
 
+// Get a list of today's appointments for a specific crew
+app.post('/api/get-joblist', (req, res) => {
+
+	console.log(`Body of request to /get-joblist : ${req.body}`);
+
+	const getTodayDate = () => {
+		const today = new Date();
+		const year = today.getFullYear();
+		const month = String(today.getMonth() + 1).padStart(2, '0');
+		const day = String(today.getDate()).padStart(2, '0');
+		return `${year}-${month}-${day}`;
+	}
+
+	// send failure response if bad request
+	if (!req.body.crewName) {
+		res.json({
+			success: false,
+			message: "Bad request: no crew number included."
+		});
+		return;
+	}
+
+	// if request was good, make the db query	
+	const getJobListQuery = "CALL get_appointments_on_half_day_from_date_crew(?, CURDATE());";
+	const params = [req.body.crewName];
+	dbController.query(getJobListQuery, params, (err, result) => {
+		if (err) {
+			console.log("Error while fetching appointments: ", err);
+			res.json({
+				success: false,
+				message: "Error while fetching appointments"
+			});
+			return;
+		} else {
+			console.log("successfully fetched appointments: ", result);
+			res.json({
+				success: true,
+				message: "Successfully fetched appointments",
+				queryResult: result
+			});
+		}
+	}
+}
+	
 
 
 

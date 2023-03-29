@@ -121,8 +121,8 @@ class App extends Component {
     }
 
     // gets a list of today's jobs for the specified crew from the database
-    getJobsTodayForCrew(crew_number) {
-        axios.get(`/api/get-jobs/${crew_number}`)
+    getJobsTodayForCrew(crew_name) {
+        axios.get(`/api/get-jobs/${crew_name}`)
             .then((response) => {
                 this.setState({
                     fetchJobsTodayData: response.data
