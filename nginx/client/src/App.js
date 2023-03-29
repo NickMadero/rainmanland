@@ -71,7 +71,7 @@ class App extends Component {
             .then((response) => {
                 if (response.data.success) {
                     this.setState({
-                        userInfo: response.data.queryResult
+                        userInfo: response.data.queryResult[0]
                     })
                 }
                 else {
@@ -85,7 +85,7 @@ class App extends Component {
                     console.log("user is owner");
                     this.props.navigate('/owner-dashboard');
                 }
-                else if (this.state.userInfo.user_type === "employee") {
+                else if (this.state.userInfo.user_type === "crew_member") {
                     console.log("user is employee")
                     this.getJobsTodayForCrew(this.state.userInfo.crew_number)
                     this.props.navigate('/employee-dashboard');
