@@ -10,6 +10,7 @@ function CrewTable() {
     const [newMemberEmail, setNewMemberEmail] = useState('');
     const [zipcodes, setZipCodes] = useState([]);
     const [showZipCodeModal, setShowZipCodeModal] = useState(false);
+    const [currentCrewName, setCurrentCrewName] = useState('');
 
     // this just gets the list of crews
     useEffect(() => {
@@ -31,6 +32,7 @@ function CrewTable() {
                 console.log(response.data);
                 setZipCodes(response.data);
                 setShowZipCodeModal(true);
+                setCurrentCrewName(crewname);
             })
             .catch(error => {
                 console.log(error);
@@ -98,6 +100,32 @@ function CrewTable() {
             });
     }
 
+    const handleRemovalZip = (zip, crewName) => {
+        axios.post('/api/remove-zip-from-crew', { zip_code: zip, crew_name: crewName })
+            .then(response => {
+                console.log(response.data);
+                // Update the zip codes to reflect the removal of the zip code
+                const updatedZipCodes = zipcodes.filter(z => z.zipcode !== zip);
+                setZipCodes(updatedZipCodes);
+                // Update the crew list to reflect the removal of the zip code
+                const updatedCrews = crews.map(c => {
+                    if (c.crew_name === selectedCrew.crew_name) {
+                        return {
+                            ...c,
+                            zipcodes: c.zipcodes.filter(z => z !== zip)
+                        };
+                    }
+                    return c;
+                });
+                setCrews(updatedCrews);
+                window.alert(`${zip} has been removed from the crew.`);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
+
     return (
         // displays the crew table
         <div style={{ position: "absolute", top: 15, left: 0, width: '50%', height: '50%', overflowY: 'scroll' }}>
@@ -134,10 +162,18 @@ function CrewTable() {
                     <ul>
                         {zipcodes.length > 0 ? (
                             zipcodes.map((zip) => (
-                                <li key={zip.id}>{zip.zip}</li>
-                            ))
+                                <li key={zip.id}>
+                                    <div className="col">{zip.zip}</div>
+                                    <div className="col-auto"><Form.Check>
+                                        <Form.Check.Input type="checkbox" onChange={() => handleRemovalZip(zip.zip,currentCrewName)} />
+                                        <Form.Check.Label style={{ fontSize: '12px' }}>Remove</Form.Check.Label>
+                                    </Form.Check></div>
+                                </li>
+                            )
+                            )
                         ) : (
                             <div>No zip codes found.</div>
+
                         )}
                     </ul>
                 </Modal.Body>

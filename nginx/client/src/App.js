@@ -43,6 +43,7 @@ class App extends Component {
                 date_occuring : null,
                 is_complete : null,
                 zip_code : null,
+                phone_number : null,
                 //for crews
                 crew_name: null,
 

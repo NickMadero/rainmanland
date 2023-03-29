@@ -58,6 +58,7 @@ class CustomerInfoPage extends React.Component {
             First_Name,
             Last_Name,
             zipcode,
+            phone,
 
         } = this.state;
 
@@ -72,6 +73,7 @@ class CustomerInfoPage extends React.Component {
                 first_name: First_Name,
                 last_name: Last_Name,
                 zip_code : zipcode,
+            phone_number: phone,
 
             })
             .then(res => {
@@ -149,6 +151,10 @@ class CustomerInfoPage extends React.Component {
                 <Form.Group controlId="formzipcode">
                     <Form.Label>what is your zip code?</Form.Label>
                     <Form.Control name="zipcode" type="text" placeholder="zip code"required onChange={this.handleInputChange}/>
+                </Form.Group>
+                <Form.Group controlId="formphone">
+                    <Form.Label>what is your phone number?</Form.Label>
+                    <Form.Control name="phone" type="text" placeholder="phone number"required onChange={this.handleInputChange}/>
                 </Form.Group>
                 <Button variant="primary" type="submit"
                         style={{margin: '30px', color: 'white', backgroundColor: 'blue'}}>
