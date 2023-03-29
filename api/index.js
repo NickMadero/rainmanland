@@ -172,7 +172,7 @@ app.post('/api/remove-crewmember', (req,res) => {
 
 
 // author Nick
-app.post('api/add-zip-to-crew', (req,res) =>{
+app.post('/api/add-zip-to-crew', (req,res) =>{
     const add_zip_to_crew = "call add_zip_to_crew(?,?);";
     dbController.query(add_zip_to_crew,[req.body.crew_name,req.body.zip_code],(err,result) =>{
         if (err){
