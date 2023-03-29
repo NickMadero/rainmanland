@@ -4,7 +4,7 @@ import { Button, Container, Card, Row } from 'react-bootstrap'
 function EmployeeDashboard(props) {
 
     let card = props.jobsToday.map((val, key) => {
-        if (val.is_outdoor) {
+        if (val.controller_is_outside) {
             val.controller_location = "Outdoor";
         }
         else {
@@ -13,12 +13,12 @@ function EmployeeDashboard(props) {
         return (
             <React.Fragment>
                 <Card>
-                    <Card.Header as="h5">{val.job_address}</Card.Header>
+                    <Card.Header as="h5">{val.address}</Card.Header>
                     <Card.Body>
                         <Card.Title>{val.customer_name}</Card.Title>
-                        <Card.Subtitle>Appointment window is {val.time_range}</Card.Subtitle>
+                        <Card.Subtitle>Appointment window is {val.start_time} to {val.end_time}.</Card.Subtitle>
                         <Card.Text>
-                            {val.controller_location} {val.controller_brand} controller with {val.num_zones} zones, {val.heads_per_zone} sprinklers per zone.
+                            {val.controller_location} {val.controller_brand} controller with {val.zone_amount} zone(s).
                         </Card.Text>
                         <Button variant="primary">Mark Complete</Button>
                         <Button variant="primary">Open Directions in Google Maps</Button>
