@@ -534,7 +534,7 @@ BEGIN
 
 INSERT INTO `rainmanland-dev`.`user`
 (
-`fist_name`,
+`first_name`,
 `last_name`,
 `email`,
 `password_hash`,
@@ -555,6 +555,37 @@ return last_insert_id();
 
 END ;;
 DELIMITER ;
+
+
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `get_crew_id_from_crew_name` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`dev` FUNCTION `get_crew_id_from_crew_name`(crew_name varchar(45)) RETURNS int
+    DETERMINISTIC
+BEGIN
+
+declare cr_id int;
+
+select u.crew_id into cr_id
+from `rainmanland-dev`.`crew` u
+where u.crew_name=crew_name
+limit 1;
+
+RETURN cr_id;
+END ;;
+DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -584,6 +615,37 @@ where c.email=email and c.first_name=first_name and c.last_name=last_name limit 
 RETURN cus_id;
 END ;;
 DELIMITER ;
+
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `get_user_id_from_email` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`dev` FUNCTION `get_user_id_from_email`(email varchar(100)) RETURNS int
+    DETERMINISTIC
+BEGIN
+
+declare ur_id int;
+
+select u.user_id into ur_id
+from `rainmanland-dev`.`user` u
+where u.email=email
+limit 1;
+
+RETURN ur_id;
+END ;;
+DELIMITER ;
+
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -598,15 +660,16 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
+
 CREATE DEFINER=`dev` PROCEDURE `add_new_crew_member`(date_hired_set Date,
 	first_name varchar(45), last_name varchar(45), email varchar(100),
-	password_hash varchar(255), phone varchar(45), is_working tinyint, user_type varchar(45))
+	password_hash varchar(255), phone varchar(45))
 BEGIN
 
 declare crew_id int;
 
-select `rainmanland-dev`.add_new_user(first_name , last_name , email ,
-	password_hash , phone, is_working , user_type ) into crew_id ;
+select `rainmanland-dev`.`add_new_user(first_name , last_name , email ,
+	password_hash , phone, is_working ,'crew_member' )` into crew_id ;
 
 update `rainmanland-dev`.`crew_member`
 set date_hired=date_hired_set
@@ -850,7 +913,7 @@ BEGIN
 #returns all of the members that are appart of the given crew
 select u.user_id,c.crew_name, u.first_name, u.last_name, u.email, u.phone_number, u.currently_working, u.user_type,
 		 c.is_active, c.starting_location
-from rainmanland.user u
+from `rainmanland-dev`.`user` u
 	join `rainmanland-dev`.`placed_on` po on po.user_id=u.user_id
 	join `rainmanland-dev`.`crew` c on c.crew_id=po.crew_id
 where c.crew_name=crew_name;
@@ -982,6 +1045,83 @@ on duplicate key update
     setting_value=value_;
 END ;;
 DELIMITER ;
+
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `put_user_on_crew` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`dev` PROCEDURE `put_user_on_crew`(email varchar(100), crew_name varchar(45))
+BEGIN
+
+#this is used to put a user onto a crew from their email and crew name
+
+declare us_id int;
+declare cr_id int;
+
+
+select `rainmanland-dev`.get_user_id_from_email(email) into us_id;
+select `rainmanland-dev`.get_crew_id_from_crew_name(crew_name) into cr_id;
+
+
+insert ignore into `rainmanland-dev`.`placed_on`
+(
+`user_id`,
+`crew_id`)
+VALUES
+(
+us_id,
+cr_id);
+
+select last_insert_id();
+
+END ;;
+DELIMITER ;
+
+
+
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `remove_user_from_crew` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`dev` PROCEDURE `remove_user_from_crew`(email varchar(100), crew_name varchar(45))
+BEGIN
+
+#this is used to remove a user from a crew
+
+declare us_id int;
+declare cr_id int;
+
+
+select `rainmanland-dev`.get_user_id_from_email(email) into us_id;
+select `rainmanland-dev`.get_crew_id_from_crew_name(crew_name) into cr_id;
+
+DELETE FROM `rainmanland-dev`.`placed_on` p
+WHERE p.user_id=us_id and p.crew_id=cr_id;
+
+
+END ;;
+DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;

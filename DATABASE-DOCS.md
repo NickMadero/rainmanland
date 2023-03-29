@@ -4,8 +4,8 @@ Authors: Marcus Tangradi
 
 
 Interacting with the database:
-    When interacting with the database with the api (node) calls to stored procedures and functions 
-    are to be used when available.
+When interacting with the database with the api (node) calls to stored procedures and functions
+are to be used when available.
 
 ***************************************************************
 **********************************************************
@@ -14,10 +14,10 @@ Interacting with the database:
 ### Get Controller Brands:
 
 The controller brands are an enum datatype in the `appointment` table.
-        To get the controller brands make a call to the stored procedure:
-        
+To get the controller brands make a call to the stored procedure:
+
         CALL `rainmanland`.`get_controller_enum`();
-    
+
 This will return a list of the possible controller brands that can be inserted into the
 table.
 
@@ -43,7 +43,7 @@ sets the date.
     CALL `rainmanland`.`set_date_of_appointment`(<{date_occur date}>, <{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>);
 
 *************************************************************
-  
+
 
 ## Get All Appointments with Customers
 
@@ -56,7 +56,7 @@ customer
 
 ## Get All Appointments on specific day
 
-This is used to get all the appointments that occur on the date provided. 
+This is used to get all the appointments that occur on the date provided.
 the format for date should be `YYYY-MM-DD`.
 
     CALL `rainmanland`.`get_all_appointments_on_date`(<{date_occur DATE}>);
@@ -119,7 +119,7 @@ This will return the password hash from a given email of a user
     CALL `rainmanland`.`get_password_hash`(<{email varchar(100)}>);
 
 ***********************************
-    
+
 ## Get all user info
 
 Returns all the information about a user given their email
@@ -155,7 +155,7 @@ and associates an appointment with that zipcode
 
 ## Remove User from Crew
 
-This is used to take an employee off of a crew. 
+This is used to take an employee off of a crew.
 This can be used for switching to another crew or to stop working
 
     CALL `rainmanland`.`remove_user_from_crew`(<{email varchar(100)}>, <{crew_name varchar(45)}>);
@@ -168,3 +168,83 @@ This is used when you want to add a user to an existing crew
     CALL `rainmanland`.`put_user_on_crew`(<{email varchar(100)}>, <{crew_name varchar(45)}>);
 
 **************************
+
+## Get all appointments serviced by a specific crew
+
+This will return all appointments that a crew is responsible for
+
+    CALL `rainmanland`.`get_all_appointments_serviced_by_crew`(<{crew_name varchar(45)}>);
+
+***********************************
+## Add a zip code to a specific crew
+
+This allows the user to add a zip code to a crew's serviceable area
+
+    CALL `rainmanland`.`add_zip_to_crew`(<{crew_name varchar(45)}>, <{zip_code varchar(5)}>);
+
+****************************************
+## Add zip code to list
+
+This will add an existing zip code. Decide if its available or not
+
+    CALL `rainmanland`.`add_zip_code`(<{zip_codee varchar(5)}>, <{is_availablee tinyint}>);
+
+************************************************
+## Remove a zip from a crew
+
+This removed a given zip code from the servie area of a crew
+
+    CALL `rainmanland`.`remove_zip_from_crew`(<{zip_code char(5)}>, <{crew_name varchar(45)}>);
+************************************
+
+## Get all half days on a date and crew
+
+This will return all of the half days that a crew is responsible for on a half day
+This does not return the appointments on the given half days
+
+    CALL `rainmanland`.`get_half_day_by_crew_name_and_date`(<{crew_name varchar(45)}>, <{date_occur date}>);
+
+********************************************
+
+## Get all appointments occuring on day by date and crew name
+
+This will return all the appointment information and crew name that is
+responsible for a crew on a given date
+
+    CALL `rainmanland`.`get_appointments_on_half_day_from_date_crew`(<{crew_name varchar(45)}>, <{date_occur date}>);
+
+**********************************************************
+## Put appointment on a half day
+
+this is used when confirmation that the apppointment is set
+This takes an appointment and associated it with a halfday which is associated with a specific crew
+this also sets the date the appointment is to occur
+
+    CALL `rainmanland`.`put_appointment_on_half_day`(<{crew_name varchar(45)}>, <{date_occuring date}>, <{which_half enum('first', 'second')}>, <{email varchar(100)}>, <{first_name varchar(45)}>, <{last_name varchar(45)}>, <{appointment_id int}>);
+
+********************************************************
+## Add new crew
+
+This adds a new crew given a unique name and starting location
+
+    CALL `rainmanland`.`add_new_crew`(<{crew_name varchar(45)}>, <{starting_location varchar(255)}>);
+
+**************************************************
+## Remove crew
+
+This will remove a crew given a unique crew name
+
+    CALL `rainmanland`.`remove_crew`(<{crew_name varchar(45)}>);
+
+***************************************************
+
+## Get all zip codes associated with a crew
+This will return all zip codes that a crew services
+
+    CALL `rainmanland-test`.`get_all_zip_codes_serviced_by_crew`(<{crew_name varchar(45)}>);
+
+*******************************************************
+
+
+
+
