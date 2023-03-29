@@ -45,11 +45,3 @@ services:
       - /app/node_modules
       - ./nginx/client:/app
 
-  adminer:
-      image: adminer:latest
-      restart: unless-stopped
-      ports:
-        - "8000:8080"
-      environment:
-        ADMINER_DEFAULT_SERVER: ${ADMINER_DEFAULT_SERVER}
-

@@ -201,9 +201,9 @@ class EmployeeSignInPage extends React.Component {
 										<Form.Group controlId="crewNumber">
 											<Form.Label>Crew Number</Form.Label>
 											<Form.Select name="addCrewNum" value={this.state.addCrewNum} onChange={this.handleInputChange} >
-												<option value="" >Select Crew</option>
-												<option value="1">Crew 1</option>
-												<option value="2">Crew 2</option>
+												<option value="" >Unassigned</option>
+												<option value="one">Crew 1</option>
+												<option value="two">Crew 2</option>
 											</Form.Select>
 										</Form.Group>
 									</Col>
