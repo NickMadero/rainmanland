@@ -1,0 +1,11 @@
+.cardContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardBodyCustom {
+    flex: 1;
+    overflow: auto;
+}
+

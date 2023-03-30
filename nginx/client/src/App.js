@@ -177,7 +177,8 @@ class App extends Component {
                         onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>}/>
                     <Route path='calendar' element={<Calendar
                         custInfo={this.state.customerInfo} />} />
-                    <Route path='owner-dashboard' element={<OwnerDashboard />}/>
+                    <Route path='owner-dashboard' element={<OwnerDashboard
+						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='employee-dashboard' element={<EmployeeDashboard
                         jobsToday={this.state.fetchJobsTodayData}
                         crewNum={this.state.userInfo.crew_number} />} />

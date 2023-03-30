@@ -1,3 +1,4 @@
+import NewEmployeeForm from './Dashboard-Parts/SettingsTable/NewEmployeeForm.jsx';
 import React from 'react'
 import styles from '../style/ownerdashboard.module.css'
 import SelectableAppointmentTable from './Dashboard-Parts/AppointmentTable/AppointmentTable.jsx'
@@ -17,7 +18,6 @@ const OwnerHomePage = (props) => {
     return (
         <>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
             <div className={styles['page']}>
                 <CrewTable />
                 <div id="container--bottom" className={styles['bottom-container']}>
@@ -25,8 +25,12 @@ const OwnerHomePage = (props) => {
                     <SettingsTable />
                 </div>
             </div>
+			<div>
+                <NewEmployeeForm onNewEmployeeSubmit={props.onNewEmployeeSubmit} />
+			</div>
         </>
     );
 }
 
 export default OwnerHomePage
+
