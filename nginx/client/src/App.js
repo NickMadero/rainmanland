@@ -32,11 +32,22 @@ class App extends Component {
 
             // state attribute that remembers the info given in the Customer Info page
             customerInfo: {
-                outside: null,
+                controller_is_outside: null,
+                controller_brand:null,
                 brand: null,
                 unitsPerZone: null,
-                numZones: null,
-                address: null
+                zone_amount: null,
+                address: null,
+                first_name: null,
+                last_name: null,
+                date_occuring : null,
+                is_complete : null,
+                zip_code : null,
+                phone_number : null,
+                //for crews
+                crew_name: null,
+                starting_location: null,
+
             },
 
             // other state attributes
@@ -61,32 +72,46 @@ class App extends Component {
     // When the user clicks the "Log in" button on EmployeeSignInPage, this method validates the credentials and brings
     // up the appropriate dashboard for the employee
     handleEmpLoginButtonClick(email, pw) {
-        axios.post("/api/get-user-info", {email: email, password: pw})
+        axios.post("/api/verify-user", {sentEmail: email, sentPw: pw})
             .then((response) => {
-                if (response.data && response.data.length > 0) {
+                if (response.data.success) {
                     this.setState({
-                        userInfo: response.data[0]
+                        userInfo: response.data.queryResult
                     })
                 }
                 else {
                     this.setState({
                         userInfo: false,
-                        CurrentPage: 'EmployeeSignInPage'
                     });
-                    alert("Invalid login. Please try again or contact the business owner for credentials.")
+                    alert(response.data.message)
                     return;
                 }
-                if (this.state.userInfo.user_type === "owner") {
+                if (this.state.userInfo.user_type === "boss") {
                     console.log("user is owner");
                     this.props.navigate('/owner-dashboard');
                 }
-                else if (this.state.userInfo.user_type === "employee") {
+                else if (this.state.userInfo.user_type === "crew_member") {
                     console.log("user is employee")
-                    this.getJobsTodayForCrew(this.state.userInfo.crew_number)
+                    this.getJobsTodayForCrew(this.state.userInfo.crewName)
                     this.props.navigate('/employee-dashboard');
                 }
             })
     }
+
+	// Add a new user (called when user clicks "submit" on the add employee form)
+	onNewEmployeeSubmit(childComponentState) {
+		axios.post("/api/add-user", childComponentState)
+			.then((response) => {
+				if (response.data.success) {
+					console.log(response.data.message);
+					alert("Employee added successfully.");
+				}
+				else {
+					console.log(response.data.message);
+					alert("Error while adding employee.");
+				}
+			})
+	}
 
     // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered
     handleGoToCalendarButtonClick(custInfo) {
@@ -97,14 +122,14 @@ class App extends Component {
     }
 
     // gets a list of today's jobs for the specified crew from the database
-    getJobsTodayForCrew(crew_number) {
-        axios.get(`/api/get-jobs/${crew_number}`)
+    getJobsTodayForCrew(crew_name) {
+        axios.post('/api/get-joblist', {crewName: crew_name})
             .then((response) => {
                 this.setState({
-                    fetchJobsTodayData: response.data
+                    fetchJobsTodayData: response.data.queryResult[0]
                 })
             })
-    }
+    };
 
     handleChange = (event) => {
         let nam = event.target.name;
@@ -147,12 +172,14 @@ class App extends Component {
                 <Routes>
                     <Route path='/' element={<LandingPage propsWork={true}/>}/>
                     <Route path='employee-login' element={<EmployeeSignInPage
-                        onLoginClick={this.handleEmpLoginButtonClick} />} />
+                        onLoginClick={this.handleEmpLoginButtonClick} 
+						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='appointment-info' element={<CustomerInfoPage
                         onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>}/>
                     <Route path='calendar' element={<Calendar
                         custInfo={this.state.customerInfo} />} />
-                    <Route path='owner-dashboard' element={<OwnerDashboard />}/>
+                    <Route path='owner-dashboard' element={<OwnerDashboard
+						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='employee-dashboard' element={<EmployeeDashboard
                         jobsToday={this.state.fetchJobsTodayData}
                         crewNum={this.state.userInfo.crew_number} />} />

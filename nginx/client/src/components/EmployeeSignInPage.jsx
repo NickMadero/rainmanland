@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
-import Button from 'react-bootstrap/Button';
+import { Card, Container, Form, Button, Col, Row, InputGroup, FormControl, FormCheck } from 'react-bootstrap';
 import {renderIntoDocument} from "react-dom/test-utils";
 import {withRouter} from "./withRouter";
 
@@ -11,9 +11,12 @@ class EmployeeSignInPage extends React.Component {
         // Initialize the component state
         this.state = {
             email: '',
-            password: ''
-        };
+            password: '',
+       };
+
+		this.handleInputChange = this.handleInputChange.bind(this);
     }
+
 
     // Update the state whenever the user types in the username or password fields
     handleInputChange = event => {
@@ -21,12 +24,17 @@ class EmployeeSignInPage extends React.Component {
         const name = target.name;
         const value = target.value;
 
-        this.setState({
-            [name]: value
-        });
-    };
+        this.setState(prevState => (
+			{
+				...prevState,
+				[name]: value
+			}
+		), function () {
+			console.log(`Setting state.${name} to ${value}`); 
+		});
+	};
 
-    // Handle form submission
+    // Handle login form submission
     handleSubmit = event => {
         event.preventDefault();
 
@@ -42,28 +50,37 @@ class EmployeeSignInPage extends React.Component {
         // Clear the form fields after submission
         this.setState({
             email: '',
-            password: ''
+            password: '',
         });
     };
 
-    render() {
-        return (
-            <div>
-                <h1>Employee Login</h1>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Email:
-                        <input type="text" name="email" value={this.state.email} onChange={this.handleInputChange} />
-                    </label>
-                    <label>
-                        Password:
-                        <input type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
-                    </label>
-                    <button type="submit">Log In</button>
-                </form>
-            </div>
-        );
-    }
+	render() {
+		return (
+			<Container>
+				<Row className="justify-content-md-center">
+					<Col md="auto">
+						<Card className="mt-4 mb-4 p-4">
+							<Card.Title>Employee Login</Card.Title>
+							<Form onSubmit={this.handleSubmit}>
+								<Form.Group controlId="email">
+									<Form.Label>Email</Form.Label>
+									<Form.Control type="text" name="email" value={this.state.email} onChange={this.handleInputChange} />
+								</Form.Group>
+								<Form.Group controlId="password">
+									<Form.Label>Password</Form.Label>
+									<Form.Control type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
+								</Form.Group>
+								<Button variant="primary" type="submit">
+									Log In
+								</Button>
+							</Form>
+						</Card>
+					</Col>
+				</Row>
+			</Container>
+		);
+	}
 }
 
 export default withRouter(EmployeeSignInPage);
+

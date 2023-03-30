@@ -1,0 +1,21 @@
+.wrapper{
+    border: 2px solid red;
+    display: flex;
+    flex-direction: column;
+    width: 10rem;
+}
+
+label {
+    display: block;
+    font: 1.5rem 'Fira Sans', sans-serif;
+}
+
+.date-input,
+label {
+    margin: 0.4rem 0;
+}
+
+.date-input {
+    height: 2.5rem;
+    font: 1rem Arial, sans-serif;
+}
