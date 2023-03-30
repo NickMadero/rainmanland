@@ -103,15 +103,29 @@ app.post('/api/verify-user', (req, res) => {
 							});
 							return;
 						} else {
-                    		res.json({
-								success: true,
-								message: "User info sent.",
-								queryResult: result[0]
-							});
+							var allInfoButCrew = result[0][0];
+							const getCrewNameQuery = "SELECT c.crew_name FROM placed_on AS p JOIN crew AS c ON p.crew_id = c.crew_id WHERE p.user_id = ?;";
+							dbController.query(getCrewNameQuery, [allInfoButCrew.user_id], (err, resultTwo) => {
+								console.log(result);
+								if (err) {
+									res.json({
+										success: false,
+										message: "Error while getting user's crew"
+									});
+									return;
+								} else {
+									allInfoButCrew.crewName = resultTwo[0].crew_name;
+									res.json({
+										success: true,
+										message: "User info sent.",
+										queryResult: allInfoButCrew
+									});
+									return;
+								}
+							})
 						}
 					})
-                }
-                else {
+				} else {
                     console.log("Bad password");
                     console.log(err);
                     res.json({
@@ -185,18 +199,6 @@ app.post('/api/add-user', (req, res) => {
 	})
 });
 
-// get a list of today's jobs for the crew number passed as URL param
-app.get('/api/get-jobs/:crewName', (req, res) => {
-    const crewNum = req.params.crewNum
-	const 
-    // TODO: make this query actually do its job - this is just for the demo again
-    const GetJobsQuery = "SELECT * FROM appointments";
-    dbController.query(GetJobsQuery, (err, result) => {
-        if (err) console.log(err);
-        res.send(result);
-    })
-})
-
 // get a list of the available controller brand options author: Nick Madero / Steve Piccolo
 app.post('/api/get-controller-brand', (req, res) => {
     const getController = "call get_controller_enum();";
@@ -268,11 +270,8 @@ app.post('/api/get-joblist', (req, res) => {
 				queryResult: result
 			});
 		}
-	}
-}
-	
-
-
+	})
+});
 
 //author : Nick Madero
 app.post('/api/show-appointments', (req, res) => {

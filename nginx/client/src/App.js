@@ -75,7 +75,7 @@ class App extends Component {
             .then((response) => {
                 if (response.data.success) {
                     this.setState({
-                        userInfo: response.data.queryResult[0]
+                        userInfo: response.data.queryResult
                     })
                 }
                 else {
@@ -91,7 +91,7 @@ class App extends Component {
                 }
                 else if (this.state.userInfo.user_type === "crew_member") {
                     console.log("user is employee")
-                    this.getJobsTodayForCrew(this.state.userInfo.crew_number)
+                    this.getJobsTodayForCrew(this.state.userInfo.crewName)
                     this.props.navigate('/employee-dashboard');
                 }
             })
@@ -125,7 +125,7 @@ class App extends Component {
         axios.post('/api/get-joblist', {crewName: crew_name})
             .then((response) => {
                 this.setState({
-                    fetchJobsTodayData: response.data.queryResult
+                    fetchJobsTodayData: response.data.queryResult[0]
                 })
             })
     };
