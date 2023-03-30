@@ -245,6 +245,12 @@ This will return all zip codes that a crew services
 
 *******************************************************
 
+## Get all crew names
 
+This will return a list of only the crew names
+
+    CALL `rainmanland`.`get_all_crew_names`();
+
+******************************************************
 
 
