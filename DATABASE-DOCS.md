@@ -253,4 +253,11 @@ This will return a list of only the crew names
 
 ******************************************************
 
+## Get all appointments
+
+This will return all of the appointments that are created
+    
+    CALL `rainmanland`.`get_all_appointments`();
+
+******************************************************
 
