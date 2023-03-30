@@ -368,6 +368,17 @@ app.post('/api/get-crew', (req, res) => {
     });
 });
 
+// author Nick
+app.post('/api/add-new-crew', (req,res) =>{
+    const addNewCrew = "call add_new_crew(?,?);";
+    dbController.query(addNewCrew,[req.body.crew_name, req.body.starting_location],(err,result) =>{
+        if (err){
+            console.log(err)
+        }else {
+            console.log("added new crew ")
+        }
+    })
+})
 app.post('/api/get-settings', (req, res) => {
     const getSettings = "call get_settings();";
     dbController.query(getSettings, (err, result) => {
@@ -401,7 +412,6 @@ app.post('/api/put-setting', (req, res) => {
 
 
 
-//author Nick
 
 
 // add a port to expose the API when the server is running

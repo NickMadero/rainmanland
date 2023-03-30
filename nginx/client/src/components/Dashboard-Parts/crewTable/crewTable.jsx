@@ -3,18 +3,26 @@ import { Table, Form, Button, FormGroup, FormLabel, Modal } from 'react-bootstra
 import { useState, useEffect } from "react";
 
 function CrewTable() {
+
+    // constants for the crew / members proportion of the code
     const [crews, setCrews] = useState([]);
     const [selectedCrew, setSelectedCrew] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
     const [newMemberEmail, setNewMemberEmail] = useState('');
 
-
+    // constants for the zip code proportion of the code
     const [zipcodes, setZipCodes] = useState([]);
     const [showZipCodeModal, setShowZipCodeModal] = useState(false);
     const [currentCrewName, setCurrentCrewName] = useState('');
     const [showAddZipModal, setShowAddZipModal] = useState(false);
     const [NewZipCode, setNewZipCode] = useState('');
+
+
+    const [showAddCrewModal, setAddCrewModal] = useState(false);
+    const [NewCrew, setNewCrew] = useState('');
+    const [startLoc , setStartLoc] = useState('');
+
 
     // this just gets the list of crews
     useEffect(() => {
@@ -154,14 +162,28 @@ function CrewTable() {
             });
     };
 
+    const handleAddCrew = (newCrewName , startLocation) => {
+        axios.post('/api/add-new-crew', { crew_name: newCrewName , starting_location: startLocation })
+            .then(response => {
+                console.log(response.data);
+                // Update the crew list to reflect the addition of the new crew
+                setCrews([...crews, { crew_name: newCrewName, members: [], zipcodes: [] }]);
+                setNewCrew('');
+                window.alert(`${newCrewName} has been added to the crews.`);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
     return (
         // displays the crew table
         <div style={{ position: "absolute", top: 15, left: 0, width: '50%', height: '50%', overflowY: 'scroll' }}>
             <FormGroup>
                 <Form.Label>Crew List</Form.Label>
+                <Button   style={{marginLeft:"5px", marginBottom:"5px"}} onClick={() => setAddCrewModal(true)}>Add Crew</Button>
             </FormGroup>
-            <Table striped bordered >
+            <Table striped bordered style={{border:"solid"}} >
                 <thead>
                 <tr>
                     <th>Crews</th>
@@ -182,6 +204,30 @@ function CrewTable() {
                 ))}
                 </tbody>
             </Table>
+
+            {/*Modal for adding a new crew */}
+            <Modal show={showAddCrewModal} onHide={() => setAddCrewModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add New Crew</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group>
+                        <Form.Label>New Crew</Form.Label>
+                        <Form.Control type="NewCrew" placeholder="Enter Crew Name" value={NewCrew} onChange={(event) => setNewCrew(event.target.value)} />
+                        <Form.Control type="NewCrew" placeholder="Enter start location" value={startLoc} onChange={(event) => setStartLoc(event.target.value)} />
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => {handleAddCrew(NewCrew,startLoc)} }>
+                        Add
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
+
+
+
             {/* Modal for displaying zip codes */}
             <Modal show={showZipCodeModal} onHide={handleCloseZipCodeModal}>
                 <Modal.Header closeButton>
@@ -249,15 +295,20 @@ function CrewTable() {
                 </Modal.Header>
                 <Modal.Body>
                     <ul>
-                        {selectedCrew?.members.map(member => (
-                            <li key={member.id} className="row">
-                                <div className="col" style={{ whiteSpace: 'nowrap' }}>{member.first_name} | {member.last_name} | {member.emailaddress}</div>
-                                <div className="col-auto"><Form.Check>
-                                    <Form.Check.Input type="checkbox" onChange={() => handleRemoveMember(member.emailaddress, selectedCrew.name)} />
-                                    <Form.Check.Label style={{ fontSize: '12px' }}>Remove</Form.Check.Label>
-                                </Form.Check></div>
-                            </li>
-                        ))}
+                        {selectedCrew?.members.length > 0 ? (
+                            selectedCrew.members.map((member) => (
+                                <li key={member.id} className="row">
+                                    <div className="col" style={{ whiteSpace: 'nowrap' }}>{member.first_name} | {member.last_name} | {member.emailaddress}</div>
+                                    <div className="col-auto"><Form.Check>
+                                        <Form.Check.Input type="checkbox" onChange={() => handleRemoveMember(member.emailaddress, selectedCrew.name)} />
+                                        <Form.Check.Label style={{ fontSize: '12px' }}>Remove</Form.Check.Label>
+                                    </Form.Check></div>
+                                </li>
+                            ))
+                        ) : (
+                            <div>No crew members yet.</div>
+                        )}
+
                     </ul>
                 </Modal.Body>
 

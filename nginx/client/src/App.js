@@ -46,6 +46,7 @@ class App extends Component {
                 phone_number : null,
                 //for crews
                 crew_name: null,
+                starting_location: null,
 
             },
 
