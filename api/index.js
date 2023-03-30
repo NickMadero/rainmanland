@@ -214,8 +214,9 @@ app.post('/api/get-controller-brand', (req, res) => {
 app.post('/api/insert-newcustomer', (req, res) => {
     console.log(req.body); // added console.log statement
 
-    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?,?);";
-    dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address, req.body.numZones,req.body.brand, req.body.outside,req.body.zip_code],  (err, result) => {
+    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?,?,?);";
+    dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address,
+        req.body.numZones,req.body.brand, req.body.outside,req.body.zip_code , req.body.phone_number],  (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send(err);
@@ -248,6 +249,7 @@ app.post('/api/show-appointments', (req, res) => {
                 lastName: appointment.last_name,
                 email: appointment.email,
                 zipcode: appointment.zip_code,
+                phone : appointment.phone_number,
             }));
             res.send(appointments);
         }
@@ -283,13 +285,24 @@ app.post('/api/remove-crewmember', (req,res) => {
 
 
 // author Nick
-app.post('api/add-zip-to-crew', (req,res) =>{
+app.post('/api/add-zip-to-crew', (req,res) =>{
     const add_zip_to_crew = "call add_zip_to_crew(?,?);";
     dbController.query(add_zip_to_crew,[req.body.crew_name,req.body.zip_code],(err,result) =>{
         if (err){
             console.log(err)
         }else {
             console.log("added zip code succesfully")
+        }
+    })
+})
+// author Nick
+app.post('/api/remove-zip-from-crew', (req,res) =>{
+    const remove_zip_to_crew = "call remove_zip_from_crew(?,?);";
+    dbController.query(remove_zip_to_crew,[req.body.zip_code,req.body.crew_name],(err,result) =>{
+        if (err){
+            console.log(err)
+        }else {
+            console.log("remove zip code succesfully")
         }
     })
 })
@@ -336,20 +349,18 @@ app.post('/api/get-crew', (req, res) => {
             result[0].forEach(crew => {
                 const crewName = crew.crew_name;
                 const crewMember = {
-
                     first_name: crew.first_name,
                     last_name: crew.last_name,
                     emailaddress: crew.email,
-                    crewName : crew.crew_name
+                    crewName: crew.crew_name
                 };
                 if (!crewData[crewName]) {
                     crewData[crewName] = {
                         name: crewName,
-                        members: [crewMember]
+                        members: []
                     };
-                } else {
-                    crewData[crewName].members.push(crewMember);
                 }
+                crewData[crewName].members.push(crewMember);
             });
             const crews = Object.values(crewData);
             res.send(crews);
@@ -387,6 +398,7 @@ app.post('/api/put-setting', (req, res) => {
         }
     })
 })
+
 
 
 //author Nick
