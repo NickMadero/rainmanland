@@ -103,15 +103,29 @@ app.post('/api/verify-user', (req, res) => {
 							});
 							return;
 						} else {
-                    		res.json({
-								success: true,
-								message: "User info sent.",
-								queryResult: result[0]
-							});
+							var allInfoButCrew = result[0][0];
+							const getCrewNameQuery = "SELECT c.crew_name FROM placed_on AS p JOIN crew AS c ON p.crew_id = c.crew_id WHERE p.user_id = ?;";
+							dbController.query(getCrewNameQuery, [allInfoButCrew.user_id], (err, resultTwo) => {
+								console.log(result);
+								if (err) {
+									res.json({
+										success: false,
+										message: "Error while getting user's crew"
+									});
+									return;
+								} else {
+									allInfoButCrew.crewName = resultTwo[0].crew_name;
+									res.json({
+										success: true,
+										message: "User info sent.",
+										queryResult: allInfoButCrew
+									});
+									return;
+								}
+							})
 						}
 					})
-                }
-                else {
+				} else {
                     console.log("Bad password");
                     console.log(err);
                     res.json({
@@ -185,17 +199,6 @@ app.post('/api/add-user', (req, res) => {
 	})
 });
 
-// get a list of today's jobs for the crew number passed as URL param
-app.get('/api/get-jobs/:crewNum', (req, res) => {
-    const crewNum = req.params.crewNum
-    // TODO: make this query actually do its job - this is just for the demo again
-    const GetJobsQuery = "SELECT * FROM appointments";
-    dbController.query(GetJobsQuery, (err, result) => {
-        if (err) console.log(err);
-        res.send(result);
-    })
-})
-
 // get a list of the available controller brand options author: Nick Madero / Steve Piccolo
 app.post('/api/get-controller-brand', (req, res) => {
     const getController = "call get_controller_enum();";
@@ -226,8 +229,49 @@ app.post('/api/insert-newcustomer', (req, res) => {
     })
 })
 
+// Get a list of today's appointments for a specific crew
+app.post('/api/get-joblist', (req, res) => {
 
+	console.log(`Body of request to /get-joblist : ${req.body}`);
 
+	const getTodayDate = () => {
+		const today = new Date();
+		const year = today.getFullYear();
+		const month = String(today.getMonth() + 1).padStart(2, '0');
+		const day = String(today.getDate()).padStart(2, '0');
+		return `${year}-${month}-${day}`;
+	}
+
+	// send failure response if bad request
+	if (!req.body.crewName) {
+		res.json({
+			success: false,
+			message: "Bad request: no crew number included."
+		});
+		return;
+	}
+
+	// if request was good, make the db query	
+	const getJobListQuery = "CALL get_appointments_on_half_day_from_date_crew(?, CURDATE());";
+	const params = [req.body.crewName];
+	dbController.query(getJobListQuery, params, (err, result) => {
+		if (err) {
+			console.log("Error while fetching appointments: ", err);
+			res.json({
+				success: false,
+				message: "Error while fetching appointments"
+			});
+			return;
+		} else {
+			console.log("successfully fetched appointments: ", result);
+			res.json({
+				success: true,
+				message: "Successfully fetched appointments",
+				queryResult: result
+			});
+		}
+	})
+});
 
 //author : Nick Madero
 app.post('/api/show-appointments', (req, res) => {

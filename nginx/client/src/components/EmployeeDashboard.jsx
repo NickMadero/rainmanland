@@ -1,44 +1,132 @@
-import React from 'react';
-import { Button, Container, Card, Row } from 'react-bootstrap'
+import React, { useState } from 'react';
+import { Button, Container, Card, Row } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function EmployeeDashboard(props) {
+	const [completedAppointments, setCompletedAppointments] = useState({});
 
-    let card = props.jobsToday.map((val, key) => {
-        if (val.is_outdoor) {
-            val.controller_location = "Outdoor";
-        }
-        else {
-            val.controller_location = "Indoor";
-        }
-        return (
-            <React.Fragment>
-                <Card>
-                    <Card.Header as="h5">{val.job_address}</Card.Header>
-                    <Card.Body>
-                        <Card.Title>{val.customer_name}</Card.Title>
-                        <Card.Subtitle>Appointment window is {val.time_range}</Card.Subtitle>
-                        <Card.Text>
-                            {val.controller_location} {val.controller_brand} controller with {val.num_zones} zones, {val.heads_per_zone} sprinklers per zone.
-                        </Card.Text>
-                        <Button variant="primary">Mark Complete</Button>
-                        <Button variant="primary">Open Directions in Google Maps</Button>
-                    </Card.Body>
-                </Card>
-            </React.Fragment>
-        )
-    })
+	const markComplete = (appointmentId) => {
+		// Update the appointment in the database and set completion status to true
+		// After updating, update the completedAppointments state with the appointmentId
+		setCompletedAppointments({ ...completedAppointments, [appointmentId]: true });
+	};
 
-    return (
-        <div className='App'>
-            <h1>Today's Jobs for Crew {props.crewNum}</h1>
-            <br /><br />
-            <Container>
-                <Row>
-                    {card}
-                </Row>
-            </Container>
-        </div>
-    );
+	const openDirections = (address) => {
+		const encodedAddress = encodeURIComponent(address);
+		const url = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`;
+		window.open(url, '_blank');
+	};
+
+	const DayButton = () => {
+	  const [buttonState, setButtonState] = useState({
+		color: 'secondary',
+		text: 'Begin Day',
+	  });
+
+	  const handleClick = () => {
+		setButtonState({
+		  color: 'success',
+		  text: 'Day Started - head to first job',
+		});
+	  };
+
+	  return (
+		<Button
+		  variant={buttonState.color}
+		  onClick={handleClick}
+		>
+		  {buttonState.text}
+		</Button>
+	  );
+	};
+
+	const FinishDayButton = () => {
+	  const [buttonState, setButtonState] = useState({
+		color: 'secondary',
+		text: 'Finish Day',
+	  });
+
+	  const handleClick = () => {
+		setButtonState({
+		  color: 'danger',
+		  text: 'All jobs finished',
+		});
+	  };
+
+	  return (
+		<Card className="w-auto" style={{ display: 'inline-block' }}>
+		  <Card.Body className="p-0">
+			<Button
+			  variant={buttonState.color}
+			  className="w-100"
+			  onClick={handleClick}
+			>
+			  {buttonState.text}
+			</Button>
+		  </Card.Body>
+		</Card>
+	  );
+	};
+
+	let card = props.jobsToday.map((val, key) => {
+		if (val.controller_is_outside) {
+			val.controller_location = 'Outdoor';
+		} else {
+			val.controller_location = 'Indoor';
+		}
+		const isCompleted = completedAppointments[key];
+		return (
+			<React.Fragment key={key}>
+				<Card
+					style={{
+						borderColor: isCompleted ? 'green' : '',
+						borderWidth: isCompleted ? '2px' : '',
+					}}
+				>
+					<Card.Header as="h5">{val.address}</Card.Header>
+					<Card.Body>
+						<Card.Title>{val.customer_name}</Card.Title>
+						<Card.Subtitle>
+							Appointment window is {val.start_time} to {val.end_time}.
+						</Card.Subtitle>
+						<Card.Text>
+							{val.controller_location} {val.controller_brand} controller with {val.zone_amount} zone(s).
+						</Card.Text>
+						<Button
+						variant="primary"
+						onClick={() => markComplete(key)}
+						>
+						Mark Complete
+						</Button>
+						<Button
+						variant="primary"
+						onClick={() => openDirections(val.address)}
+						>
+						Open Directions in Google Maps
+						</Button>
+					</Card.Body>
+				</Card>
+			</React.Fragment>
+		);
+	});
+
+	return (
+		<div className="App">
+			<h1>Today's Jobs for Crew {props.crewNum}</h1>
+			<br />
+			<br />
+				<Container>
+
+			<div className="d-grid gap-2">
+				<DayButton/>
+					<Row>{card}</Row>
+				<FinishDayButton/>
+
+		</div>
+				</Container>
+			</div>
+	);
 }
 
 export default EmployeeDashboard;
+
