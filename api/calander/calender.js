@@ -7,13 +7,15 @@
  *
  */
 
-const {} = require('./generateHalfDay');
+const { generateHalfDaysForCrew} = require('./generateHalfDay');
 const { checkHalfDayAvailable } = require('./halfDayAvailability');
 const dbController = require('../dbController');
 
 
 let appointment = {};
 let crew = {};
+let zip = [];
+let settings = {};
 
 
 
@@ -26,14 +28,23 @@ let crew = {};
 
     setCurrentCrewInit((crew) => {
         //run everything else in here so crew name is set
+        //gets all of the zip codes
+        getZipCodes((zip) =>{
+            getSettings((settings) =>{
+                // console.log(zip);
+                // console.log(crew);
+                // console.log(settings);
 
-        console.log(appointment, crew);
+                //TODO check if half days have been generated yet or not
+                generateHalfDaysForCrew(crew.crewName, zip, settings, (generate) =>{
 
 
+                //TODO get all halfdays for calender as an array? and iterate through them all checking
+                //     if they are available or not using the checkHalfDayAvailable function
 
-
-
-
+                });
+            })
+        })
     });
 
 
@@ -71,5 +82,50 @@ let crew = {};
     })
 
   }
+function getZipCodes(callback) {
+    const getZipCodes = 'call rainmanland.get_all_zip_codes_serviced_by_crew(?);'
+
+
+
+    dbController.query(getZipCodes, [crew.crewName], (err,result) => {
+        if (err) {
+            // console.log(err);
+        }else {
+            // console.log(result);
+            result[0].forEach(function(zipCodeReturn){
+                zip.push(zipCodeReturn.zip_code);
+            })
+            callback(zip);
+        }
+    })
+
+}
+function getSettings(callback) {
+    const getSettings = 'call rainmanland.get_settings();'
+
+
+
+    dbController.query(getSettings, (err,result) => {
+        if (err) {
+            // console.log(err);
+        }else {
+            // console.log(result);
+
+            let temp = {};
+
+             result[0].forEach(function (setting) {
+                 temp[setting.setting_name] = setting.setting_value;
+             })
+
+            //get all of the settings that we need
+            settings.start_time_first_half = temp['start_time_first_half'];
+            settings.end_time_first_half = temp['end_time_first_half'];
+            settings.start_time_second_half = temp['start_time_second_half'];
+            settings.end_time_second_half = temp['end_time_second_half'];
+
+            callback(settings);
+        }
+    })
+}
 
 module.exports ={ setAppointment, initCalander};
