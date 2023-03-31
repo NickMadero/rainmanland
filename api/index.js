@@ -5,6 +5,8 @@ const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcrypt');
 
+const { setAppointment, initCalander } = require("./calander/calender");
+
 const dbController = require('./dbController');
 
 // Set constants
@@ -203,27 +205,39 @@ app.post('/api/add-user', (req, res) => {
 app.post('/api/get-controller-brand', (req, res) => {
     const getController = "call get_controller_enum();";
     dbController.query(getController,  (err, result) => {
-        console.log(result);
+        // console.log(result);
 		// parse the result before sending it to the frontend
 		const unparsedString = result[0][0]["column_type"];
-		console.log(`Got unparsed string: ${unparsedString}.`);
+		// console.log(`Got unparsed string: ${unparsedString}.`);
 		const parsedArray = unparsedString.slice(1, -1).split("','");
-		console.log(`Parsed string into array: ${parsedArray}`);
+		// console.log(`Parsed string into array: ${parsedArray}`);
         res.send(parsedArray);
     })
 })
 
 //author : Nick Madero
 app.post('/api/insert-newcustomer', (req, res) => {
-    console.log(req.body); // added console.log statement
+    // console.log(req.body); // added console.log statement
 
-    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?,?,?);";
+    const new_appointment = `CALL create_new_appointment_return_app_id(?, ?, ?, ?, ?, ?, ?, ?, ?, @appointment_id_out);`;
+    const app_id = `SELECT @appointment_id_out AS appointment_id;`;
     dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address,
         req.body.numZones,req.body.brand, req.body.outside,req.body.zip_code , req.body.phone_number],  (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send(err);
         } else {
+            //this is used to send the current appointment to the calander to generate
+            let appointment_id;
+            dbController.query(app_id, (error, resultt) =>{
+                appointment_id = resultt[0].appointment_id;
+                // console.log(resultt);
+                setAppointment(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
+                    req.body.outside, req.body.zip_code);
+                //this will start the process of generating a calander
+                initCalander();
+            });
+
             res.send(result);
         }
     })
@@ -280,7 +294,7 @@ app.post('/api/show-appointments', (req, res) => {
         if (err) {
             console.log(err);
         } else {
-            console.log(result);
+            // console.log(result);
             const appointments = result[0].map(appointment => ({
 
                 address: appointment.address,
@@ -460,3 +474,4 @@ app.post('/api/put-setting', (req, res) => {
 
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })
+

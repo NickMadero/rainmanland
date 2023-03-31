@@ -118,6 +118,7 @@ class App extends Component {
         this.setState({
             customerInfo: custInfo
         });
+        axios.post('/api/')
         this.props.navigate('/calendar');
     }
 
