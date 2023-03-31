@@ -10,6 +10,9 @@
  * if that half day should be shown as available
  */
 
-function checkHalfDayAvailable(halfDay, crewName, ){
+function checkHalfDayAvailable(halfDay, crewName, appointment){
 
 }
+
+
+module.exports = {checkHalfDayAvailable};

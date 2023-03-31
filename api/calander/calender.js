@@ -7,7 +7,14 @@
  *
  */
 
+const {} = require('./generateHalfDay');
+const { checkHalfDayAvailable } = require('./halfDayAvailability');
+const dbController = require('../dbController');
+
+
 let appointment = {};
+let crew = {};
+
 
 
 
@@ -16,7 +23,20 @@ let appointment = {};
  */
  function initCalander(){
 
-   console.log(appointment);
+
+    setCurrentCrewInit((crew) => {
+        //run everything else in here so crew name is set
+
+        console.log(appointment, crew);
+
+
+
+
+
+
+    });
+
+
 }
 
 /**
@@ -33,9 +53,23 @@ let appointment = {};
     appointment.controllerBrand = controllerBrand;
     appointment.controllerIsOutside = controllerOutside;
     appointment.zipCode = zipCode;
-    appointment.test = 'hahah';
+
 
 }
 
+  function setCurrentCrewInit(callback) {
+    const getCrew = 'CALL get_crew_names_ordered();'
+
+    dbController.query(getCrew, (err,result) => {
+     if (err) {
+      // console.log(err);
+     }else {
+      // console.log(result);
+      crew.crewName = result[0][0].crew_name;
+      callback(crew);
+     }
+    })
+
+  }
 
 module.exports ={ setAppointment, initCalander};
