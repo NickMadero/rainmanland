@@ -6,16 +6,33 @@ const dbController = require('../dbController');
 
 async function initCalander(appointmentID, address, isComplete, zoneAmount,
                             controllerBrand, controllerOutside, zipCode) {
+    //this keep all of the appointment information
     let appointment = {};
+    //this stores the crew name
     let crew = {};
+    // this is all the available zip codes
     let zip = [];
+    // this is for the generating half days for start and stop times
     let settings = {};
+
+    // this calendar object is has all the information that it needs to display a calendar for a specific appointment
+    let calendar = {};
+
 
 
     await setAppointment(appointment, appointmentID, address, isComplete, zoneAmount, controllerBrand, controllerOutside, zipCode);
     crew = await setCurrentCrewInit();
     zip = await getZipCodes(crew.crewName);
     settings = await getSettings();
+
+
+
+    //this will store all the exsiting half-days into the object
+    await getInitalHalfDays(calendar, crew);
+
+
+
+
 
     //TODO check if half days have been generated yet or not
     await generateHalfDaysForCrew(crew.crewName, zip, settings);
@@ -92,6 +109,15 @@ function getSettings() {
             }
         });
     });
+}
+
+/**
+* this is used to get all the half days for a crew for 3 months
+ */
+function getInitalHalfDays(calendar, crew){
+
+
+
 }
 
 module.exports = { initCalander };

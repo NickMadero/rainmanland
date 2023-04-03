@@ -81,7 +81,7 @@ class CustomerInfoPage extends React.Component {
                 this.props.onGoToCalendarButtonClick(this.state);
                 this.state.appointmentID = res;
                 // console.log(res);
-                console.log(this.state);
+                // console.log(this.state);
             })
             .catch(err => console.log(err));
     };

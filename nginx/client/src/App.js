@@ -29,6 +29,9 @@ class App extends Component {
 
             appointmentID: null,
 
+            // this will be used to display the entire calender to the customer
+            calendar: null,
+
             // state attribute that controls which page is rendered
             currentPage: 'LandingPage',
 
