@@ -117,6 +117,55 @@ function getSettings() {
 function getInitalHalfDays(calendar, crew){
 
 
+    calendar = {
+      crewName: crew.crewName,
+      crewStartingLocation: null,
+
+        halfDays: [
+            singleHalfDay = {
+                whichHalf: null,
+                startTime: null,
+                endTime: null,
+                isAvailable: null,
+                isFull: null,
+                date: null,
+            },
+        ],
+
+
+
+    };
+
+    const getHalfDays = 'CALL `rainmanland`.`get_all_half_days_by_crew`(?);';
+
+    return new Promise((resolve, reject) => {
+        dbController.query(getHalfDays, [crew.crewName], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                calendar.crewStartingLocation = result[0].starting_location;
+
+               result[0].forEach(function (halfDay) {
+                    let singleHalfDay = {
+                        whichHalf: result[0].which_half,
+                        startTime: result[0].start_time,
+                        endTime: result[0].end_time,
+                        isAvailable: result[0].is_available,
+                        isFull: result[0].is_full,
+                        date: result[0].date,
+
+                    };
+
+                   calendar.halfDays.push(singleHalfDay);
+                });
+
+
+
+
+                resolve();
+            }
+        });
+    });
 
 }
 
