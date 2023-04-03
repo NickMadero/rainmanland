@@ -2,12 +2,17 @@ const { generateHalfDaysForCrew } = require('./generateHalfDay');
 const { checkHalfDayAvailable } = require('./halfDayAvailability');
 const dbController = require('../dbController');
 
-let appointment = {};
-let crew = {};
-let zip = [];
-let settings = {};
 
-async function initCalander() {
+
+async function initCalander(appointmentID, address, isComplete, zoneAmount,
+                            controllerBrand, controllerOutside, zipCode) {
+    let appointment = {};
+    let crew = {};
+    let zip = [];
+    let settings = {};
+
+
+    await setAppointment(appointment, appointmentID, address, isComplete, zoneAmount, controllerBrand, controllerOutside, zipCode);
     crew = await setCurrentCrewInit();
     zip = await getZipCodes(crew.crewName);
     settings = await getSettings();
@@ -19,7 +24,7 @@ async function initCalander() {
     //     if they are available or not using the checkHalfDayAvailable function
 }
 
-function setAppointment(appointmentID, address, isComplete, zoneAmount,
+function setAppointment(appointment, appointmentID, address, isComplete, zoneAmount,
                         controllerBrand, controllerOutside, zipCode) {
 
     appointment.appointmentID = appointmentID;
@@ -29,6 +34,8 @@ function setAppointment(appointmentID, address, isComplete, zoneAmount,
     appointment.controllerBrand = controllerBrand;
     appointment.controllerIsOutside = controllerOutside;
     appointment.zipCode = zipCode;
+
+    // resolve(appointment);
 }
 
 function setCurrentCrewInit() {
@@ -87,4 +94,4 @@ function getSettings() {
     });
 }
 
-module.exports = { setAppointment, initCalander };
+module.exports = { initCalander };

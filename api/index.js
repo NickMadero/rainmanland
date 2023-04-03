@@ -232,13 +232,20 @@ app.post('/api/insert-newcustomer', (req, res) => {
             dbController.query(app_id, (error, resultt) =>{
                 appointment_id = resultt[0].appointment_id;
                 // console.log(resultt);
-                setAppointment(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
-                    req.body.outside, req.body.zip_code);
+                // setAppointment(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
+                //     req.body.outside, req.body.zip_code);
                 //this will start the process of generating a calander
-                initCalander();
+                initCalander(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
+                     req.body.outside, req.body.zip_code);
+
+                const responseObj = {
+                    appointment_id: appointment_id,
+                    result: result
+                };
+                res.send(responseObj);
             });
 
-            res.send(result);
+            // res.send(result);
         }
     })
 })
