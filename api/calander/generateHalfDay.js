@@ -14,7 +14,7 @@
 /**
  * this function will
  */
-function generateHalfDaysForCrew(crew, zipCodes, settings, callback){
+function generateHalfDaysForCrew(crew, zipCodes, settings){
 
     console.log(zipCodes);
     console.log(crew);
@@ -23,7 +23,7 @@ function generateHalfDaysForCrew(crew, zipCodes, settings, callback){
 
     //TODO generate halfdays and store in database in this file
 
-    callback(callback);
+
 }
 
 
