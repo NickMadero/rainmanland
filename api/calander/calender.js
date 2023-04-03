@@ -147,12 +147,12 @@ function getInitalHalfDays(calendar, crew){
 
                result[0].forEach(function (halfDay) {
                     let singleHalfDay = {
-                        whichHalf: result[0].which_half,
-                        startTime: result[0].start_time,
-                        endTime: result[0].end_time,
-                        isAvailable: result[0].is_available,
-                        isFull: result[0].is_full,
-                        date: result[0].date,
+                        whichHalf: halfDay.which_half,
+                        startTime: halfDay.start_time,
+                        endTime: halfDay.end_time,
+                        isAvailable: halfDay.is_available,
+                        isFull: halfDay.is_full,
+                        date: halfDay.date,
 
                     };
 
