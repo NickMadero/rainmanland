@@ -14,17 +14,50 @@
 /**
  * this function will
  */
-function generateHalfDaysForCrew(crew, zipCodes, settings){
+
+
+
+async function generateHalfDaysForCrew(crew, zipCodes, settings) {
 
     console.log(zipCodes);
     console.log(crew);
     console.log(settings);
 
 
-    //TODO generate halfdays and store in database in this file
+    let calendarDates = [];
 
+    await generateDates(calendarDates);
+
+    console.log(calendarDates);
+
+    //TODO generate halfdays and store in database in this file
+    // show 30 days ALWAYS
 
 }
+
+/**
+ * generate array of dates for the next 30 days
+ *
+ */
+function generateDates(dates) {
+    const today = new Date(); // get current date
+
+    for (let i = 0; i < 30; i++) {
+        const nextDay = new Date(today);
+        nextDay.setDate(today.getDate() + i);
+        const dateString = nextDay.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        });
+        dates.push(dateString);
+    }
+
+    return Promise.resolve();
+}
+
+
+
 
 
 
