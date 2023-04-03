@@ -119,17 +119,17 @@ function getInitalHalfDays(calendar, crew){
 
     calendar = {
       crewName: crew.crewName,
-      crewStartingLocation: null,
+      // crewStartingLocation: null,
 
         halfDays: [
-            singleHalfDay = {
-                whichHalf: null,
-                startTime: null,
-                endTime: null,
-                isAvailable: null,
-                isFull: null,
-                date: null,
-            },
+        //     singleHalfDay = {
+        //         whichHalf: null,
+        //         startTime: null,
+        //         endTime: null,
+        //         isAvailable: null,
+        //         isFull: null,
+        //         date: null,
+        //     },
         ],
 
 
@@ -143,9 +143,10 @@ function getInitalHalfDays(calendar, crew){
             if (err) {
                 reject(err);
             } else {
-                calendar.crewStartingLocation = result[0].starting_location;
+                // calendar.crewStartingLocation = result[0].starting_location;
 
                result[0].forEach(function (halfDay) {
+                   calendar.crewStartingLocation = halfDay.starting_location;
                     let singleHalfDay = {
                         whichHalf: halfDay.which_half,
                         startTime: halfDay.start_time,
