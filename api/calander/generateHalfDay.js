@@ -80,20 +80,23 @@ function generateDates(dates) {
  * @param settings to get the start and stop times of half days to set
  */
 async function checkAndGenerateHalfDays(calendar, calendarDates, settings) {
+console.log(calendar)
 
 
+// check if half DAY exist that equals that day. if they exist continues if not create two half days
+    for (let i = 0; i < calendarDates.length; i++) {
+        const date = calendarDates[i];
+        const halfDayExists =  calendar.halfDays.find(singleHalfDay => singleHalfDay.date === date)
 
 
-    for(let i =0; i< calendarDates.length; i++){
-        if(calendar.halfDays.prototype.find.call(singleHalfDay, (x) => x.date == calendarDates[i]) != null) {
-            console.log(calendar.halfDays.prototype.find.call(singleHalfDay, (x) => x.date == calendarDates[i]));
+        if (halfDayExists) {
+            console.log('Half day already exists for', date);
+        } else {
+            console.log('Creating two half days for', date);
+            // TODO: create two half days for this date
         }
-        else{
-            //create half days for each date that they do not exist for yet
-
-        }
-
     }
+
 
 
     return Promise.resolve(calendar);

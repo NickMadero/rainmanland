@@ -153,7 +153,7 @@ function getInitalHalfDays(crew){
                         endTime: halfDay.end_time,
                         isAvailable: halfDay.is_available,
                         isFull: halfDay.is_full,
-                        date: halfDay.date,
+                        date: new Date(halfDay.date).toISOString().slice(0, 10) // this just converts to yyyy-mm-dd the slice is for getting the actual value we care about
 
                     };
 
