@@ -229,18 +229,19 @@ app.post('/api/insert-newcustomer', (req, res) => {
         } else {
             //this is used to send the current appointment to the calander to generate
             let appointment_id;
-            dbController.query(app_id, (error, resultt) =>{
+            dbController.query(app_id, async (error, resultt) => {
                 appointment_id = resultt[0].appointment_id;
                 // console.log(resultt);
                 // setAppointment(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
                 //     req.body.outside, req.body.zip_code);
                 //this will start the process of generating a calander
-                initCalander(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
-                     req.body.outside, req.body.zip_code);
+                let calendar = await initCalander(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
+                    req.body.outside, req.body.zip_code);
 
                 const responseObj = {
                     appointment_id: appointment_id,
-                    result: result
+                    result: result,
+                    calendar: calendar
                 };
                 res.send(responseObj);
             });

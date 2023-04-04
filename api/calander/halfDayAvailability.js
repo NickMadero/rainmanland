@@ -15,7 +15,7 @@ async function checkCalendarAvailability(calendar, appointment){
 
     for(let i = 0; i < calendar.halfDays.length; i++ ){
         calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment);
-        console.log(calendar.halfDays[i]);
+        // console.log(calendar.halfDays[i]);
     }
 
 
