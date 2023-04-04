@@ -14,7 +14,7 @@
 /**
  * this function will
  */
-
+const numDays = 30;
 
 
 async function generateHalfDaysForCrew(crew, zipCodes, settings) {
@@ -42,14 +42,21 @@ async function generateHalfDaysForCrew(crew, zipCodes, settings) {
 function generateDates(dates) {
     const today = new Date(); // get current date
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i <= numDays; i++) {
         const nextDay = new Date(today);
         nextDay.setDate(today.getDate() + i);
-        const dateString = nextDay.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-        });
+        // const dateString = nextDay.toLocaleDateString("en-US", {
+        //     year: "numeric",
+        //     month: "2-digit",
+        //     day: "2-digit",
+        // });
+        const getYear = nextDay.toLocaleString("default", { year: "numeric" });
+        const getMonth = nextDay.toLocaleString("default", { month: "2-digit" });
+        const getDay = nextDay.toLocaleString("default", { day: "2-digit" });
+        const dateString =  getYear + "-" + getMonth + "-" + getDay ;
+
+
+
         dates.push(dateString);
     }
 
