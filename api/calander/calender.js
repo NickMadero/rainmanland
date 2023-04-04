@@ -1,5 +1,5 @@
 const { generateHalfDaysForCrew } = require('./generateHalfDay');
-const { checkHalfDayAvailable } = require('./halfDayAvailability');
+const { checkCalendarAvailability } = require('./halfDayAvailability');
 const dbController = require('../dbController');
 
 
@@ -39,6 +39,8 @@ async function initCalander(appointmentID, address, isComplete, zoneAmount,
 
     //TODO get all halfdays for calender as an array? and iterate through them all checking
     //     if they are available or not using the checkHalfDayAvailable function
+    calendar = checkCalendarAvailability(calendar, appointment);
+
 }
 
 function setAppointment(appointment, appointmentID, address, isComplete, zoneAmount,

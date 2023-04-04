@@ -24,9 +24,9 @@ const numDays = 30;
 
 async function generateHalfDaysForCrew(crew, zipCodes, settings, calendar) {
 
-    console.log(zipCodes);
-    console.log(crew);
-    console.log(settings);
+    // console.log(zipCodes);
+    // console.log(crew);
+    // console.log(settings);
 
 
     let calendarDates = [];
@@ -34,7 +34,7 @@ async function generateHalfDaysForCrew(crew, zipCodes, settings, calendar) {
     //get the inital calendar for the next 30 days
     await generateDates(calendarDates);
 
-    console.log(calendarDates);
+    // console.log(calendarDates);
 
     //this will check all of the half days that exist and if the next 30 days are not full of half days it will
     //generate the half days and store them in the database
@@ -97,14 +97,14 @@ console.log(calendar)
 
 
         if (halfDayExists) {
-            console.log('Half day already exists for', date);
+            // console.log('Half day already exists for', date);
             let firstHalf = calendar.halfDays.find(singleHalfDay => singleHalfDay.date === date && singleHalfDay.whichHalf === "first");
             let secondHalf = calendar.halfDays.find(singleHalfDay => singleHalfDay.date === date && singleHalfDay.whichHalf === "second");
             // console.log(firstHalf);
             // console.log(secondHalf);
 
         } else {
-            console.log('Creating two half days for', date);
+            // console.log('Creating two half days for', date);
             // TODO: create two half days for this date
             let firstHalfDay = {
                 whichHalf: "first",
@@ -163,14 +163,14 @@ async function storeHalfDaysIntDatabase(firstHalfDay, secondHalfDay, crewName) {
             if (err) {
                 reject(err);
             } else {
-                console.log(result);
+                // console.log(result);
             }
         });
         dbController.query(addSecondHalf,  (err, result) => {
             if (err) {
                 reject(err);
             } else {
-                console.log(result);
+                // console.log(result);
             }
         });
         resolve();
