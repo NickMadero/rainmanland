@@ -35,7 +35,7 @@ async function initCalander(appointmentID, address, isComplete, zoneAmount,
 
 
     //TODO check if half days have been generated yet or not
-    await generateHalfDaysForCrew(crew.crewName, zip, settings, calendar);
+    calendar = await generateHalfDaysForCrew(crew.crewName, zip, settings, calendar);
 
     //TODO get all halfdays for calender as an array? and iterate through them all checking
     //     if they are available or not using the checkHalfDayAvailable function

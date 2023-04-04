@@ -41,6 +41,8 @@ async function generateHalfDaysForCrew(crew, zipCodes, settings, calendar) {
     calendar = await checkAndGenerateHalfDays(calendar, calendarDates, settings);
 
 
+    return Promise.resolve(calendar);
+
     //TODO generate halfdays and store in database in this file
     // show 30 days ALWAYS
 
