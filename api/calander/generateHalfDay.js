@@ -14,6 +14,9 @@
 /**
  * this function will
  */
+
+const dbController = require('../dbController');
+
 const numDays = 30;
 
 
@@ -72,6 +75,8 @@ function generateDates(dates) {
 }
 
 
+
+
 /**
  * this will use the existing half days and create new ones if there doesnt exist half days for the next 30 days
  *
@@ -118,9 +123,11 @@ console.log(calendar)
 
             };
 
+            //store the new half days in the calendar object
             calendar.halfDays.push(firstHalfDay);
             calendar.halfDays.push(secondHalfDay);
 
+            await storeHalfDaysIntDatabase(firstHalfDay, secondHalfDay, calendar.crewName);
         }
     }
 
@@ -129,7 +136,44 @@ console.log(calendar)
     return Promise.resolve(calendar);
 }
 
+/**
+ * this is used to store the newly created half days into the database
+ * @param firstHalfDay
+ * @param secondHalfDay
+ * @param crewName
+ * @returns {Promise<void>}
+ */
+async function storeHalfDaysIntDatabase(firstHalfDay, secondHalfDay, crewName) {
+    const addFirstHalf =  'CALL `rainmanland`.`add_new_half_day_for_crew`' +
+        '(\'' + crewName + '\', \'' + firstHalfDay.date + '\', \'' + firstHalfDay.whichHalf + '\', \'' +
+        firstHalfDay.startTime + '\', \'' + firstHalfDay.endTime + '\');';
+    const addSecondHalf =  'CALL `rainmanland`.`add_new_half_day_for_crew`' +
+        '(\'' + crewName + '\', \'' + secondHalfDay.date + '\', \'' + secondHalfDay.whichHalf + '\', \'' +
+        secondHalfDay.startTime + '\', \'' + secondHalfDay.endTime + '\');';
 
+
+    // console.log(addFirstHalf);
+    // console.log(addSecondHalf);
+
+
+    return new Promise((resolve, reject) => {
+        dbController.query(addFirstHalf,  (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                console.log(result);
+            }
+        });
+        dbController.query(addSecondHalf,  (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                console.log(result);
+            }
+        });
+        resolve();
+    });
+}
 
 
 module.exports = {generateHalfDaysForCrew};
