@@ -91,9 +91,36 @@ console.log(calendar)
 
         if (halfDayExists) {
             console.log('Half day already exists for', date);
+            let firstHalf = calendar.halfDays.find(singleHalfDay => singleHalfDay.date === date && singleHalfDay.whichHalf === "first");
+            let secondHalf = calendar.halfDays.find(singleHalfDay => singleHalfDay.date === date && singleHalfDay.whichHalf === "second");
+            // console.log(firstHalf);
+            // console.log(secondHalf);
+
         } else {
             console.log('Creating two half days for', date);
             // TODO: create two half days for this date
+            let firstHalfDay = {
+                whichHalf: "first",
+                startTime: settings.start_time_first_half,
+                endTime: settings.end_time_first_half,
+                isAvailable: 1,
+                isFull: 0,
+                date: date
+
+            };
+            let secondHalfDay = {
+                whichHalf: "second",
+                startTime: settings.start_time_second_half,
+                endTime: settings.end_time_second_half,
+                isAvailable: 1,
+                isFull: 0,
+                date: date
+
+            };
+
+            calendar.halfDays.push(firstHalfDay);
+            calendar.halfDays.push(secondHalfDay);
+
         }
     }
 
