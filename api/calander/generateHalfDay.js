@@ -17,7 +17,7 @@
 const numDays = 30;
 
 
-async function generateHalfDaysForCrew(crew, zipCodes, settings) {
+async function generateHalfDaysForCrew(crew, zipCodes, settings, calendar) {
 
     console.log(zipCodes);
     console.log(crew);

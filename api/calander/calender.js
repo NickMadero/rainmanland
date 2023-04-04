@@ -28,14 +28,14 @@ async function initCalander(appointmentID, address, isComplete, zoneAmount,
 
 
     //this will store all the exsiting half-days into the object
-    await getInitalHalfDays(calendar, crew);
+    calendar = await getInitalHalfDays(crew);
 
 
 
 
 
     //TODO check if half days have been generated yet or not
-    await generateHalfDaysForCrew(crew.crewName, zip, settings);
+    await generateHalfDaysForCrew(crew.crewName, zip, settings, calendar);
 
     //TODO get all halfdays for calender as an array? and iterate through them all checking
     //     if they are available or not using the checkHalfDayAvailable function
@@ -114,10 +114,10 @@ function getSettings() {
 /**
 * this is used to get all the half days for a crew for 3 months
  */
-function getInitalHalfDays(calendar, crew){
+function getInitalHalfDays(crew){
 
 
-    calendar = {
+    let calendar = {
       crewName: crew.crewName,
       // crewStartingLocation: null,
 
@@ -163,7 +163,7 @@ function getInitalHalfDays(calendar, crew){
 
 
 
-                resolve();
+                resolve(calendar);
             }
         });
     });
