@@ -39,7 +39,7 @@ async function initCalander(appointmentID, address, isComplete, zoneAmount,
 
     //TODO get all halfdays for calender as an array? and iterate through them all checking
     //     if they are available or not using the checkHalfDayAvailable function
-    calendar = await checkCalendarAvailability(calendar, appointment, settings);
+    calendar = await checkCalendarAvailability(calendar, appointment, settings, zip);
 
 
     return Promise.resolve(calendar);

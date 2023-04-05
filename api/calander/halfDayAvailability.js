@@ -15,12 +15,12 @@ const googleMapsClient = require('@google/maps').createClient({
     Promise: Promise
 });
 
-async function checkCalendarAvailability(calendar, appointment, settings){
+async function checkCalendarAvailability(calendar, appointment, settings, zipCodes){
 
     console.log(appointment);
 
     for(let i = 0; i < calendar.halfDays.length; i++ ){
-        calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings);
+        calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings, zipCodes);
         console.log(calendar.halfDays[i]);
     }
 
@@ -35,14 +35,18 @@ async function checkCalendarAvailability(calendar, appointment, settings){
  * @param appointment
  * @returns {Promise<void>}
  */
-async function checkHalfDay(halfDay, appointment, crewName, settings){
+async function checkHalfDay(halfDay, appointment, crewName, settings, zipCodes){
 
-    //TODO check if the new appointment is not in the service area for the crew
-
+    // check if the new appointment is not in the service area for the crew
+    if( await checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)){
+        halfDay.isAvailable = 0;
+        return Promise.resolve(halfDay);
+    }
 
     //check if an appointent is too far from an existing appointment on a half day
     if( await checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings) === true){
-        halfDay.isAvailable = 0;
+            halfDay.isAvailable = 0;
+            return Promise.resolve(halfDay);
     }
 
     // console.log(halfDay);
@@ -150,5 +154,15 @@ async function getDrivingDistance(origin, destination) {
     }
 }
 
+async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes){
+    let notInServiceArea = false;
+
+    if(!zipCodes.includes(appointment.zipCode)){
+        notInServiceArea = true;
+        return Promise.resolve(notInServiceArea);
+    }
+
+    return Promise.resolve(notInServiceArea);
+}
 
 module.exports = {checkCalendarAvailability};
