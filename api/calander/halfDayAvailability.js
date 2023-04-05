@@ -1,4 +1,3 @@
-
 /**
  *
  *  Author: Marcus Tangradi
@@ -9,6 +8,8 @@
  * This takes a half day, a crew, the new appointment being scheduled and returns
  * if that half day should be shown as available
  */
+const dbController = require("../dbController");
+
 
 async function checkCalendarAvailability(calendar, appointment){
 
@@ -63,6 +64,27 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
     return Promise.resolve(isTooFar);
 }
 
+async function getStoredHalfDay(halfDay, crewName){
+    const getAppOnHalfDay = 'call rainmanland.get_appointments_on_half_day_from_date_crew(?, ?);';
+
+    let storedHalfDay = {
+         appointments :[],
+    };
+
+
+    return new Promise((resolve, reject) => {
+        dbController.query(getAppOnHalfDay, [crewName,halfDay.date], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+
+                //TODO get the result and store into the storedHalfDay object
+
+                resolve(storedHalfDay);
+            }
+        });
+    });
+}
 
 
 module.exports = {checkCalendarAvailability};
