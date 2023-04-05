@@ -74,11 +74,8 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
         isTooFar = true;
         return Promise.resolve(isTooFar);
     }
-    else{
-        //the compare is close enough to schedule
-        isTooFar = false;
-        return Promise.resolve(isTooFar);
-    }
+
+
 
 
 
@@ -86,6 +83,12 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
     return Promise.resolve(isTooFar);
 }
 
+/**
+ * this is used to  return all of the appointments that are scheduled for a half day
+ * @param halfDay the half day to check
+ * @param crewName the crew name which is responsible for the half day
+ * @returns {Promise<unknown>} an object that has all of the appointments that occur on the half day
+ */
 async function getStoredHalfDay(halfDay, crewName){
     const getAppOnHalfDay = 'call rainmanland.get_appointments_on_half_day_from_date_crew(?, ?);';
 
