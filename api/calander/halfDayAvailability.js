@@ -9,8 +9,10 @@
  * if that half day should be shown as available
  */
 const dbController = require("../dbController");
-
-
+const distance = require('google-distance-matrix');
+distance.key('AIzaSyAF2m0svp07tGLzObVsQFEIMw6EpRh14Hc');
+const origins = ['201 Mullica Hill Rd, Glassboro, NJ 08028'];
+const destinations = ['354 Egg Harbor Rd, Sewell, NJ 08080'];
 async function checkCalendarAvailability(calendar, appointment){
 
     console.log(appointment);
@@ -59,7 +61,21 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
     //this will query the database to get all the appointments on a half day to compare distance to new appointment
     let storedHalfDay = await getStoredHalfDay(halfDay, crewName);
 
-
+    //compare two addresses
+    distance.matrix(origins, destinations, function (err, distances) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        if (!distances) {
+            console.log('No distances found.');
+            return;
+        }
+        if (distances.status == 'OK') {
+            const duration = distances.rows[0].elements[0].duration.value;
+            console.log('Duration:', duration, 'seconds');
+        }
+    });
 
     return Promise.resolve(isTooFar);
 }
