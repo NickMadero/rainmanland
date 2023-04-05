@@ -9,8 +9,10 @@
  * if that half day should be shown as available
  */
 const dbController = require("../dbController");
-const distance = require('google-distance-matrix');
-distance.key('AIzaSyAF2m0svp07tGLzObVsQFEIMw6EpRh14Hc');
+const googleMapsClient = require('@google/maps').createClient({
+    key: 'AIzaSyAF2m0svp07tGLzObVsQFEIMw6EpRh14Hc',
+    Promise: Promise
+});
 const origins = ['201 Mullica Hill Rd, Glassboro, NJ 08028'];
 const destinations = ['354 Egg Harbor Rd, Sewell, NJ 08080'];
 async function checkCalendarAvailability(calendar, appointment){
@@ -62,20 +64,9 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
     let storedHalfDay = await getStoredHalfDay(halfDay, crewName);
 
     //compare two addresses
-    distance.matrix(origins, destinations, function (err, distances) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        if (!distances) {
-            console.log('No distances found.');
-            return;
-        }
-        if (distances.status == 'OK') {
-            const duration = distances.rows[0].elements[0].duration.value;
-            console.log('Duration:', duration, 'seconds');
-        }
-    });
+    let distance = await getDrivingDistance(origins, destinations);
+
+
 
     return Promise.resolve(isTooFar);
 }
@@ -100,6 +91,34 @@ async function getStoredHalfDay(halfDay, crewName){
             }
         });
     });
+}
+
+async function getDrivingDistance(origin, destination) {
+    try {
+        const response = await googleMapsClient.distanceMatrix({
+            origins: [origin],
+            destinations: [destination],
+            mode: 'driving',
+        }).asPromise();
+
+        const result = response.json.rows[0].elements[0];
+
+        if (result.status === 'OK') {
+            const distance = result.distance.text;
+            const duration = result.duration.text;
+            let driveData = {
+                distance: distance,
+                duration: duration,
+            };
+            return driveData;
+        } else {
+            console.error('Error calculating distance:', result.status);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error in Google Maps API:', error);
+        return null;
+    }
 }
 
 
