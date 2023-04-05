@@ -78,6 +78,8 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
 
 
+    //TODO check if there is enough time left in half day to fit in another appointment
+    //TODO ***************************************************************************
 
 
     return Promise.resolve(isTooFar);
