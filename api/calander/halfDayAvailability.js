@@ -58,6 +58,23 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
     //this will query the database to get all the appointments on a half day to compare distance to new appointment
     let storedHalfDay = await getStoredHalfDay(halfDay, crewName);
+    if(storedHalfDay.appointments[0] === null){
+        isTooFar = false;
+        return Promise.resolve(isTooFar);
+    }
+    //the appointment that is already scheduled
+    let firstApp = storedHalfDay.appointments[0][0];
+
+
+    //TODO compare the address of firstApp against the address of the new appointment
+
+    if(google compare address: result too far){
+        isTooFar = true;
+    }
+    else{
+        //the compare is close enough to schedule
+        isTooFar = false;
+    }
 
 
 
@@ -78,7 +95,9 @@ async function getStoredHalfDay(halfDay, crewName){
                 reject(err);
             } else {
 
-                //TODO get the result and store into the storedHalfDay object
+                result.forEach(function (app){
+                   storedHalfDay.appointments.push(app);
+                });
 
                 resolve(storedHalfDay);
             }
