@@ -49,6 +49,8 @@ async function checkHalfDay(halfDay, appointment, crewName, settings){
  * THIS WILL use the google maps api to check the distance between an existing appointment on a half day and the
  * appointment trying to be scheduled
  *
+ *
+ *
  * @param halfDay a single half day from the calendar
  * @param appointment the new appointment that is trying to be scheduled
  * @returns {Promise<boolean>} a boolean value to determine if an appointment is too far
@@ -70,11 +72,14 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
     let distanceBetweenAppointments = await
     if(distanceBetweenAppointments > settings.maxDistanceHalfday){
         isTooFar = true;
+        return Promise.resolve(isTooFar);
     }
     else{
         //the compare is close enough to schedule
         isTooFar = false;
+        return Promise.resolve(isTooFar);
     }
+
 
 
 
