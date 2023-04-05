@@ -11,12 +11,12 @@
 const dbController = require("../dbController");
 
 
-async function checkCalendarAvailability(calendar, appointment){
+async function checkCalendarAvailability(calendar, appointment, settings){
 
     console.log(appointment);
 
     for(let i = 0; i < calendar.halfDays.length; i++ ){
-        calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName);
+        calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings);
         console.log(calendar.halfDays[i]);
     }
 
@@ -31,10 +31,10 @@ async function checkCalendarAvailability(calendar, appointment){
  * @param appointment
  * @returns {Promise<void>}
  */
-async function checkHalfDay(halfDay, appointment, crewName){
+async function checkHalfDay(halfDay, appointment, crewName, settings){
 
     //check if an appointent is too far from an existing appointment on a half day
-    if( await checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName) === true){
+    if( await checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings) === true){
         halfDay.isAvailable = 0;
     }
 
@@ -53,7 +53,7 @@ async function checkHalfDay(halfDay, appointment, crewName){
  * @param appointment the new appointment that is trying to be scheduled
  * @returns {Promise<boolean>} a boolean value to determine if an appointment is too far
  */
-async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName){
+async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings){
     let isTooFar = false;
 
     //this will query the database to get all the appointments on a half day to compare distance to new appointment
@@ -67,8 +67,8 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
 
     //TODO compare the address of firstApp against the address of the new appointment
-
-    if(google compare address: result too far){
+    let distanceBetweenAppointments = await
+    if(distanceBetweenAppointments > settings.maxDistanceHalfday){
         isTooFar = true;
     }
     else{
