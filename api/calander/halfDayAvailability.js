@@ -82,6 +82,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
     //check distance between two appointments
     let distanceBetweenAppointments = await getDrivingDistance(firstApp.address, appointment.address);
         //compare two addresses
+    //TODO change to a max drive time to next appointment
     if(distanceBetweenAppointments.distance > settings.maxDistanceHalfday){
         isTooFar = true;
         return Promise.resolve(isTooFar);
