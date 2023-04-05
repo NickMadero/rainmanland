@@ -39,6 +39,7 @@ async function checkHalfDay(halfDay, appointment, crewName, settings){
 
     //TODO check if the new appointment is not in the service area for the crew
 
+
     //check if an appointent is too far from an existing appointment on a half day
     if( await checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings) === true){
         halfDay.isAvailable = 0;
@@ -74,7 +75,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
     let firstApp = storedHalfDay.appointments[0][0];
 
 
-    //TODO compare the address of firstApp against the address of the new appointment
+    //check distance between two appointments
     let distanceBetweenAppointments = await getDrivingDistance(firstApp.address, appointment.address);
         //compare two addresses
     if(distanceBetweenAppointments.distance > settings.maxDistanceHalfday){
