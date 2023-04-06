@@ -82,7 +82,7 @@ class CustomerInfoPage extends React.Component {
                 this.state.appointmentID = res.data.appointment_id;
                 this.state.calendar = res.data.calendar;
                 // console.log(res);
-                // console.log(this.state);
+                console.log(this.state);
             })
             .catch(err => console.log(err));
     };

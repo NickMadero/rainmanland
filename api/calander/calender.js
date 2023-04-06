@@ -39,7 +39,7 @@ async function initCalander(appointmentID, address, isComplete, zoneAmount,
 
     //TODO get all halfdays for calender as an array? and iterate through them all checking
     //     if they are available or not using the checkHalfDayAvailable function
-    calendar = await checkCalendarAvailability(calendar, appointment);
+    calendar = await checkCalendarAvailability(calendar, appointment, settings, zip);
 
 
     return Promise.resolve(calendar);
@@ -107,7 +107,9 @@ function getSettings() {
                     start_time_first_half: temp['start_time_first_half'],
                     end_time_first_half: temp['end_time_first_half'],
                     start_time_second_half: temp['start_time_second_half'],
-                    end_time_second_half: temp['end_time_second_half']
+                    end_time_second_half: temp['end_time_second_half'],
+                    maxDistanceHalfday: temp['halfdayMaxDistanceRestriction(in_km)'],
+                    maxDriveTimeHalfDay: temp['halfdayMaxDriveTimeRestriction(in_min)']
                 };
 
                 resolve(settings);
