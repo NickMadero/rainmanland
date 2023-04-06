@@ -71,7 +71,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
     //this will query the database to get all the appointments on a half day to compare distance to new appointment
     let storedHalfDay = await getStoredHalfDay(halfDay, crewName);
-    if(storedHalfDay.appointments[0] === null){
+    if(storedHalfDay.appointments[0].length == 0){
         isTooFar = false;
         return Promise.resolve(isTooFar);
     }
@@ -83,7 +83,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
     let distanceBetweenAppointments = await getDrivingDistance(firstApp.address, appointment.address);
         //compare two addresses
     //TODO change to a max drive time to next appointment
-    if(distanceBetweenAppointments.distance > settings.maxDistanceHalfday){
+    if(distanceBetweenAppointments.duration > parseInt(settings.maxDriveTimeHalfDay)){
         isTooFar = true;
         return Promise.resolve(isTooFar);
     }
@@ -139,7 +139,7 @@ async function getDrivingDistance(origin, destination) {
 
         if (result.status === 'OK') {
             const distance = result.distance.text;
-            const duration = result.duration.text;
+            const duration = parseInt(result.duration.text);
             let driveData = {
                 distance: distance,
                 duration: duration,
@@ -165,8 +165,16 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)
 
     return Promise.resolve(notInServiceArea);
 }
-//TODO check if there is enough time left in half day to fit in another appointment
+
+/**
+ * this function will check if there is enough time left in a half day to schedule another appointment
+ * or to not allow another appointment to fit
+ * @param halfDay the half day to schedule the new appointment into
+ * @param appointment the new appointment to schedule into the half day
+ * @returns {Promise<void>}
+ */
 async function checkForEnoughTime(halfDay,appointment) {
+    //TODO check if there is enough time left in half day to fit in another appointment
         // make var for computing the amount of time it takes ie 5 + 3X the amount zones
         // check to see if the var is still less than the end time of the half
         // if not dont let the user schedule ( greyed out )

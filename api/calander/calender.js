@@ -108,7 +108,8 @@ function getSettings() {
                     end_time_first_half: temp['end_time_first_half'],
                     start_time_second_half: temp['start_time_second_half'],
                     end_time_second_half: temp['end_time_second_half'],
-                    maxDistanceHalfday: temp['halfdayMaxDistanceRestriction(in_km)']
+                    maxDistanceHalfday: temp['halfdayMaxDistanceRestriction(in_km)'],
+                    maxDriveTimeHalfDay: temp['halfdayMaxDriveTimeRestriction(in_min)']
                 };
 
                 resolve(settings);
