@@ -177,7 +177,7 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)
  * @param halfDay the half day to schedule the new appointment into
  * @param appointment the new appointment to schedule into the half day
  * @param storedHalfDay an array of appointments that are occuring on the given half day currently
- * @returns {Promise<void>}
+ * @returns {Promise<void>} returns true for when an appointment can fit into halfday
  *
  */
 async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
@@ -189,8 +189,10 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     let halfDayTimes = {
         totalAppointmentTime: 0,
         totalDriveTime: 0,
+        totalTime: 0,
     };
 
+    //TODO add variables in settings for each variable
     //this will loop all the existing appointments in the half day and calculate total time it takes before drive time
     for(let i =0; i < storedHalfDay.length; i++){
         let appointmentTime =  ((3 * storedHalfDay[i].zone_amount) + 5);
@@ -201,6 +203,11 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     for(let i = 0; i < storedHalfDay.length; i++){
         addresses.push(storedHalfDay[i].address);
     }
+    addresses.push(appointment.address);
+
+
+    //add new appointment time
+    halfDayTimes.totalAppointmentTime += ((3 * appointment.zone_amount) + 5);
 
     // let addresses1 = [
     //     '1635 Elmwood Avenue, Cranston, RI 02910',
@@ -211,10 +218,22 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     // addresses.push('1124 Main Street, Middletown, CT 06457');
     // addresses.push('5 silver ave, glassboror, NJ 08028');
 
-    //this will get the total drive time it takes between each scheduled appointment
-    let test = await sortAddressesByDriveTime(addresses[0], addresses);
+    //this will sort the addresses by drive time and return the drive time from start to each location
+    let sortedAddresses = await sortAddressesByDriveTime(addresses[0], addresses);
 
-    console.log(test);
+    //set the total drive time to what is stored in sortedAddresses
+    halfDayTimes.totalDriveTime = Math.trunc(sortedAddresses.driveTimes.pop()/60)+1;
+
+    //store the total amount of time the current halfday takes
+    halfDayTimes.totalTime = halfDayTimes.totalAppointmentTime +halfDayTimes.totalDriveTime;
+
+    //halfday (end - start)= total allotted
+    // get appointment time for new appointment
+    // get drive time to the new appointment
+    if( (halfDay.endTime - halfDay.startTime) > halfDayTimes.totalTime ){
+        return Promise.resolve(true);
+    }
+    return Promise.resolve(false);
 }
 
 
@@ -232,14 +251,19 @@ async function sortAddressesByDriveTime(startAddr, addresses){
     );
 
     const durationMap = new Map();
-    addresses.forEach((address, index) => {
+     await addresses.forEach((address, index) => {
         const durationValue = results[index]?.json?.rows[0]?.elements[0]?.duration?.value;
         if (durationValue !== undefined) {
             durationMap.set(address, durationValue);
         }
     });
 
-    return addresses.sort((a, b) => durationMap.get(a) - durationMap.get(b));
+    // return addresses.sort((a, b) => durationMap.get(a) - durationMap.get(b));
+
+    const sortedAddresses = await addresses.sort((a, b) => durationMap.get(a) - durationMap.get(b));
+    const driveTimes = await sortedAddresses.map((address) => durationMap.get(address));
+
+    return Promise.resolve({ sortedAddresses, driveTimes });
 }
 
 
