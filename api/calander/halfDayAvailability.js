@@ -9,6 +9,7 @@
  * if that half day should be shown as available
  */
 const dbController = require("../dbController");
+const {add} = require("nodemon/lib/rules");
 
 const googleMapsClient = require('@google/maps').createClient({
     key: 'AIzaSyAF2m0svp07tGLzObVsQFEIMw6EpRh14Hc',
@@ -201,15 +202,17 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
         addresses.push(storedHalfDay[i].address);
     }
 
-    let addresses1 = [
-        '1635 Elmwood Avenue, Cranston, RI 02910',
-        '2560 East Cherry Street, Philadelphia, PA 19134',
-        '1124 Main Street, Middletown, CT 06457',
-        '4170 East Washington Street, East Point, GA 30344',
-        '2189 North Pine Street, Wilmington, DE 19802'];
+    // let addresses1 = [
+    //     '1635 Elmwood Avenue, Cranston, RI 02910',
+    //     '2560 East Cherry Street, Philadelphia, PA 19134',
+    //     '1124 Main Street, Middletown, CT 06457',
+    //     '4170 East Washington Street, East Point, GA 30344',
+    //     '2189 North Pine Street, Wilmington, DE 19802'];
+    // addresses.push('1124 Main Street, Middletown, CT 06457');
+    // addresses.push('5 silver ave, glassboror, NJ 08028');
 
     //this will get the total drive time it takes between each scheduled appointment
-    let test = await sortAddressesByDriveTime(addresses1[0], addresses1);
+    let test = await sortAddressesByDriveTime(addresses[0], addresses);
 
     console.log(test);
 }
