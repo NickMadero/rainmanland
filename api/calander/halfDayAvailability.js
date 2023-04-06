@@ -230,7 +230,7 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     //halfday (end - start)= total allotted
     // get appointment time for new appointment
     // get drive time to the new appointment
-    if( (halfDay.endTime - halfDay.startTime) > halfDayTimes.totalTime ){
+    if( (halfDay.endTime - halfDay.startTime)  < halfDayTimes.totalTime ){
         return Promise.resolve(true);
     }
     return Promise.resolve(false);
