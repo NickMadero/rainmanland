@@ -192,13 +192,25 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
 
     //this will loop all the existing appointments in the half day and calculate total time it takes before drive time
     for(let i =0; i < storedHalfDay.length; i++){
-        let appointmentTime = ((3 * storedHalfDay[i].zone_amount) + 5);
+        let appointmentTime =  ((3 * storedHalfDay[i].zone_amount) + 5);
         halfDayTimes.totalAppointmentTime += appointmentTime;
     }
 
+    let addresses = [];
+    for(let i = 0; i < storedHalfDay.length; i++){
+        addresses.push(storedHalfDay[i].address);
+    }
+
     //this will get the total drive time it takes between each scheduled appointment
+    let test = await sortAddressesByDriveTime(addresses[0], addresses);
+
+}
+
+
+async function sortAddressesByDriveTime(startAddr, addresses){
 
 
 }
+
 
 module.exports = {checkCalendarAvailability};
