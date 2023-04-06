@@ -21,9 +21,17 @@ import EmployeeDashboard from "./components/EmployeeDashboard";
 // to the node.js backend (index.js) each time the front end needs to interact with the
 // database. This is basically the core of the front end.
 class App extends Component {
+
+
     constructor(props) {
         super(props)
         this.state = {
+
+            appointmentID: null,
+
+            // this will be used to display the entire calender to the customer
+            calendar: null,
+
             // state attribute that controls which page is rendered
             currentPage: 'LandingPage',
 
@@ -118,6 +126,7 @@ class App extends Component {
         this.setState({
             customerInfo: custInfo
         });
+        axios.post('/api/')
         this.props.navigate('/calendar');
     }
 

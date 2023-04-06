@@ -79,6 +79,10 @@ class CustomerInfoPage extends React.Component {
             .then(res => {
                 console.log('Customer info saved before going to calendar.');
                 this.props.onGoToCalendarButtonClick(this.state);
+                this.state.appointmentID = res.data.appointment_id;
+                this.state.calendar = res.data.calendar;
+                // console.log(res);
+                console.log(this.state);
             })
             .catch(err => console.log(err));
     };

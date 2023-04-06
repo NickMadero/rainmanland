@@ -253,4 +253,20 @@ This will return a list of only the crew names
 
 ******************************************************
 
+## Get all appointments
+
+This will return all of the appointments that are created
+    
+    CALL `rainmanland`.`get_all_appointments`();
+
+******************************************************
+
+## Get  half days for a given crew from a date
+
+this will return all the half days that a crew is responsible for
+this will return only from the current day and ordering by the date
+
+    CALL `rainmanland`.`get_all_half_days_by_crew`(<{crew_name varchar(45)}>);
+
+*******************************************************
 
