@@ -93,7 +93,11 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
     //TODO check if there is enough time left in half day to fit in another appointment
     //TODO ***************************************************************************
-
+    let notEnoughTime = await checkForEnoughTime(halfDay,appointment, storedHalfDay.appointments[0]);
+    if(notEnoughTime){
+        isTooFar = true;
+        return Promise.resolve(isTooFar);
+    }
 
     return Promise.resolve(isTooFar);
 }
@@ -171,13 +175,30 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)
  * or to not allow another appointment to fit
  * @param halfDay the half day to schedule the new appointment into
  * @param appointment the new appointment to schedule into the half day
+ * @param storedHalfDay an array of appointments that are occuring on the given half day currently
  * @returns {Promise<void>}
+ *
  */
-async function checkForEnoughTime(halfDay,appointment) {
+async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     //TODO check if there is enough time left in half day to fit in another appointment
         // make var for computing the amount of time it takes ie 5 + 3X the amount zones
         // check to see if the var is still less than the end time of the half
         // if not dont let the user schedule ( greyed out )
+
+    let halfDayTimes = {
+        totalAppointmentTime: 0,
+        totalDriveTime: 0,
+    };
+
+    //this will loop all the existing appointments in the half day and calculate total time it takes before drive time
+    for(let i =0; i < storedHalfDay.length; i++){
+        let appointmentTime = ((3 * storedHalfDay[i].zone_amount) + 5);
+        halfDayTimes.totalAppointmentTime += appointmentTime;
+    }
+
+    //this will get the total drive time it takes between each scheduled appointment
+
+
 }
 
 module.exports = {checkCalendarAvailability};
