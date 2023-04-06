@@ -165,5 +165,11 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)
 
     return Promise.resolve(notInServiceArea);
 }
+//TODO check if there is enough time left in half day to fit in another appointment
+async function checkForEnoughTime(halfDay,appointment) {
+        // make var for computing the amount of time it takes ie 5 + 3X the amount zones
+        // check to see if the var is still less than the end time of the half
+        // if not dont let the user schedule ( greyed out )
+}
 
 module.exports = {checkCalendarAvailability};
