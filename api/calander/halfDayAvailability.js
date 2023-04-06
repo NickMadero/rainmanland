@@ -201,15 +201,42 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
         addresses.push(storedHalfDay[i].address);
     }
 
-    //this will get the total drive time it takes between each scheduled appointment
-    let test = await sortAddressesByDriveTime(addresses[0], addresses);
+    let addresses1 = [
+        '1635 Elmwood Avenue, Cranston, RI 02910',
+        '2560 East Cherry Street, Philadelphia, PA 19134',
+        '1124 Main Street, Middletown, CT 06457',
+        '4170 East Washington Street, East Point, GA 30344',
+        '2189 North Pine Street, Wilmington, DE 19802'];
 
+    //this will get the total drive time it takes between each scheduled appointment
+    let test = await sortAddressesByDriveTime(addresses1[0], addresses1);
+
+    console.log(test);
 }
 
 
 async function sortAddressesByDriveTime(startAddr, addresses){
+    const results = await Promise.all(
+        addresses.map((addr) =>
+            googleMapsClient
+                .distanceMatrix({
+                    origins: [startAddr],
+                    destinations: [addr],
+                    mode: 'driving',
+                })
+                .asPromise()
+        )
+    );
 
+    const durationMap = new Map();
+    addresses.forEach((address, index) => {
+        const durationValue = results[index]?.json?.rows[0]?.elements[0]?.duration?.value;
+        if (durationValue !== undefined) {
+            durationMap.set(address, durationValue);
+        }
+    });
 
+    return addresses.sort((a, b) => durationMap.get(a) - durationMap.get(b));
 }
 
 
