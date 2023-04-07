@@ -132,6 +132,14 @@ async function getStoredHalfDay(halfDay, crewName){
         });
     });
 }
+
+/**
+ * this will get all the information needed for addresses to be sorted by drive time
+ * @requires sortAddressesByDriveTime
+ * @param origin
+ * @param destination
+ * @returns {Promise<{duration: number, distance: *}|null>}
+ */
 async function getDrivingDistance(origin, destination) {
     try {
         const response = await googleMapsClient.distanceMatrix({
@@ -174,6 +182,7 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)
 /**
  * this function will check if there is enough time left in a half day to schedule another appointment
  * or to not allow another appointment to fit
+ *
  * @param halfDay the half day to schedule the new appointment into
  * @param appointment the new appointment to schedule into the half day
  * @param storedHalfDay an array of appointments that are occuring on the given half day currently
@@ -243,7 +252,13 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) 
     return Promise.resolve(false);
 }
 
-
+/**
+ * this will take an address and an array of addresses and return a sorted list of them
+ * @requires getDrivingDistance
+ * @param startAddr the starting address
+ * @param addresses array of addresses to visit in any order
+ * @returns {Promise<{driveTimes: *, sortedAddresses: *}>} returns an array of sorted addresses by drive time
+ */
 async function sortAddressesByDriveTime(startAddr, addresses){
     const results = await Promise.all(
         addresses.map((addr) =>
@@ -274,4 +289,4 @@ async function sortAddressesByDriveTime(startAddr, addresses){
 }
 
 
-module.exports = {checkCalendarAvailability};
+module.exports = {checkCalendarAvailability, getDrivingDistance, sortAddressesByDriveTime};

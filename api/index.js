@@ -6,6 +6,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 
 const { setAppointment, initCalander } = require("./calander/calender");
+const {storeAppointmentIntoDatabase} = require('/calander/storeAppointment');
 
 const dbController = require('./dbController');
 
@@ -476,7 +477,22 @@ app.post('/api/put-setting', (req, res) => {
     })
 })
 
+/**
+ * @param req require that req has appointmentId, crewName, halfDay, email, firstName, lastName
+ *  stored as those names
+ */
+app.post('/api/put-new-appointment', async (req, res) => {
 
+    const { appointmentId, crewName, halfDay, email, firstName, lastName } = req.body;
+
+    try {
+        const result = await storeAppointmentIntoDatabase(appointmentId, crewName, halfDay, email, firstName, lastName);
+        res.status(200).json({ message: 'Appointment stored successfully', data: result });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error storing appointment' });
+    }
+})
 
 
 
