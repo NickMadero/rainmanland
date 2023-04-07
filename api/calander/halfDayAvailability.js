@@ -94,7 +94,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
     //TODO check if there is enough time left in half day to fit in another appointment
     //TODO ***************************************************************************
-    let notEnoughTime = await checkForEnoughTime(halfDay,appointment, storedHalfDay.appointments[0]);
+    let notEnoughTime = await checkForEnoughTime(halfDay,appointment, storedHalfDay.appointments[0], settings);
     if(notEnoughTime){
         isTooFar = true;
         return Promise.resolve(isTooFar);
@@ -180,7 +180,7 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)
  * @returns {Promise<void>} returns true for when an appointment can fit into halfday
  *
  */
-async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
+async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) {
     //TODO check if there is enough time left in half day to fit in another appointment
         // make var for computing the amount of time it takes ie 5 + 3X the amount zones
         // check to see if the var is still less than the end time of the half
@@ -195,7 +195,10 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     //TODO add variables in settings for each variable
     //this will loop all the existing appointments in the half day and calculate total time it takes before drive time
     for(let i =0; i < storedHalfDay.length; i++){
-        let appointmentTime =  ((3 * storedHalfDay[i].zone_amount) + 5);
+        let appointmentTime =  ((settings.minutesPerZone * storedHalfDay[i].zone_amount) + settings.baseTime);
+        if(appointmentTime < settings.lowestPossibleTime){
+            appointmentTime = settings.lowestPossibleTime;
+        }
         halfDayTimes.totalAppointmentTime += appointmentTime;
     }
 
@@ -206,8 +209,12 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     addresses.push(appointment.address);
 
 
+    let newAppTime = ((settings.minutesPerZone * appointment.zone_amount) + settings.baseTime);
+    if(newAppTime < settings.lowestPossibleTime){
+        newAppTime = settings.lowestPossibleTime;
+    }
     //add new appointment time
-    halfDayTimes.totalAppointmentTime += ((3 * appointment.zone_amount) + 5);
+    halfDayTimes.totalAppointmentTime += newAppTime;
 
     // let addresses1 = [
     //     '1635 Elmwood Avenue, Cranston, RI 02910',
@@ -230,7 +237,7 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     //halfday (end - start)= total allotted
     // get appointment time for new appointment
     // get drive time to the new appointment
-    if( (halfDay.endTime - halfDay.startTime)  > halfDayTimes.totalTime ){
+    if( (parseInt(halfDay.endTime) - parseInt(halfDay.startTime))  > parseInt(halfDayTimes.totalTime) ){
         return Promise.resolve(true);
     }
     return Promise.resolve(false);

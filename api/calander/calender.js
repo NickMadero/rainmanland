@@ -109,7 +109,11 @@ function getSettings() {
                     start_time_second_half: temp['start_time_second_half'],
                     end_time_second_half: temp['end_time_second_half'],
                     maxDistanceHalfday: temp['halfdayMaxDistanceRestriction(in_km)'],
-                    maxDriveTimeHalfDay: temp['halfdayMaxDriveTimeRestriction(in_min)']
+                    maxDriveTimeHalfDay: temp['halfdayMaxDriveTimeRestriction(in_min)'],
+                    lowestPossibleTime: parseInt(temp['lowestPossibleTime']),
+                    maxSprinklerForLowest:  parseInt(temp['maxSprinklerForLowest']),
+                    baseTime:   parseInt(temp['baseTime']),
+                    minutesPerZone: parseInt(temp['minutesPerZone']),
                 };
 
                 resolve(settings);
