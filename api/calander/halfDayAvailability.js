@@ -110,7 +110,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
  * @returns {Promise<unknown>} an object that has all of the appointments that occur on the half day
  */
 async function getStoredHalfDay(halfDay, crewName){
-    const getAppOnHalfDay = 'call rainmanland.get_appointments_on_half_day_from_date_crew(?, ?);';
+    const getAppOnHalfDay = 'call rainmanland.get_appointments_on_half_day_from_date_crew_by_which_half(?, ?, ?);';
 
     let storedHalfDay = {
          appointments :[],
@@ -118,7 +118,7 @@ async function getStoredHalfDay(halfDay, crewName){
 
 
     return new Promise((resolve, reject) => {
-        dbController.query(getAppOnHalfDay, [crewName,halfDay.date], (err, result) => {
+        dbController.query(getAppOnHalfDay, [crewName,halfDay.date, halfDay.whichHalf], (err, result) => {
             if (err) {
                 reject(err);
             } else {
@@ -230,7 +230,7 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     //halfday (end - start)= total allotted
     // get appointment time for new appointment
     // get drive time to the new appointment
-    if( (halfDay.endTime - halfDay.startTime)  < halfDayTimes.totalTime ){
+    if( (halfDay.endTime - halfDay.startTime)  > halfDayTimes.totalTime ){
         return Promise.resolve(true);
     }
     return Promise.resolve(false);
