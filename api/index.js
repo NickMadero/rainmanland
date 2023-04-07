@@ -6,7 +6,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 
 const { setAppointment, initCalander } = require("./calander/calender");
-const {storeAppointmentIntoDatabase} = require('/calander/storeAppointment');
+const {storeAppointmentIntoDatabase} = require('./calander/storeAppointment');
 
 const dbController = require('./dbController');
 
