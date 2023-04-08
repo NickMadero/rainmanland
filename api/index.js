@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 
 const { setAppointment, initCalander } = require("./calander/calender");
 const {storeAppointmentIntoDatabase} = require('./calander/storeAppointment');
+const {getAppointmentsForHalfDay} = require('./crew/loadCrewAppointments');
 
 const dbController = require('./dbController');
 
@@ -494,6 +495,22 @@ app.post('/api/put-new-appointment', async (req, res) => {
     }
 })
 
+app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
+    try {
+        const { date, whichHalf, crewName } = req.body;
+
+        if (!date || !whichHalf || !crewName) {
+            return res.status(400).json({ error: 'Missing required parameters' });
+        }
+
+        const sortedAppointments = await getAppointmentsForHalfDay(date, whichHalf, crewName);
+        res.json(sortedAppointments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+}
 
 
 // add a port to expose the API when the server is running

@@ -2,10 +2,14 @@ const { generateHalfDaysForCrew } = require('./generateHalfDay');
 const { checkCalendarAvailability } = require('./halfDayAvailability');
 const dbController = require('../dbController');
 
+const {getAppointmentsForHalfDay} = require('../crew/loadCrewAppointments');
 
 
 async function initCalander(appointmentID, address, isComplete, zoneAmount,
                             controllerBrand, controllerOutside, zipCode) {
+
+    // await getAppointmentsForHalfDay('2023-04-08','first','one');
+
     //this keep all of the appointment information
     let appointment = {};
     //this stores the crew name
