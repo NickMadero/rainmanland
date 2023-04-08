@@ -495,6 +495,12 @@ app.post('/api/put-new-appointment', async (req, res) => {
     }
 })
 
+/**
+ * this is used to get the appointments that occur on a given halfday
+ * @param date "YYYY-MM-DD" the date for which the appointment is to occur
+ * @param whichHalf (first, second) which half of a date is it
+ * @param crewName the name of the crew you wish to get
+ */
 app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
     try {
         const { date, whichHalf, crewName } = req.body;
