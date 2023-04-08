@@ -13,11 +13,13 @@ class CustomerInfoPage extends React.Component {
 
         this.state = {
             outside: false,
-            controllerBrands: [],
+            controller_brand: [],
             brand: '',
             unitsPerZone: '',
             numZones: '',
             address: '',
+
+
 
 
         }
@@ -26,7 +28,7 @@ class CustomerInfoPage extends React.Component {
         axios.post('/api/get-controller-brand')
             .then(res => {
                 this.setState({
-                    controllerBrands: res.data
+                    controller_brand: res.data
                 });
             })
             .catch(err => console.log(err));
@@ -54,7 +56,10 @@ class CustomerInfoPage extends React.Component {
             address,
             email,
             First_Name,
-            Last_Name
+            Last_Name,
+            zipcode,
+            phone,
+
         } = this.state;
 
         const outsideValue = outside ? 1 : 0;
@@ -66,11 +71,18 @@ class CustomerInfoPage extends React.Component {
                 address: address,
                 email: email,
                 first_name: First_Name,
-                last_name: Last_Name
+                last_name: Last_Name,
+                zip_code : zipcode,
+            phone_number: phone,
+
             })
             .then(res => {
                 console.log('Customer info saved before going to calendar.');
                 this.props.onGoToCalendarButtonClick(this.state);
+                this.state.appointmentID = res.data.appointment_id;
+                this.state.calendar = res.data.calendar;
+                // console.log(res);
+                console.log(this.state);
             })
             .catch(err => console.log(err));
     };
@@ -81,7 +93,7 @@ class CustomerInfoPage extends React.Component {
     };
 
     render() {
-        const { controllerBrands } = this.state;
+        const { controller_brand } = this.state;
         return (
             <Form style={{
                 width: '50%',
@@ -107,7 +119,7 @@ class CustomerInfoPage extends React.Component {
                     <Col>
                         <Form.Group controlId="formControllerBrand">
                             <DropdownButton id="dropdown-basic-button" title={this.state.selectedBrandName || "brand of controller"} required onSelect={(eventKey, event) => { this.setState({ brand: eventKey, selectedBrandName: event.target.innerText }); }}>
-                            {controllerBrands.map((brand, index) => (
+                            {controller_brand.map((brand, index) => (
                                     <Dropdown.Item key={index} eventKey={brand}>
                                         {brand}
                                     </Dropdown.Item>
@@ -133,12 +145,20 @@ class CustomerInfoPage extends React.Component {
                     <Form.Control name="email" type="text" placeholder="enter Email address"required onChange={this.handleInputChange}/>
                 </Form.Group>
                 <Form.Group controlId="formFirstName">
-                    <Form.Label>What is First Name?</Form.Label>
+                    <Form.Label>What is your First Name?</Form.Label>
                     <Form.Control name="First_Name" type="text" placeholder="First Name" required onChange={this.handleInputChange}/>
                 </Form.Group>
                 <Form.Group controlId="formLastName">
-                    <Form.Label>What is Last Name?</Form.Label>
+                    <Form.Label>What is your Last Name?</Form.Label>
                     <Form.Control name="Last_Name" type="text" placeholder="Last Name"required onChange={this.handleInputChange}/>
+                </Form.Group>
+                <Form.Group controlId="formzipcode">
+                    <Form.Label>what is your zip code?</Form.Label>
+                    <Form.Control name="zipcode" type="text" placeholder="zip code"required onChange={this.handleInputChange}/>
+                </Form.Group>
+                <Form.Group controlId="formphone">
+                    <Form.Label>what is your phone number?</Form.Label>
+                    <Form.Control name="phone" type="text" placeholder="phone number"required onChange={this.handleInputChange}/>
                 </Form.Group>
                 <Button variant="primary" type="submit"
                         style={{margin: '30px', color: 'white', backgroundColor: 'blue'}}>

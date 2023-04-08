@@ -1,34 +1,52 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from 'react-bootstrap/Button'
+import { Button, Container, Row, Col, Card } from 'react-bootstrap';
+import '../style/LandingPage.css';
+
 function LandingPage(props) {
+    let navigate = useNavigate();
 
-	let navigate = useNavigate();
+    const goToCalendar = () => {
+        let path = `appointment-info`;
+        navigate(path);
+    }
 
-	// Use functions like this to make buttons/handlers that navigate through react-router
-	const goToCalendar = () => {
-		let path = `appointment-info`;
-		navigate(path);
-	}
+    const goToEmployeeLogin = () => {
+        let path = 'employee-login';
+        navigate(path);
+    }
 
-	const goToEmployeeLogin = () => {
-		let path = 'employee-login';
-		navigate(path);
-	}
-
-	return (
-		<div className="App">
-			<h1>Rainmanland Self-Booking Calendar</h1>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus odio eget justo dictum, at vestibulum velit interdum. Integer euismod tellus et nisi commodo feugiat.</p>
-			<Button variant="primary" size="lg" onClick={goToCalendar}>
-				Book Now!
-			</Button>{' '}
-			<Button onClick={goToEmployeeLogin} variant="outline-secondary">
-				Employee Login
-			</Button>{' '}
-		</div>
-	);
+    return (
+        <div className="App">
+            <Container>
+                <Row>
+                    <Col>
+                    	<Card className="custom-card">
+							<Card.Body>
+								<h1>Rainmanland Self-Booking Calendar</h1>
+								<p>
+									Welcome to Rainmanland Self-Booking Calendar, an intelligent scheduling solution that
+									optimizes appointment organization and delivers cost savings right to your pocket.
+									Discover how easy it is to book your next appointment with our intuitive interface and
+									enjoy a seamless experience.
+								</p>
+								<Button variant="primary" size="lg" onClick={goToCalendar}>
+									Book Now!
+								</Button>
+        					</Card.Body>
+    					</Card>                    
+					</Col>
+                </Row>
+            </Container>
+            <div className="employee-login">
+                <Button onClick={goToEmployeeLogin} variant="outline-secondary">
+                    Employee Login
+                </Button>
+            </div>
+        </div>
+    );
 }
 
 export default LandingPage;
+
 
