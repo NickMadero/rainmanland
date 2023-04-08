@@ -289,4 +289,4 @@ async function sortAddressesByDriveTime(startAddr, addresses){
 }
 
 
-module.exports = {checkCalendarAvailability, getDrivingDistance, sortAddressesByDriveTime};
+module.exports = {checkCalendarAvailability, getDrivingDistance, sortAddressesByDriveTime, googleMapsClient};
