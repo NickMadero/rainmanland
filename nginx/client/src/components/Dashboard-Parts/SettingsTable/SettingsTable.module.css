@@ -1,6 +1,21 @@
 .appt-heading{
     color: #000000;
 }
+
+.wrapper {
+    padding: 1rem;
+    box-sizing: border-box; 
+    position: relative;
+    border-radius: 2px;
+    width:70%;
+    height: 50%;
+    gap: 2rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: rgb(195, 195, 202);
+   
+}
+
 h4 {
     text-align: center;
     line-height: 1;
@@ -11,26 +26,23 @@ th,
 td {
     padding: 0.75rem;
     text-align: center;
-    color: white;
+    color: rgb(0, 0, 0);
     position: sticky;
 }
+td {
+    font-weight: 600;
+}
 tr {
-    background-color: #253c72;
+    background-color: #d3cdcd;
 }
 th {
-    background-color:#447c4496;
+    background-color:#000000;
 }
 tr:nth-child(even){
-    background-color: #13369785;
+    background-color: #fcfcfb !important;
 }
 
 table{
     overflow-y:scroll;
-}
-
-.wrapper {
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    height: 15rem;
 }

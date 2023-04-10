@@ -1,0 +1,52 @@
+.wrapper{
+    padding: 1rem;
+    box-sizing: border-box; 
+    position: relative;
+    border-radius: 2px;
+    width:50%;
+    height:100%;
+    gap: 2rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: rgb(195, 195, 202);
+}
+
+
+th,
+td {
+    padding: 0.75rem;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    position: sticky;
+}
+td {
+    font-weight: 600;
+}
+tr {
+    background-color: #e4e4e4 !important;
+}
+th {
+    background-color:#000000;
+}
+tr:nth-child(even){
+    background-color: #dfdfdf !important;
+}
+
+table{
+    overflow-y:scroll;
+}
+
+.btn-add-crew{
+    background-color: rgb(112, 25, 25);
+    color: #ffffff;
+    border: 0;
+    white-space: nowrap;
+    padding: 0.5em;
+    width: fit-content;
+    height: 2.5rem;
+    border-radius: .25rem;
+}
+.btn-add-crew:hover{
+    opacity: 0.90;
+    transition: 0.25s;
+}

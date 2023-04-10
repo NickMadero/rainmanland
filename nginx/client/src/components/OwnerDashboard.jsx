@@ -18,10 +18,12 @@ const OwnerHomePage = (props) => {
     return (
         <>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <div className={styles['page']}>
-                <CrewTable />
-                <div id="container--bottom" className={styles['bottom-container']}>
+                <div className={styles['page']}>
+                    <div id="container--top" className={styles['top-container']}>
                     <SelectableAppointmentTable />
+                </div>
+                <div id="container--bottom" className={styles['bottom-container']}>
+                    <CrewTable />
                     <SettingsTable />
                 </div>
             </div>
