@@ -7,6 +7,16 @@ const bcrypt = require('bcrypt');
 
 const dbController = require('./dbController');
 
+const nodemailer = require('nodemailer');
+const email = 'wallabytest8@gmail.com'
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: email,
+        pass: 'kxdedschdfgofvvn'
+    }
+});
+
 // Set constants
 const saltRounds = 10;  // complexity of bcrypt hash
 
@@ -71,54 +81,54 @@ app.post('/api/verify-user', (req, res) => {
     const pass = req.body.sentPw;
     if (!email || !pass) {
         res.json({
-			success: false,
-			message: "Email and password are required"
-		});
+            success: false,
+            message: "Email and password are required"
+        });
         return;
-	}
+    }
     const getHashQuery = "CALL get_password_hash(?);";
     dbController.query(getHashQuery, [email], (err, result) => {
         console.log(result)
         if (err) {
             console.log("Error while retrieving password hash.");
             res.json({
-				success: false,
-				message: 'Error while retrieving password hash.'
-			});
-			return;
+                success: false,
+                message: 'Error while retrieving password hash.'
+            });
+            return;
         }
         else {
             console.log("User email exists.");
             bcrypt.compare(pass, result[0][0].password_hash, function(err, hashResult) {
                 if (hashResult) {
                     console.log("User verified.");
-					// now get the relevant user info
-					const userInfoQuery = "CALL get_user_info(?);";
-					dbController.query(userInfoQuery, [email], (err, result) => {
-						console.log(result);
-						if (err) {
-							res.json({
-								success: false,
-								message: "Error getting user info"
-							});
-							return;
-						} else {
-                    		res.json({
-								success: true,
-								message: "User info sent.",
-								queryResult: result[0]
-							});
-						}
-					})
+                    // now get the relevant user info
+                    const userInfoQuery = "CALL get_user_info(?);";
+                    dbController.query(userInfoQuery, [email], (err, result) => {
+                        console.log(result);
+                        if (err) {
+                            res.json({
+                                success: false,
+                                message: "Error getting user info"
+                            });
+                            return;
+                        } else {
+                            res.json({
+                                success: true,
+                                message: "User info sent.",
+                                queryResult: result[0]
+                            });
+                        }
+                    })
                 }
                 else {
                     console.log("Bad password");
                     console.log(err);
                     res.json({
-						success: true,
-						message: "Password doesn't match.",
-						queryResult: false
-					});
+                        success: true,
+                        message: "Password doesn't match.",
+                        queryResult: false
+                    });
                 }
             })
         }
@@ -127,62 +137,62 @@ app.post('/api/verify-user', (req, res) => {
 
 // Add a new employee to the user table
 app.post('/api/add-user', (req, res) => {
-	// raw info from request
-	const email = req.body.addEmail;
-	const plaintextPass = req.body.addPassword;
-	const firstName = req.body.addFirstName;
-	const lastName = req.body.addLastName;
-	const phone = req.body.addPhoneNum;
-	const crewNum = req.body.addCrewNum;
-	const currentlyWorking = req.body.addCurrentlyWorking ? 1 : 0;
+    // raw info from request
+    const email = req.body.addEmail;
+    const plaintextPass = req.body.addPassword;
+    const firstName = req.body.addFirstName;
+    const lastName = req.body.addLastName;
+    const phone = req.body.addPhoneNum;
+    const crewNum = req.body.addCrewNum;
+    const currentlyWorking = req.body.addCurrentlyWorking ? 1 : 0;
 
-	// generate password hash
-	const passHash = bcrypt.hash(plaintextPass, saltRounds, (err, hashedPassword) => {
-		if (err) {
-			console.error('Error hashing password: ', err);
-			res.json({
-				success: false,
-				message: 'Error hashing password.'
-			});
-			return;
-		} else {
-			console.log('Hashed password: ', hashedPassword);
-			// add to database using stored procedure
-			const addCustQuery = "CALL add_new_crew_member(CURDATE(),?,?,?,?,?,?);";
-			const params = [firstName, lastName, email, hashedPassword, phone, currentlyWorking];
-			dbController.query(addCustQuery, params, (err, result) => {
-				if (err) {
-					console.log("error while adding crew member: ", err);
-					res.json({
-						success: false,
-						message: 'Error while adding crew member.'
-					});
-					return;
-				} else {
-					console.log("successfully added new employee");
-				}
-				// if a crew number was given while adding the employee, add them to the crew
-				if (crewNum) {
-					const addToCrewQuery = "CALL put_user_on_crew(?,?);";
-					dbController.query(addToCrewQuery, [email, crewNum], (err, result) => {
-						if (err) {
-							console.log("error while adding new crew member to crew: ", err);
-							res.json({
-								success: false,
-								message: 'Error while adding new crew member to crew.'
-							});
-						} else {
-							console.log("successfully added employee to crew");
-							res.json({
-								success: true,
-								message: 'successfully added employee to crew'
-							})
-						}
-					})
-				}
-			})
-		}
-	})
+    // generate password hash
+    const passHash = bcrypt.hash(plaintextPass, saltRounds, (err, hashedPassword) => {
+        if (err) {
+            console.error('Error hashing password: ', err);
+            res.json({
+                success: false,
+                message: 'Error hashing password.'
+            });
+            return;
+        } else {
+            console.log('Hashed password: ', hashedPassword);
+            // add to database using stored procedure
+            const addCustQuery = "CALL add_new_crew_member(CURDATE(),?,?,?,?,?,?);";
+            const params = [firstName, lastName, email, hashedPassword, phone, currentlyWorking];
+            dbController.query(addCustQuery, params, (err, result) => {
+                if (err) {
+                    console.log("error while adding crew member: ", err);
+                    res.json({
+                        success: false,
+                        message: 'Error while adding crew member.'
+                    });
+                    return;
+                } else {
+                    console.log("successfully added new employee");
+                }
+                // if a crew number was given while adding the employee, add them to the crew
+                if (crewNum) {
+                    const addToCrewQuery = "CALL put_user_on_crew(?,?);";
+                    dbController.query(addToCrewQuery, [email, crewNum], (err, result) => {
+                        if (err) {
+                            console.log("error while adding new crew member to crew: ", err);
+                            res.json({
+                                success: false,
+                                message: 'Error while adding new crew member to crew.'
+                            });
+                        } else {
+                            console.log("successfully added employee to crew");
+                            res.json({
+                                success: true,
+                                message: 'successfully added employee to crew'
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
 });
 
 // get a list of today's jobs for the crew number passed as URL param
@@ -201,11 +211,11 @@ app.post('/api/get-controller-brand', (req, res) => {
     const getController = "call get_controller_enum();";
     dbController.query(getController,  (err, result) => {
         console.log(result);
-		// parse the result before sending it to the frontend
-		const unparsedString = result[0][0]["column_type"];
-		console.log(`Got unparsed string: ${unparsedString}.`);
-		const parsedArray = unparsedString.slice(1, -1).split("','");
-		console.log(`Parsed string into array: ${parsedArray}`);
+        // parse the result before sending it to the frontend
+        const unparsedString = result[0][0]["column_type"];
+        console.log(`Got unparsed string: ${unparsedString}.`);
+        const parsedArray = unparsedString.slice(1, -1).split("','");
+        console.log(`Parsed string into array: ${parsedArray}`);
         res.send(parsedArray);
     })
 })
@@ -357,6 +367,55 @@ app.post('/api/get-crew', (req, res) => {
     });
 });
 
+app.post('/api/send-mail', (req, res) => {
+    const mailOptions = {
+        from: email,
+        to: req.body.to,
+        subject: req.body.subject,
+        text: req.body.text
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+})
+
+app.post('/api/send-mail-scheduled', (req, res) => {
+    const body = "Your appointment has been scheduled for " + req.body.date + " at " + req.body.time
+    const mailOptions = {
+        from: email,
+        to: req.body.to,
+        subject: "Rainmanland Appointment Time",
+        text: body
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+})
+
+app.post('/api/send-mail-reminder', (req, res) => {
+    const body = "A crew is on their way now and will be there shortly."
+    const mailOptions = {
+        from: email,
+        to: req.body.to,
+        subject: "Rainmanland Reminder",
+        text: body
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+})
 
 
 //author Nick
