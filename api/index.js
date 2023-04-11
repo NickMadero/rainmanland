@@ -486,10 +486,10 @@ app.post('/api/put-new-appointment', async (req, res) => {
 
     try {
         const result = await storeAppointmentIntoDatabase(appointmentId, crewName, halfDay, email, firstName, lastName);
-        res.status(200).json({ message: 'Appointment stored successfully', data: result });
+        res.status(200).json({ success: true, message: 'Appointment stored successfully', data: result });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ message: 'Error storing appointment' });
+        res.status(500).json({ success: false, message: 'Error storing appointment' });
     }
 })
 

@@ -22,6 +22,7 @@ import EmployeeDashboard from "./components/EmployeeDashboard";
 // database. This is basically the core of the front end.
 class App extends Component {
 
+
     constructor(props) {
         super(props)
         this.state = {
@@ -67,6 +68,8 @@ class App extends Component {
         // The following bindings are set so the App component automatically updates itself whenever they are called
         this.handleEmpLoginButtonClick = this.handleEmpLoginButtonClick.bind(this);
         this.handleGoToCalendarButtonClick = this.handleGoToCalendarButtonClick.bind(this);
+		this.saveApptInfo = this.saveApptInfo.bind(this);
+		this.addNewAppointment = this.addNewAppointment.bind(this);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,12 +126,51 @@ class App extends Component {
     // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered
     handleGoToCalendarButtonClick(custInfo) {
         this.setState({
-            customerInfo: custInfo
-        });
-        axios.post('/api/')
-        this.props.navigate('/calendar');
+			customerInfo: custInfo,
+			loading: true,
+		});
     }
 
+	// takes the calendar object from the CustomerInfoPage component before switching pages
+	saveApptInfo(custInfoComponentState) {
+		this.setState(
+			prevState => ({
+				...prevState,
+				calendar: custInfoComponentState.calendar,
+				newApptParams: {
+					appointmentId: custInfoComponentState.appointmentID,
+					crewName: custInfoComponentState.calendar.crewName,
+					halfDay: null,
+					email: custInfoComponentState.email,
+					firstName: custInfoComponentState.First_Name,
+					lastName: custInfoComponentState.Last_Name
+				}
+			}),
+			() => {
+				console.log(`SAVED CALENDAR TO APP.JS:\n${JSON.stringify(this.state.calendar, null, 2)}`);
+        		this.props.navigate('/calendar');
+			}
+		);
+	}
+
+	// After a customer clicks on a half day and confirms their appointment, this handler finalizes the appt in the db
+	async addNewAppointment(halfDayObject) {
+
+		// now that we know the specific half day that's been selected, we can add it to the params
+		var params = this.state.newApptParams;
+		params.halfDay = halfDayObject;
+
+		// call the POST endpoint with the params as request payload
+		await axios.post('/api/put-new-appointment', params)
+			.then((response) => {
+				return response.data.success;
+			})
+			.catch((error) => {
+				console.error(error);
+				return false;
+			});
+	}
+	
     // gets a list of today's jobs for the specified crew from the database
     getJobsTodayForCrew(crew_name) {
         axios.post('/api/get-joblist', {crewName: crew_name})
@@ -183,9 +225,12 @@ class App extends Component {
                         onLoginClick={this.handleEmpLoginButtonClick} 
 						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='appointment-info' element={<CustomerInfoPage
-                        onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>}/>
+                        onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick} 
+						saveApptInfo={this.saveApptInfo} /> }/>
                     <Route path='calendar' element={<Calendar
-                        custInfo={this.state.customerInfo} />} />
+                        custInfo={this.state.customerInfo}
+						addNewAppointment={this.addNewAppointment}
+						calendar={this.state.calendar} />} />
                     <Route path='owner-dashboard' element={<OwnerDashboard
 						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='employee-dashboard' element={<EmployeeDashboard
