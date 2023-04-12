@@ -56,6 +56,9 @@ const NewCalendar = (props) => {
 			alert(`Problem while booking appointment.`);
 		}
 		setShowModal(false);
+
+		// go back to landing page if an appointment was booked successfully
+		props.goToPage('/');
 	};
 
 	// Now actually format the halfDay array from the calendar object (passed as a prop)

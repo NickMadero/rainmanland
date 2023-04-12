@@ -91,6 +91,14 @@ app.post('/api/verify-user', (req, res) => {
 			return;
         }
         else {
+			const password_hash = result[0]?.[0]?.password_hash || false;
+			if (!password_hash) {
+				res.json({
+					success: false,
+					message: 'User does not exist.'
+				});
+				return;
+			}
             console.log("User email exists.");
             bcrypt.compare(pass, result[0][0].password_hash, function(err, hashResult) {
                 if (hashResult) {
@@ -147,7 +155,7 @@ app.post('/api/add-user', (req, res) => {
 	// raw info from request
 	const email = req.body.addEmail;
 	const plaintextPass = req.body.addPassword;
-	const firstName = req.body.addFirstName;
+	const firstgame = req.body.addFirstName;
 	const lastName = req.body.addLastName;
 	const phone = req.body.addPhoneNum;
 	const crewNum = req.body.addCrewNum;

@@ -2,6 +2,58 @@ import React, { useState } from 'react';
 import { Button, Container, Card, Row } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const DayButton = () => {
+  const [buttonState, setButtonState] = useState({
+	color: 'secondary',
+	text: 'Begin Day',
+  });
+
+  const handleClick = () => {
+	setButtonState({
+	  color: 'success',
+	  text: 'Day Started - head to first job',
+	});
+  };
+
+  return (
+	<Button
+	  variant={buttonState.color}
+	  onClick={handleClick}
+	>
+	  {buttonState.text}
+	</Button>
+  );
+};
+
+const FinishDayButton = () => {
+  const [buttonState, setButtonState] = useState({
+	color: 'secondary',
+	text: 'Finish Day',
+  });
+
+  const handleClick = () => {
+	setButtonState({
+	  color: 'danger',
+	  text: 'All jobs finished',
+	});
+  };
+
+  return (
+	<Card className="w-auto" style={{ display: 'inline-block' }}>
+	  <Card.Body className="p-0">
+		<Button
+		  variant={buttonState.color}
+		  className="w-100"
+		  onClick={handleClick}
+		>
+		  {buttonState.text}
+		</Button>
+	  </Card.Body>
+	</Card>
+  );
+};
+
+
 function EmployeeDashboard(props) {
 	const [completedAppointments, setCompletedAppointments] = useState({});
 
@@ -17,56 +69,6 @@ function EmployeeDashboard(props) {
 		window.open(url, '_blank');
 	};
 
-	const DayButton = () => {
-	  const [buttonState, setButtonState] = useState({
-		color: 'secondary',
-		text: 'Begin Day',
-	  });
-
-	  const handleClick = () => {
-		setButtonState({
-		  color: 'success',
-		  text: 'Day Started - head to first job',
-		});
-	  };
-
-	  return (
-		<Button
-		  variant={buttonState.color}
-		  onClick={handleClick}
-		>
-		  {buttonState.text}
-		</Button>
-	  );
-	};
-
-	const FinishDayButton = () => {
-	  const [buttonState, setButtonState] = useState({
-		color: 'secondary',
-		text: 'Finish Day',
-	  });
-
-	  const handleClick = () => {
-		setButtonState({
-		  color: 'danger',
-		  text: 'All jobs finished',
-		});
-	  };
-
-	  return (
-		<Card className="w-auto" style={{ display: 'inline-block' }}>
-		  <Card.Body className="p-0">
-			<Button
-			  variant={buttonState.color}
-			  className="w-100"
-			  onClick={handleClick}
-			>
-			  {buttonState.text}
-			</Button>
-		  </Card.Body>
-		</Card>
-	  );
-	};
 
 	let card = props.jobsToday.map((val, key) => {
 		if (val.controller_is_outside) {
@@ -112,7 +114,7 @@ function EmployeeDashboard(props) {
 
 	return (
 		<div className="App">
-			<h1>Today's Jobs for Crew {props.crewNum}</h1>
+			<h1>Job list: Crew {props.crewNum}</h1>
 			<br />
 			<br />
 				<Container>
