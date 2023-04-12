@@ -65,9 +65,14 @@ class App extends Component {
             someFieldUpdate: ''
         };
 
-        // The following bindings are set so the App component automatically updates itself whenever they are called
+        // The following bindings are set so the App's methods can refer to the App class as "this" like normal
         this.handleEmpLoginButtonClick = this.handleEmpLoginButtonClick.bind(this);
         this.handleGoToCalendarButtonClick = this.handleGoToCalendarButtonClick.bind(this);
+		this.saveApptInfo = this.saveApptInfo.bind(this);
+		this.addNewAppointment = this.addNewAppointment.bind(this);
+		this.goToPage = this.goToPage.bind(this);
+		this.clearUserInfo = this.clearUserInfo.bind(this);
+		this.getJobsTodayForCrew = this.getJobsTodayForCrew.bind(this);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,11 +129,60 @@ class App extends Component {
     // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered
     handleGoToCalendarButtonClick(custInfo) {
         this.setState({
-            customerInfo: custInfo
-        });
-        axios.post('/api/')
-        this.props.navigate('/calendar');
+			customerInfo: custInfo,
+			loading: true,
+		});
     }
+
+	// takes the calendar object from the CustomerInfoPage component before switching pages
+	saveApptInfo(custInfoComponentState) {
+		this.setState(
+			prevState => ({
+				...prevState,
+				calendar: custInfoComponentState.calendar,
+				newApptParams: {
+					appointmentId: custInfoComponentState.appointmentID,
+					crewName: custInfoComponentState.calendar.crewName,
+					halfDay: null,
+					email: custInfoComponentState.email,
+					firstName: custInfoComponentState.First_Name,
+					lastName: custInfoComponentState.Last_Name
+				}
+			}),
+			() => {
+				console.log(`SAVED CALENDAR TO APP.JS:\n${JSON.stringify(this.state.calendar, null, 2)}`);
+        		this.props.navigate('/calendar');
+			}
+		);
+	}
+
+	async addNewAppointment(halfDayObject) {
+		// now that we know the specific half day that's been selected, we can add it to the params
+		var params = this.state.newApptParams;
+		params.halfDay = halfDayObject;
+
+		// call the POST endpoint with the params as request payload
+		return await axios.post('/api/put-new-appointment', params)
+			.then((response) => {
+				return response.data.success;
+			})
+			.catch((error) => {
+				console.error(error);
+				return false;
+			});
+	}
+
+	// Go to some page (used for child components - passed as prop) 
+	goToPage(pageUrlSuffix) {
+		this.props.navigate(pageUrlSuffix);
+	}
+
+	// Logs a user out by clearing the userInfo state attribute
+	clearUserInfo() {
+		this.setState({
+			userInfo: false
+		})
+	}
 
     // gets a list of today's jobs for the specified crew from the database
     getJobsTodayForCrew(crew_name) {
@@ -181,17 +235,25 @@ class App extends Component {
                 <Routes>
                     <Route path='/' element={<LandingPage propsWork={true}/>}/>
                     <Route path='employee-login' element={<EmployeeSignInPage
+						mainState={this.state}
+						clearUserInfo={this.clearUserInfo}
+						goToPage={this.goToPage}
+						getJobsTodayForCrew={this.getJobsTodayForCrew}
                         onLoginClick={this.handleEmpLoginButtonClick} 
 						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='appointment-info' element={<CustomerInfoPage
-                        onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}/>}/>
+                        onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick} 
+						saveApptInfo={this.saveApptInfo} /> }/>
                     <Route path='calendar' element={<Calendar
-                        custInfo={this.state.customerInfo} />} />
+						goToPage={this.goToPage}
+                        custInfo={this.state.customerInfo}
+						addNewAppointment={this.addNewAppointment}
+						calendar={this.state.calendar} />} />
                     <Route path='owner-dashboard' element={<OwnerDashboard
 						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='employee-dashboard' element={<EmployeeDashboard
                         jobsToday={this.state.fetchJobsTodayData}
-                        crewNum={this.state.userInfo.crew_number} />} />
+                        crewNum={this.state.userInfo.crewName} />} />
                 </Routes>
             </div>
         )
