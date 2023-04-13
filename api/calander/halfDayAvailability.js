@@ -258,7 +258,11 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) 
     let sortedAddresses = await sortAddressesByDriveTime(addresses[0], addresses);
 
     //set the total drive time to what is stored in sortedAddresses
-    halfDayTimes.totalDriveTime = Math.trunc(sortedAddresses.driveTimes.pop()/60)+1;
+    while(sortedAddresses.driveTimes.length > 0 ){
+        halfDayTimes.totalDriveTime += Math.trunc(sortedAddresses.driveTimes.pop()/60)+1;
+    }
+
+
 
     //store the total amount of time the current halfday takes
     halfDayTimes.totalTime = halfDayTimes.totalAppointmentTime +halfDayTimes.totalDriveTime;
@@ -266,7 +270,8 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) 
     //halfday (end - start)= total allotted
     // get appointment time for new appointment
     // get drive time to the new appointment
-    if( (parseInt(halfDay.endTime) - parseInt(halfDay.startTime))  > parseInt(halfDayTimes.totalTime) ){
+    let totalHalfDayTime = (parseInt(halfDay.endTime) - parseInt(halfDay.startTime))*60;
+    if(  totalHalfDayTime > parseInt(halfDayTimes.totalTime) ){
         return Promise.resolve(true);
     }
     return Promise.resolve(false);
