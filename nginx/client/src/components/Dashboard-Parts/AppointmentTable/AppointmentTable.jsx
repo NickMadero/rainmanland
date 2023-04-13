@@ -34,7 +34,7 @@ function SelectableAppointmentTable() {
                 <Form.Control type="date" style={{width: '10rem'}} value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
             </Form.Group>
             <Button onClick={fetchAppointments} className={styles['btn-show']}>Show Appointments</Button>
-            <Table striped bordered className={styles.table}>
+            <Table striped bordered style={{height: '30rem', overflowY:'scroll'}}>
                 <thead>
                 <tr>
                     <th>Address</th>
@@ -68,7 +68,8 @@ function SelectableAppointmentTable() {
                 ))}
                 </tbody>
             </Table>
-        </div>
+            </div>
+        
     );
 }
 

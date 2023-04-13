@@ -25,6 +25,16 @@
     clear:none;
 }
 
+.btn-show:hover{
+    opacity: 0.90 !important;
+    transition: 0.25s !important;
+}
+
+.btn-show:active{
+    scale: 0.90;
+    transition: 0.20s;
+}
+
 h4 {
     text-align: left;
     line-height: 1;
@@ -51,6 +61,6 @@ tr:nth-child(even){
     background-color: #bebebe !important;
 }
 
-table{
-    overflow-y:scroll;
+.table{
+   overflow-y:scroll;
 }

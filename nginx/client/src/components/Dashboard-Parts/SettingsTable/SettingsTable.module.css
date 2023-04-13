@@ -42,7 +42,9 @@ tr:nth-child(even){
     background-color: #fcfcfb !important;
 }
 
-table{
+.table{
     overflow-y:scroll;
-    height: 15rem;
+    height: 18rem;
+    border: 2px solid #0000;
+    border-radius: .25rem;
 }

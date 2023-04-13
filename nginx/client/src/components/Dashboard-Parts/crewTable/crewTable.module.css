@@ -1,11 +1,11 @@
-.wrapper{
+.form-wrapper{
     padding: 1rem;
     box-sizing: border-box; 
     position: relative;
     border-radius: 2px;
-    width:50%;
-    height:100%;
-    gap: 2rem;
+    width:100%;
+    height: auto;
+    gap: 2rem !important;
     flex-wrap: wrap;
     flex-direction: column;
     background-color: rgb(195, 195, 202);
@@ -36,7 +36,7 @@ table{
     overflow-y:scroll;
 }
 
-.btn-add-crew{
+.btn-add{
     background-color: rgb(112, 25, 25);
     color: #ffffff;
     border: 0;
@@ -46,7 +46,11 @@ table{
     height: 2.5rem;
     border-radius: .25rem;
 }
-.btn-add-crew:hover{
+.btn-add:hover{
     opacity: 0.90;
     transition: 0.25s;
+}
+
+.modal{
+    gap: 1rem !important;
 }

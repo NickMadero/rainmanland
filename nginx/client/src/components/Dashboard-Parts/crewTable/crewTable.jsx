@@ -179,10 +179,11 @@ function CrewTable() {
 
     return (
         // displays the crew table
-        <div className={styles['wrapper']}>
+        <div>
+            <div  className={styles['form-wrapper']}>
             <FormGroup>
                 <Form.Label>Crew List</Form.Label>
-                <Button id='btn-add-crew' className={styles['btn-add-crew']} onClick={() => setAddCrewModal(true)}>Add Crew</Button>
+                <Button onClick={() => setAddCrewModal(true)} className={styles['btn-add']}>Add Crew</Button>
             </FormGroup>
             <Table striped bordered className={styles['table']} >
                 <thead>
@@ -205,7 +206,8 @@ function CrewTable() {
                 ))}
                 </tbody>
             </Table>
-
+            </div>
+    
             {/*Modal for adding a new crew */}
             <Modal show={showAddCrewModal} onHide={() => setAddCrewModal(false)}>
                 <Modal.Header closeButton>
