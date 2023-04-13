@@ -195,6 +195,26 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) 
         // check to see if the var is still less than the end time of the half
         // if not dont let the user schedule ( greyed out )
 
+    let currentMultiplier = 1;
+    switch (appointment.brand) {
+        case 'brandTimeFactorHunter': currentMultiplier = parseInt(settings.brandTimeFactorHunter);
+            break;
+        case 'BrandTimeFactorRainbird': currentMultiplier = parseInt(settings.BrandTimeFactorRainbird);
+            break;
+        case 'BrandTimeFactorIrritol': currentMultiplier = parseInt(settings.BrandTimeFactorIrritol);
+            break;
+        case 'BrandTimeFactorRachio': currentMultiplier = parseInt(settings.BrandTimeFactorRachio);
+            break;
+        case 'BrandTimeFactorWeathermatic': currentMultiplier = parseInt(settings.BrandTimeFactorWeathermatic);
+            break;
+        case 'BrandTimeFactorOrbit': currentMultiplier = parseInt(settings.BrandTimeFactorOrbit);
+            break;
+        case 'BrandTimeFactorOther': currentMultiplier = parseInt(settings.BrandTimeFactorOther);
+            break;
+    }
+
+
+
     let halfDayTimes = {
         totalAppointmentTime: 0,
         totalDriveTime: 0,
@@ -204,7 +224,7 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) 
     //TODO add variables in settings for each variable
     //this will loop all the existing appointments in the half day and calculate total time it takes before drive time
     for(let i =0; i < storedHalfDay.length; i++){
-        let appointmentTime =  ((settings.minutesPerZone * storedHalfDay[i].zone_amount) + settings.baseTime);
+        let appointmentTime =  ((settings.minutesPerZone * storedHalfDay[i].zone_amount) + settings.baseTime) * currentMultiplier;
         if(appointmentTime < settings.lowestPossibleTime){
             appointmentTime = settings.lowestPossibleTime;
         }
@@ -218,7 +238,7 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) 
     addresses.push(appointment.address);
 
 
-    let newAppTime = ((settings.minutesPerZone * appointment.zone_amount) + settings.baseTime);
+    let newAppTime = ((settings.minutesPerZone * appointment.zone_amount) + settings.baseTime) * currentMultiplier;
     if(newAppTime < settings.lowestPossibleTime){
         newAppTime = settings.lowestPossibleTime;
     }

@@ -118,6 +118,15 @@ function getSettings() {
                     maxSprinklerForLowest:  parseInt(temp['maxSprinklerForLowest']),
                     baseTime:   parseInt(temp['baseTime']),
                     minutesPerZone: parseInt(temp['minutesPerZone']),
+                    brandTimeFactorHunter: parseInt(temp['BrandTimeFactorHunter']),
+                    BrandTimeFactorRainbird: parseInt(temp['BrandTimeFactorRainbird']),
+                    BrandTimeFactorIrritol: parseInt(temp['BrandTimeFactorIrritol']),
+                    BrandTimeFactorRachio: parseInt(temp['BrandTimeFactorRachio']),
+                    BrandTimeFactorWeathermatic: parseInt(temp['BrandTimeFactorWeathermatic']),
+                    BrandTimeFactorOrbit: parseInt(temp['BrandTimeFactorOrbit']),
+                    BrandTimeFactorOther: parseInt(temp['BrandTimeFactorOther']),
+
+
                 };
 
                 resolve(settings);

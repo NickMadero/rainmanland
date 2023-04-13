@@ -17,9 +17,28 @@ class EmployeeSignInPage extends React.Component {
 		this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-
     // Update the state whenever the user types in the username or password fields
     handleInputChange = event => {
+
+		// if the user is attempting to log in while already logged in, prompt them to log out first
+		if (this.props.mainState.userInfo) {
+			// eslint-disable-next-line no-restricted-globals
+			const userWantsToLogout = confirm("You are already logged in. Log out now?");
+			if (!userWantsToLogout) {
+				if (this.props.mainState.userInfo.user_type === "boss") {
+					this.props.goToPage('/owner-dashboard');
+				}
+				else if (this.props.mainState.userInfo.user_type === "crew_member") {
+					this.props.getJobsTodayForCrew(this.props.mainState.userInfo.crewName)
+					this.props.goToPage('/employee-dashboard');
+				}
+			} else {
+				// Change the mainState userInfo to false to log out
+				this.props.clearUserInfo();
+			}
+		}
+
+		// collect info from event trigger
         const target = event.target;
         const name = target.name;
         const value = target.value;
@@ -36,6 +55,7 @@ class EmployeeSignInPage extends React.Component {
 
     // Handle login form submission
     handleSubmit = event => {
+
         event.preventDefault();
 
         // TODO: handle login logic here
