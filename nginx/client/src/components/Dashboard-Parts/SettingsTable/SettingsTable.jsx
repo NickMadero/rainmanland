@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Form, Button } from 'react-bootstrap';
+import styles from './SettingsTable.module.css'
 
 function SelectableAppointmentTable() {
     const [appointments, setAppointments] = useState([]);
@@ -38,9 +39,10 @@ function SelectableAppointmentTable() {
     };
 
     return (
-        <div style={{ position: 'absolute', top: 400, right: 0, width: '100%', height: '50%', overflowY: 'scroll' }}>
+        <div className={styles.wrapper}>
             <Form.Label>Settings</Form.Label>
-            <Table striped bordered >
+            <div className={styles['table']}>
+            <Table striped bordered>
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -60,6 +62,7 @@ function SelectableAppointmentTable() {
                 ))}
                 </tbody>
             </Table>
+            </div>
         </div>
     );
 }

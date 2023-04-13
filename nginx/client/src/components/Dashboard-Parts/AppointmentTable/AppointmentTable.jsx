@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Form, Button } from 'react-bootstrap';
 
+import styles from './AppointmentTable.module.css'
 function SelectableAppointmentTable() {
     const [appointments, setAppointments] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
@@ -26,14 +27,14 @@ function SelectableAppointmentTable() {
     }
 
     return (
-        <div style={{ position: 'absolute', top: 15, right: 0, width: '50%', height: '50%', overflowY: 'scroll' }}>
+        <div className={styles['wrapper']}>
             <Form.Label style={{paddingLeft:'245px'}}>Appointment Table for selected date.</Form.Label>
             <Form.Group controlId="formDate">
                 <Form.Label>Select Date:</Form.Label>
-                <Form.Control type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
+                <Form.Control type="date" style={{width: '10rem'}} value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
             </Form.Group>
-            <Button onClick={fetchAppointments}>Show Appointments</Button>
-            <Table striped bordered >
+            <Button onClick={fetchAppointments} className={styles['btn-show']}>Show Appointments</Button>
+            <Table striped bordered style={{height: '30rem', overflowY:'scroll'}}>
                 <thead>
                 <tr>
                     <th>Address</th>
@@ -67,7 +68,8 @@ function SelectableAppointmentTable() {
                 ))}
                 </tbody>
             </Table>
-        </div>
+            </div>
+        
     );
 }
 

@@ -19,3 +19,19 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
 }
 
+.logo {
+    width: 50vw; /* Adjust the size as needed */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 500px; /* Set a maximum width for large screens */
+    margin-bottom: 1rem;
+	margin-top: 1rem;
+}
+
+/* Media query for smaller screens, e.g., mobile devices */
+@media screen and (max-width: 767px) {
+    .logo {
+        width: 70vw; /* Adjust the size as needed for mobile devices */
+    }
+}
+
+

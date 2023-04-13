@@ -6,6 +6,8 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 
 const { setAppointment, initCalander } = require("./calander/calender");
+const {storeAppointmentIntoDatabase} = require('./calander/storeAppointment');
+const {getAppointmentsForHalfDay} = require('./crew/loadCrewAppointments');
 
 const dbController = require('./dbController');
 
@@ -90,6 +92,14 @@ app.post('/api/verify-user', (req, res) => {
 			return;
         }
         else {
+			const password_hash = result[0]?.[0]?.password_hash || false;
+			if (!password_hash) {
+				res.json({
+					success: false,
+					message: 'User does not exist.'
+				});
+				return;
+			}
             console.log("User email exists.");
             bcrypt.compare(pass, result[0][0].password_hash, function(err, hashResult) {
                 if (hashResult) {
@@ -146,7 +156,7 @@ app.post('/api/add-user', (req, res) => {
 	// raw info from request
 	const email = req.body.addEmail;
 	const plaintextPass = req.body.addPassword;
-	const firstName = req.body.addFirstName;
+	const firstgame = req.body.addFirstName;
 	const lastName = req.body.addLastName;
 	const phone = req.body.addPhoneNum;
 	const crewNum = req.body.addCrewNum;
@@ -217,8 +227,6 @@ app.post('/api/get-controller-brand', (req, res) => {
 
 //author : Nick Madero
 app.post('/api/insert-newcustomer', (req, res) => {
-    // console.log(req.body); // added console.log statement
-
     const new_appointment = `CALL create_new_appointment_return_app_id(?, ?, ?, ?, ?, ?, ?, ?, ?, @appointment_id_out);`;
     const app_id = `SELECT @appointment_id_out AS appointment_id;`;
     dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address,
@@ -245,8 +253,6 @@ app.post('/api/insert-newcustomer', (req, res) => {
                 };
                 res.send(responseObj);
             });
-
-            // res.send(result);
         }
     })
 })
@@ -322,6 +328,7 @@ app.post('/api/show-appointments', (req, res) => {
     })
 });
 
+// Add a crew member
 app.post('/api/add-crewmember' , (req,res) => {
     const add_member = "call put_user_on_crew(?,?);";
     dbController.query(add_member,[req.body.email,req.body.crew_name],(err,result) =>{
@@ -332,6 +339,8 @@ app.post('/api/add-crewmember' , (req,res) => {
         }
     })
 })
+
+// Remove a crew member
 app.post('/api/remove-crewmember', (req,res) => {
     const remove_member = "call remove_user_from_crew(?,?);";
     if (!req.body.crew_name) {
@@ -348,8 +357,6 @@ app.post('/api/remove-crewmember', (req,res) => {
     }
 })
 
-
-
 // author Nick
 app.post('/api/add-zip-to-crew', (req,res) =>{
     const add_zip_to_crew = "call add_zip_to_crew(?,?);";
@@ -361,6 +368,7 @@ app.post('/api/add-zip-to-crew', (req,res) =>{
         }
     })
 })
+
 // author Nick
 app.post('/api/remove-zip-from-crew', (req,res) =>{
     const remove_zip_to_crew = "call remove_zip_from_crew(?,?);";
@@ -399,7 +407,6 @@ app.post('/api/get-zip-by-crew', (req,res) =>{
         }
     });
 });
-
 
 // author Nick
 app.post('/api/get-crew', (req, res) => {
@@ -445,6 +452,8 @@ app.post('/api/add-new-crew', (req,res) =>{
         }
     })
 })
+
+// Get settings
 app.post('/api/get-settings', (req, res) => {
     const getSettings = "call get_settings();";
     dbController.query(getSettings, (err, result) => {
@@ -462,7 +471,7 @@ app.post('/api/get-settings', (req, res) => {
     })
 })
 
-
+// Change a setting
 app.post('/api/put-setting', (req, res) => {
     const putSetting = "call put_setting(?, ?);";
 
@@ -476,9 +485,45 @@ app.post('/api/put-setting', (req, res) => {
     })
 })
 
+/**
+ * @param req require that req has appointmentId, crewName, halfDay, email, firstName, lastName
+ *  stored as those names
+ */
+app.post('/api/put-new-appointment', async (req, res) => {
 
+    const { appointmentId, crewName, halfDay, email, firstName, lastName } = req.body;
 
+    try {
+        const result = await storeAppointmentIntoDatabase(appointmentId, crewName, halfDay, email, firstName, lastName);
+        res.status(200).json({ success: true, message: 'Appointment stored successfully', data: result });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ success: false, message: 'Error storing appointment' });
+    }
+})
 
+/**
+ * this is used to get the appointments that occur on a given halfday
+ * @param date "YYYY-MM-DD" the date for which the appointment is to occur
+ * @param whichHalf (first, second) which half of a date is it
+ * @param crewName the name of the crew you wish to get
+ */
+app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
+    try {
+        const { date, whichHalf, crewName } = req.body;
+
+        if (!date || !whichHalf || !crewName) {
+            return res.status(400).json({ error: 'Missing required parameters' });
+        }
+
+        const sortedAppointments = await getAppointmentsForHalfDay(date, whichHalf, crewName);
+        res.json(sortedAppointments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+}
 
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Table, Form, Button, FormGroup, FormLabel, Modal } from 'react-bootstrap';
 import { useState, useEffect } from "react";
+import styles from './crewTable.module.css'
 
 function CrewTable() {
 
@@ -178,12 +179,13 @@ function CrewTable() {
 
     return (
         // displays the crew table
-        <div style={{ position: "absolute", top: 15, left: 0, width: '50%', height: '50%', overflowY: 'scroll' }}>
+        <div>
+            <div  className={styles['form-wrapper']}>
             <FormGroup>
                 <Form.Label>Crew List</Form.Label>
-                <Button   style={{marginLeft:"5px", marginBottom:"5px"}} onClick={() => setAddCrewModal(true)}>Add Crew</Button>
+                <Button onClick={() => setAddCrewModal(true)} className={styles['btn-add']}>Add Crew</Button>
             </FormGroup>
-            <Table striped bordered style={{border:"solid"}} >
+            <Table striped bordered className={styles['table']} >
                 <thead>
                 <tr>
                     <th>Crews</th>
@@ -204,7 +206,8 @@ function CrewTable() {
                 ))}
                 </tbody>
             </Table>
-
+            </div>
+    
             {/*Modal for adding a new crew */}
             <Modal show={showAddCrewModal} onHide={() => setAddCrewModal(false)}>
                 <Modal.Header closeButton>

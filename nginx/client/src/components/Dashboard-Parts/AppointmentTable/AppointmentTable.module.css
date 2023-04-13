@@ -1,8 +1,42 @@
 .appt-heading{
     color: #000000;
 }
+
+.wrapper {
+    background-color: rgba(119, 136, 153, 0.664);
+    position: relative;
+    flex-wrap: wrap;
+    flex-direction: column;
+    display: flex;
+    gap: 1rem;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    border:#000000 solid 2px;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.btn-show{
+    align-self: flex-start;
+    font-size: 1.5rem;
+    width: fit-content;
+    height: fit-content;
+    clear:none;
+}
+
+.btn-show:hover{
+    opacity: 0.90 !important;
+    transition: 0.25s !important;
+}
+
+.btn-show:active{
+    scale: 0.90;
+    transition: 0.20s;
+}
+
 h4 {
-    text-align: center;
+    text-align: left;
     line-height: 1;
     margin: 0rem;
 }
@@ -11,26 +45,22 @@ th,
 td {
     padding: 0.75rem;
     text-align: center;
-    color: white;
+    color: rgb(0, 0, 0);
     position: sticky;
 }
+td {
+    font-weight: 600;
+}
 tr {
-    background-color: #253c72;
+    background-color: #d3cdcd;
 }
 th {
-    background-color:#447c4496;
+    background-color:#000000;
 }
 tr:nth-child(even){
-    background-color: #13369785;
+    background-color: #bebebe !important;
 }
 
-table{
-    overflow-y:scroll;
-}
-
-.wrapper {
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+.table{
+   overflow-y:scroll;
 }

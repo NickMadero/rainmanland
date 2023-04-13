@@ -94,7 +94,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
     //TODO check if there is enough time left in half day to fit in another appointment
     //TODO ***************************************************************************
-    let notEnoughTime = await checkForEnoughTime(halfDay,appointment, storedHalfDay.appointments[0]);
+    let notEnoughTime = await checkForEnoughTime(halfDay,appointment, storedHalfDay.appointments[0], settings);
     if(notEnoughTime){
         isTooFar = true;
         return Promise.resolve(isTooFar);
@@ -110,7 +110,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
  * @returns {Promise<unknown>} an object that has all of the appointments that occur on the half day
  */
 async function getStoredHalfDay(halfDay, crewName){
-    const getAppOnHalfDay = 'call rainmanland.get_appointments_on_half_day_from_date_crew(?, ?);';
+    const getAppOnHalfDay = 'call rainmanland.get_appointments_on_half_day_from_date_crew_by_which_half(?, ?, ?);';
 
     let storedHalfDay = {
          appointments :[],
@@ -118,7 +118,7 @@ async function getStoredHalfDay(halfDay, crewName){
 
 
     return new Promise((resolve, reject) => {
-        dbController.query(getAppOnHalfDay, [crewName,halfDay.date], (err, result) => {
+        dbController.query(getAppOnHalfDay, [crewName,halfDay.date, halfDay.whichHalf], (err, result) => {
             if (err) {
                 reject(err);
             } else {
@@ -132,6 +132,14 @@ async function getStoredHalfDay(halfDay, crewName){
         });
     });
 }
+
+/**
+ * this will get all the information needed for addresses to be sorted by drive time
+ * @requires sortAddressesByDriveTime
+ * @param origin
+ * @param destination
+ * @returns {Promise<{duration: number, distance: *}|null>}
+ */
 async function getDrivingDistance(origin, destination) {
     try {
         const response = await googleMapsClient.distanceMatrix({
@@ -174,17 +182,38 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)
 /**
  * this function will check if there is enough time left in a half day to schedule another appointment
  * or to not allow another appointment to fit
+ *
  * @param halfDay the half day to schedule the new appointment into
  * @param appointment the new appointment to schedule into the half day
  * @param storedHalfDay an array of appointments that are occuring on the given half day currently
  * @returns {Promise<void>} returns true for when an appointment can fit into halfday
  *
  */
-async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
+async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) {
     //TODO check if there is enough time left in half day to fit in another appointment
         // make var for computing the amount of time it takes ie 5 + 3X the amount zones
         // check to see if the var is still less than the end time of the half
         // if not dont let the user schedule ( greyed out )
+
+    let currentMultiplier = 1;
+    switch (appointment.brand) {
+        case 'brandTimeFactorHunter': currentMultiplier = parseInt(settings.brandTimeFactorHunter);
+            break;
+        case 'BrandTimeFactorRainbird': currentMultiplier = parseInt(settings.BrandTimeFactorRainbird);
+            break;
+        case 'BrandTimeFactorIrritol': currentMultiplier = parseInt(settings.BrandTimeFactorIrritol);
+            break;
+        case 'BrandTimeFactorRachio': currentMultiplier = parseInt(settings.BrandTimeFactorRachio);
+            break;
+        case 'BrandTimeFactorWeathermatic': currentMultiplier = parseInt(settings.BrandTimeFactorWeathermatic);
+            break;
+        case 'BrandTimeFactorOrbit': currentMultiplier = parseInt(settings.BrandTimeFactorOrbit);
+            break;
+        case 'BrandTimeFactorOther': currentMultiplier = parseInt(settings.BrandTimeFactorOther);
+            break;
+    }
+
+
 
     let halfDayTimes = {
         totalAppointmentTime: 0,
@@ -195,7 +224,10 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     //TODO add variables in settings for each variable
     //this will loop all the existing appointments in the half day and calculate total time it takes before drive time
     for(let i =0; i < storedHalfDay.length; i++){
-        let appointmentTime =  ((3 * storedHalfDay[i].zone_amount) + 5);
+        let appointmentTime =  ((settings.minutesPerZone * storedHalfDay[i].zone_amount) + settings.baseTime) * currentMultiplier;
+        if(appointmentTime < settings.lowestPossibleTime){
+            appointmentTime = settings.lowestPossibleTime;
+        }
         halfDayTimes.totalAppointmentTime += appointmentTime;
     }
 
@@ -206,8 +238,12 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     addresses.push(appointment.address);
 
 
+    let newAppTime = ((settings.minutesPerZone * appointment.zone_amount) + settings.baseTime) * currentMultiplier;
+    if(newAppTime < settings.lowestPossibleTime){
+        newAppTime = settings.lowestPossibleTime;
+    }
     //add new appointment time
-    halfDayTimes.totalAppointmentTime += ((3 * appointment.zone_amount) + 5);
+    halfDayTimes.totalAppointmentTime += newAppTime;
 
     // let addresses1 = [
     //     '1635 Elmwood Avenue, Cranston, RI 02910',
@@ -222,7 +258,11 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     let sortedAddresses = await sortAddressesByDriveTime(addresses[0], addresses);
 
     //set the total drive time to what is stored in sortedAddresses
-    halfDayTimes.totalDriveTime = Math.trunc(sortedAddresses.driveTimes.pop()/60)+1;
+    while(sortedAddresses.driveTimes.length > 0 ){
+        halfDayTimes.totalDriveTime += Math.trunc(sortedAddresses.driveTimes.pop()/60)+1;
+    }
+
+
 
     //store the total amount of time the current halfday takes
     halfDayTimes.totalTime = halfDayTimes.totalAppointmentTime +halfDayTimes.totalDriveTime;
@@ -230,13 +270,20 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay) {
     //halfday (end - start)= total allotted
     // get appointment time for new appointment
     // get drive time to the new appointment
-    if( (halfDay.endTime - halfDay.startTime)  < halfDayTimes.totalTime ){
+    let totalHalfDayTime = (parseInt(halfDay.endTime) - parseInt(halfDay.startTime))*60;
+    if(  totalHalfDayTime > parseInt(halfDayTimes.totalTime) ){
         return Promise.resolve(true);
     }
     return Promise.resolve(false);
 }
 
-
+/**
+ * this will take an address and an array of addresses and return a sorted list of them
+ * @requires getDrivingDistance
+ * @param startAddr the starting address
+ * @param addresses array of addresses to visit in any order
+ * @returns {Promise<{driveTimes: *, sortedAddresses: *}>} returns an array of sorted addresses by drive time
+ */
 async function sortAddressesByDriveTime(startAddr, addresses){
     const results = await Promise.all(
         addresses.map((addr) =>
@@ -267,4 +314,4 @@ async function sortAddressesByDriveTime(startAddr, addresses){
 }
 
 
-module.exports = {checkCalendarAvailability};
+module.exports = {checkCalendarAvailability, getDrivingDistance, sortAddressesByDriveTime, googleMapsClient};

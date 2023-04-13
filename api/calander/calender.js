@@ -2,10 +2,14 @@ const { generateHalfDaysForCrew } = require('./generateHalfDay');
 const { checkCalendarAvailability } = require('./halfDayAvailability');
 const dbController = require('../dbController');
 
+const {getAppointmentsForHalfDay} = require('../crew/loadCrewAppointments');
 
 
 async function initCalander(appointmentID, address, isComplete, zoneAmount,
                             controllerBrand, controllerOutside, zipCode) {
+
+    // await getAppointmentsForHalfDay('2023-04-08','first','one');
+
     //this keep all of the appointment information
     let appointment = {};
     //this stores the crew name
@@ -109,7 +113,20 @@ function getSettings() {
                     start_time_second_half: temp['start_time_second_half'],
                     end_time_second_half: temp['end_time_second_half'],
                     maxDistanceHalfday: temp['halfdayMaxDistanceRestriction(in_km)'],
-                    maxDriveTimeHalfDay: temp['halfdayMaxDriveTimeRestriction(in_min)']
+                    maxDriveTimeHalfDay: temp['halfdayMaxDriveTimeRestriction(in_min)'],
+                    lowestPossibleTime: parseInt(temp['lowestPossibleTime']),
+                    maxSprinklerForLowest:  parseInt(temp['maxSprinklerForLowest']),
+                    baseTime:   parseInt(temp['baseTime']),
+                    minutesPerZone: parseInt(temp['minutesPerZone']),
+                    brandTimeFactorHunter: parseInt(temp['BrandTimeFactorHunter']),
+                    BrandTimeFactorRainbird: parseInt(temp['BrandTimeFactorRainbird']),
+                    BrandTimeFactorIrritol: parseInt(temp['BrandTimeFactorIrritol']),
+                    BrandTimeFactorRachio: parseInt(temp['BrandTimeFactorRachio']),
+                    BrandTimeFactorWeathermatic: parseInt(temp['BrandTimeFactorWeathermatic']),
+                    BrandTimeFactorOrbit: parseInt(temp['BrandTimeFactorOrbit']),
+                    BrandTimeFactorOther: parseInt(temp['BrandTimeFactorOther']),
+
+
                 };
 
                 resolve(settings);
