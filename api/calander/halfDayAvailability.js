@@ -16,13 +16,13 @@ const googleMapsClient = require('@google/maps').createClient({
     Promise: Promise
 });
 
-async function checkCalendarAvailability(calendar, appointment, settings, zipCodes){
+async function checkCalendarAvailability(calendar, appointment, settings, zipCodes, zipCodeObject){
 
-    console.log(appointment);
+    // console.log(appointment);
 
     for(let i = 0; i < calendar.halfDays.length; i++ ){
-        calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings, zipCodes);
-        console.log(calendar.halfDays[i]);
+        calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings, zipCodes, zipCodeObject);
+        // console.log(calendar.halfDays[i]);
     }
 
 
@@ -36,12 +36,12 @@ async function checkCalendarAvailability(calendar, appointment, settings, zipCod
  * @param appointment
  * @returns {Promise<void>}
  */
-async function checkHalfDay(halfDay, appointment, crewName, settings, zipCodes){
+async function checkHalfDay(halfDay, appointment, crewName, settings, zipCodes, zipCodeObject){
 
     //TODO add a check to see the max number of half days a zip code can have
 
     // check if the new appointment is not in the service area for the crew
-    if( await checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)){
+    if( await checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes, zipCodeObject)){
         halfDay.isAvailable = 0;
         return Promise.resolve(halfDay);
     }
@@ -70,26 +70,37 @@ async function checkHalfDay(halfDay, appointment, crewName, settings, zipCodes){
  * @param appointment the new appointment that is trying to be scheduled
  * @returns {Promise<boolean>} a boolean value to determine if an appointment is too far
  */
-async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings){
+async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings) {
     let isTooFar = false;
 
     //this will query the database to get all the appointments on a half day to compare distance to new appointment
     let storedHalfDay = await getStoredHalfDay(halfDay, crewName);
-    if(storedHalfDay.appointments[0].length == 0){
+    if (storedHalfDay.appointments[0].length == 0) {
         isTooFar = false;
         return Promise.resolve(isTooFar);
     }
+
+    let sortestDistanceBetweenAppoi = await getDrivingDistance(storedHalfDay.appointments[0][0].address, appointment.address);
+
+    //loop though all of the appointments and find the shortest drive time
+    for (let i = 0; i < storedHalfDay.appointments[0].length; i++) {
+
     //the appointment that is already scheduled
-    let firstApp = storedHalfDay.appointments[0][0];
+    let firstApp = storedHalfDay.appointments[0][i];
 
 
     //check distance between two appointments
     let distanceBetweenAppointments = await getDrivingDistance(firstApp.address, appointment.address);
+
+    if (distanceBetweenAppointments.duration < sortestDistanceBetweenAppoi.duration){
+        sortestDistanceBetweenAppoi = distanceBetweenAppointments;
+        }
+    }
         //compare two addresses
     //TODO change to a max drive time to next appointment
-    if(distanceBetweenAppointments.duration > parseInt(settings.maxDriveTimeHalfDay)){
+    if(sortestDistanceBetweenAppoi.duration > parseInt(settings.maxDriveTimeHalfDay)){
         isTooFar = true;
-        return Promise.resolve(isTooFar);
+         return Promise.resolve(isTooFar);
     }
 
 
@@ -170,13 +181,14 @@ async function getDrivingDistance(origin, destination) {
     }
 }
 
-async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes){
+async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes, zipCodeObject){
     let notInServiceArea = false;
 
     if(!zipCodes.includes(appointment.zipCode)){
         notInServiceArea = true;
         return Promise.resolve(notInServiceArea);
     }
+
 
     return Promise.resolve(notInServiceArea);
 }
@@ -273,7 +285,7 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) 
     // get appointment time for new appointment
     // get drive time to the new appointment
     let totalHalfDayTime = (parseInt(halfDay.endTime) - parseInt(halfDay.startTime))*60;
-    if(  totalHalfDayTime > parseInt(halfDayTimes.totalTime) ){
+    if(  totalHalfDayTime < parseInt(halfDayTimes.totalTime) ){
         return Promise.resolve(true);
     }
     return Promise.resolve(false);

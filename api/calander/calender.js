@@ -22,13 +22,16 @@ async function initCalander(appointmentID, address, isComplete, zoneAmount,
     // this calendar object is has all the information that it needs to display a calendar for a specific appointment
     let calendar = {};
 
+    //this gets the zip codes to get the max half days
+    let zipCodeObject = {};
+
 
 
     await setAppointment(appointment, appointmentID, address, isComplete, zoneAmount, controllerBrand, controllerOutside, zipCode);
     crew = await setCurrentCrewInit();
     zip = await getZipCodes(crew.crewName);
     settings = await getSettings();
-
+    zipCodeObject = await getZipCodesObject(crew.crewName);
 
 
     //this will store all the exsiting half-days into the object
@@ -43,7 +46,7 @@ async function initCalander(appointmentID, address, isComplete, zoneAmount,
 
     //TODO get all halfdays for calender as an array? and iterate through them all checking
     //     if they are available or not using the checkHalfDayAvailable function
-    calendar = await checkCalendarAvailability(calendar, appointment, settings, zip);
+    calendar = await checkCalendarAvailability(calendar, appointment, settings, zip, zipCodeObject);
 
 
     return Promise.resolve(calendar);
@@ -87,6 +90,20 @@ function getZipCodes(crewName) {
                 reject(err);
             } else {
                 const zipCodes = result[0].map(zipCodeReturn => zipCodeReturn.zip_code);
+                resolve(zipCodes);
+            }
+        });
+    });
+}
+function getZipCodesObject(crewName) {
+    const getZipCodes = 'call rainmanland.get_all_zip_codes_serviced_by_crew(?);'
+
+    return new Promise((resolve, reject) => {
+        dbController.query(getZipCodes, [crewName], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                const zipCodes = result[0].map(zipCodeReturn => zipCodeReturn);
                 resolve(zipCodes);
             }
         });
