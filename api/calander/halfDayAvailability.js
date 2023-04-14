@@ -11,18 +11,41 @@
 const dbController = require("../dbController");
 const {add} = require("nodemon/lib/rules");
 
+const apiKey = 'AIzaSyAF2m0svp07tGLzObVsQFEIMw6EpRh14Hc';
+
 const googleMapsClient = require('@google/maps').createClient({
-    key: 'AIzaSyAF2m0svp07tGLzObVsQFEIMw6EpRh14Hc',
+    key: apiKey,
     Promise: Promise
 });
+
 
 async function checkCalendarAvailability(calendar, appointment, settings, zipCodes, zipCodeObject){
 
     // console.log(appointment);
+    calendar.currentHalfDaysForZip = 0;
+    zipCodeObject.datesForZip = [];
 
     for(let i = 0; i < calendar.halfDays.length; i++ ){
-        calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings, zipCodes, zipCodeObject);
+        calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings, zipCodes, zipCodeObject, calendar);
         // console.log(calendar.halfDays[i]);
+    }
+
+    for(let i = 0; i < calendar.halfDays.length; i++ ){
+        // calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings, zipCodes, zipCodeObject, calendar);
+        // console.log(calendar.halfDays[i]);
+
+
+
+
+        let tempDate = calendar.halfDays[i].date;
+        let tempHalf = calendar.halfDays[i].whichHalf;
+
+        if(!zipCodeObject.datesForZip.some(da => da.date === tempDate && da.whichHalf === tempHalf)){
+            calendar.halfDays[i].isAvailable = 0;
+        }
+        else if(zipCodeObject.datesForZip.some(da => da.date === tempDate && da.whichHalf === tempHalf)){
+            calendar.halfDays[i].isAvailable = 1;
+        }
     }
 
 
@@ -36,19 +59,19 @@ async function checkCalendarAvailability(calendar, appointment, settings, zipCod
  * @param appointment
  * @returns {Promise<void>}
  */
-async function checkHalfDay(halfDay, appointment, crewName, settings, zipCodes, zipCodeObject){
+async function checkHalfDay(halfDay, appointment, crewName, settings, zipCodes, zipCodeObject, calendar){
 
     //TODO add a check to see the max number of half days a zip code can have
 
     // check if the new appointment is not in the service area for the crew
-    if( await checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes, zipCodeObject)){
+    if( await checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes, zipCodeObject, calendar)){
         halfDay.isAvailable = 0;
         return Promise.resolve(halfDay);
     }
 
     //TODO compare distance of nearest appointment
     //check if an appointent is too far from an existing appointment on a half day
-    if( await checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings) === true){
+    if( await checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings, zipCodeObject, calendar) === true){
             halfDay.isAvailable = 0;
             return Promise.resolve(halfDay);
     }
@@ -70,7 +93,7 @@ async function checkHalfDay(halfDay, appointment, crewName, settings, zipCodes, 
  * @param appointment the new appointment that is trying to be scheduled
  * @returns {Promise<boolean>} a boolean value to determine if an appointment is too far
  */
-async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings) {
+async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings, zipCodeObject, calendar) {
     let isTooFar = false;
 
     //this will query the database to get all the appointments on a half day to compare distance to new appointment
@@ -79,6 +102,24 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
         isTooFar = false;
         return Promise.resolve(isTooFar);
     }
+
+    for(let i = 0; i < storedHalfDay.appointments[0].length; i++) {
+        // let tempApp = storedHalfDay.appointments[0][i];
+        let tempApp = await getZipCode(storedHalfDay.appointments[0][i].address, apiKey);
+        if (tempApp === appointment.zipCode){
+            calendar.currentHalfDaysForZip += 1;
+
+            zipCodeObject.datesForZip.push(halfDay);
+
+
+            break;
+        }
+    }
+
+    // if(calendar.currentHalfDaysForZip > calendar.maxHalfDaysForZip){
+    //     isTooFar = true;
+    //     return Promise.resolve(isTooFar);
+    // }
 
     let sortestDistanceBetweenAppoi = await getDrivingDistance(storedHalfDay.appointments[0][0].address, appointment.address);
 
@@ -181,7 +222,7 @@ async function getDrivingDistance(origin, destination) {
     }
 }
 
-async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes, zipCodeObject){
+async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes, zipCodeObject, calendar){
     let notInServiceArea = false;
 
     if(!zipCodes.includes(appointment.zipCode)){
@@ -189,6 +230,14 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes,
         return Promise.resolve(notInServiceArea);
     }
 
+    let temp = zipCodeObject.find(item => item.zip_code === appointment.zipCode);
+    calendar.maxHalfDaysForZip = temp.max_half_days;
+    // calendar.currentHalfDaysForZip = calendar.currentHalfDaysForZip+1;
+
+    if(calendar.currentHalfDaysForZip > calendar.maxHalfDaysForZip){
+        notInServiceArea = true;
+        return Promise.resolve(notInServiceArea);
+    }
 
     return Promise.resolve(notInServiceArea);
 }
@@ -327,5 +376,11 @@ async function sortAddressesByDriveTime(startAddr, addresses){
     return Promise.resolve({ sortedAddresses, driveTimes });
 }
 
+async function getZipCode(address, apiKey) {
+    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`);
+    const data = await response.json();
+    const result = data.results[0];
+    return result && result.address_components.find(c => c.types.includes('postal_code')).short_name;
+}
 
 module.exports = {checkCalendarAvailability, getDrivingDistance, sortAddressesByDriveTime, googleMapsClient};
