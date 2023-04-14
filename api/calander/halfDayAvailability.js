@@ -38,12 +38,15 @@ async function checkCalendarAvailability(calendar, appointment, settings, zipCod
  */
 async function checkHalfDay(halfDay, appointment, crewName, settings, zipCodes){
 
+    //TODO add a check to see the max number of half days a zip code can have
+
     // check if the new appointment is not in the service area for the crew
     if( await checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)){
         halfDay.isAvailable = 0;
         return Promise.resolve(halfDay);
     }
 
+    //TODO compare distance of nearest appointment
     //check if an appointent is too far from an existing appointment on a half day
     if( await checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crewName, settings) === true){
             halfDay.isAvailable = 0;
@@ -92,8 +95,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
 
 
-    //TODO check if there is enough time left in half day to fit in another appointment
-    //TODO ***************************************************************************
+    // check if there is enough time left in half day to fit in another appointment
     let notEnoughTime = await checkForEnoughTime(halfDay,appointment, storedHalfDay.appointments[0], settings);
     if(notEnoughTime){
         isTooFar = true;
@@ -190,7 +192,7 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes)
  *
  */
 async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) {
-    //TODO check if there is enough time left in half day to fit in another appointment
+    // check if there is enough time left in half day to fit in another appointment
         // make var for computing the amount of time it takes ie 5 + 3X the amount zones
         // check to see if the var is still less than the end time of the half
         // if not dont let the user schedule ( greyed out )
@@ -221,7 +223,7 @@ async function checkForEnoughTime(halfDay,appointment, storedHalfDay, settings) 
         totalTime: 0,
     };
 
-    //TODO add variables in settings for each variable
+    // add variables in settings for each variable
     //this will loop all the existing appointments in the half day and calculate total time it takes before drive time
     for(let i =0; i < storedHalfDay.length; i++){
         let appointmentTime =  ((settings.minutesPerZone * storedHalfDay[i].zone_amount) + settings.baseTime) * currentMultiplier;
