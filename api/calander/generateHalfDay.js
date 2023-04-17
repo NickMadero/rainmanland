@@ -146,10 +146,10 @@ console.log(calendar)
  * @returns {Promise<void>}
  */
 async function storeHalfDaysIntDatabase(firstHalfDay, secondHalfDay, crewName) {
-    const addFirstHalf =  'CALL `rainmanland`.`add_new_half_day_for_crew`' +
+    const addFirstHalf =  'CALL `add_new_half_day_for_crew`' +
         '(\'' + crewName + '\', \'' + firstHalfDay.date + '\', \'' + firstHalfDay.whichHalf + '\', \'' +
         firstHalfDay.startTime + '\', \'' + firstHalfDay.endTime + '\');';
-    const addSecondHalf =  'CALL `rainmanland`.`add_new_half_day_for_crew`' +
+    const addSecondHalf =  'CALL `add_new_half_day_for_crew`' +
         '(\'' + crewName + '\', \'' + secondHalfDay.date + '\', \'' + secondHalfDay.whichHalf + '\', \'' +
         secondHalfDay.startTime + '\', \'' + secondHalfDay.endTime + '\');';
 

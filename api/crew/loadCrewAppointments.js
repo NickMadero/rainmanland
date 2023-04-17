@@ -38,7 +38,7 @@ async function getAppointmentsForHalfDay(date, whichHalf, crewName){
  * @returns {Promise<unknown>} an array of appointments on the half day
  */
 async function getStoredHalfDay(date, whichHalf, crewName){
-    const getAppOnHalfDay = 'call rainmanland.get_appointments_on_half_day_from_date_crew_by_which_half(?, ?, ?);';
+    const getAppOnHalfDay = 'call get_appointments_on_half_day_from_date_crew_by_which_half(?, ?, ?);';
 
     let storedHalfDay = {
         appointments :[],
@@ -97,7 +97,7 @@ async function sortAppointmentsByDriveTime(startAddr, appointments) {
 
 
 async function getCrewStartingLocation( crewName){
-    const getCrewStartingLocation = 'call rainmanland.get_crew_starting_location(?);';
+    const getCrewStartingLocation = 'call get_crew_starting_location(?);';
 
 
 

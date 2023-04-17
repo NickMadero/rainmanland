@@ -164,7 +164,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
  * @returns {Promise<unknown>} an object that has all of the appointments that occur on the half day
  */
 async function getStoredHalfDay(halfDay, crewName){
-    const getAppOnHalfDay = 'call rainmanland.get_appointments_on_half_day_from_date_crew_by_which_half(?, ?, ?);';
+    const getAppOnHalfDay = 'call get_appointments_on_half_day_from_date_crew_by_which_half(?, ?, ?);';
 
     let storedHalfDay = {
          appointments :[],

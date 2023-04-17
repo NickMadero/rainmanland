@@ -16,7 +16,7 @@ const dbController = require("../dbController");
  */
 async function storeAppointmentIntoDatabase(appointmentId, crewName, halfDay, email, firstName, lastName){
     //database call
-    const putAppointmentOnHalfday = 'CALL `rainmanland`.`put_appointment_on_half_day`(?, ?, ?, ?, ?, ?, ?);';
+    const putAppointmentOnHalfday = 'CALL `put_appointment_on_half_day`(?, ?, ?, ?, ?, ?, ?);';
 
     return new Promise((resolve, reject) => {
         dbController.query(putAppointmentOnHalfday,
