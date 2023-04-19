@@ -49,7 +49,6 @@ async function checkCalendarAvailability(calendar, appointment, settings, zipCod
         }
     }
 
-
     return Promise.resolve(calendar);
 }
 
