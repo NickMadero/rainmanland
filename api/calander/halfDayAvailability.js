@@ -30,6 +30,7 @@ async function checkCalendarAvailability(calendar, appointment, settings, zipCod
         // console.log(calendar.halfDays[i]);
     }
 
+    if(parseInt(calendar.currentHalfDaysForZip) >= parseInt(calendar.maxHalfDaysForZip))
     for(let i = 0; i < calendar.halfDays.length; i++ ){
         // calendar.halfDays[i] = await checkHalfDay(calendar.halfDays[i], appointment, calendar.crewName,settings, zipCodes, zipCodeObject, calendar);
         // console.log(calendar.halfDays[i]);
@@ -44,7 +45,7 @@ async function checkCalendarAvailability(calendar, appointment, settings, zipCod
             calendar.halfDays[i].isAvailable = 0;
         }
         else if(zipCodeObject.datesForZip.some(da => da.date === tempDate && da.whichHalf === tempHalf)){
-            calendar.halfDays[i].isAvailable = 1;
+            // calendar.halfDays[i].isAvailable = 1;
         }
     }
 
@@ -234,10 +235,10 @@ async function checkIfAppointmentIsInServiceArea(halfDay, appointment, zipCodes,
     calendar.maxHalfDaysForZip = temp.max_half_days;
     // calendar.currentHalfDaysForZip = calendar.currentHalfDaysForZip+1;
 
-    if(calendar.currentHalfDaysForZip > calendar.maxHalfDaysForZip){
-        notInServiceArea = true;
-        return Promise.resolve(notInServiceArea);
-    }
+    // if(calendar.currentHalfDaysForZip > calendar.maxHalfDaysForZip){
+    //     notInServiceArea = true;
+    //     return Promise.resolve(notInServiceArea);
+    // }
 
     return Promise.resolve(notInServiceArea);
 }

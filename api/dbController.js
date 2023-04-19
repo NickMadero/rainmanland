@@ -14,7 +14,7 @@ const mysql = require('mysql2');
     	host            : '127.0.0.1',
     	user            : 'dev',
     	password        : 'dev',
-    	database        : 'rainmanland',
+    	database        : 'rainmanland-test',
 		port			: '3307'
 	});
 
