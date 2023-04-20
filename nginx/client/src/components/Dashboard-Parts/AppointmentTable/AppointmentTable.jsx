@@ -27,14 +27,14 @@ function SelectableAppointmentTable() {
     }
 
     return (
-        <div className={styles['wrapper']}>
-            <Form.Label style={{paddingLeft:'245px'}}>Appointment Table for selected date.</Form.Label>
+        <div className={styles['appt-wrapper']}>
+            <Form.Label className={styles['appt-label']}>View Appointments</Form.Label>
             <Form.Group controlId="formDate">
                 <Form.Label>Select Date:</Form.Label>
                 <Form.Control type="date" style={{width: '10rem'}} value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
             </Form.Group>
             <Button onClick={fetchAppointments} className={styles['btn-show']}>Show Appointments</Button>
-            <Table striped bordered style={{height: '30rem', overflowY:'scroll'}}>
+            <Table className={styles['table']}>
                 <thead>
                 <tr>
                     <th>Address</th>

@@ -39,10 +39,10 @@ function SelectableAppointmentTable() {
     };
 
     return (
-        <div className={styles.wrapper}>
-            <Form.Label>Settings</Form.Label>
-            <div className={styles['table']}>
-            <Table striped bordered>
+        <div className={styles['wrapper']}>
+            <Form.Label className={styles['settings-label']}>Settings</Form.Label>
+            <div className={styles['settings-table']}>
+            <Table>
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -63,7 +63,7 @@ function SelectableAppointmentTable() {
                 </tbody>
             </Table>
             </div>
-        </div>
+            </div>
     );
 }
 

@@ -20,6 +20,7 @@ const OwnerHomePage = (props) => {
         <>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <div className={styles['page']}>
+                    <label className={styles['page-label']}>Admin Dashboard</label>
                     <div id="container--top" className={styles['top-container']}>
                     <SelectableAppointmentTable />
                 </div>

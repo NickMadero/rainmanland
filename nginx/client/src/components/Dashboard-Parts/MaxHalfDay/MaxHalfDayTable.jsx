@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {Table, Form, Button, FormGroup, Modal} from 'react-bootstrap';
-
+import styles from './MaxHalfDayTable.module.css';
 
 
 function MaxHalfDayTable () {
@@ -71,12 +71,19 @@ function MaxHalfDayTable () {
 
     return (
 
-        <div >
+        <div className={styles['halfday-wrapper']}>
                <FormGroup>
-                   <Form.Label>Max half days list </Form.Label>
+                   <Form.Label className={styles['halfday-label']}>Maximum Half-Days </Form.Label>
                </FormGroup>
-                <Table striped bordered  >
-
+               <div className={styles['halfday-table']}>                
+               <Table   >
+                    <thead>
+                        <tr>
+                            <th>ZIP Code/Servicee Area</th>
+                            <th>Max Number of Half-Days</th>
+                            <th>Change Max Half-Days</th>
+                        </tr>
+                    </thead>
                     <tbody>
                     {allMaxhalf.map((Maxhalfs) => (
                         <tr key={Maxhalfs.id}>
@@ -89,7 +96,7 @@ function MaxHalfDayTable () {
                     ))}
                     </tbody>
                 </Table>
-
+            </div>
 
             {/*modal for updating the max half*/}
             <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>

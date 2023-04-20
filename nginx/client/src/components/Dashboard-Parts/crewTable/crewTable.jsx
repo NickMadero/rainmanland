@@ -192,10 +192,10 @@ function CrewTable() {
         <div>
             <div  className={styles['form-wrapper']}>
             <FormGroup>
-                <Form.Label>Crew List</Form.Label>
+                <Form.Label className={styles['crew-label']}>Crew List</Form.Label>
                 <Button onClick={() => setAddCrewModal(true)} className={styles['btn-add']}>Add Crew</Button>
             </FormGroup>
-            <Table striped bordered className={styles['table']} >
+            <Table className={styles['table']} >
                 <thead>
                 <tr>
                     <th>Crews</th>
