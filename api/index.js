@@ -156,7 +156,7 @@ app.post('/api/add-user', (req, res) => {
 	// raw info from request
 	const email = req.body.addEmail;
 	const plaintextPass = req.body.addPassword;
-	const firstgame = req.body.addFirstName;
+	const firstName = req.body.addFirstName;
 	const lastName = req.body.addLastName;
 	const phone = req.body.addPhoneNum;
 	const crewNum = req.body.addCrewNum;
