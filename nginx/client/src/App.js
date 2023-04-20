@@ -55,6 +55,7 @@ class App extends Component {
                 //for crews
                 crew_name: null,
                 starting_location: null,
+                max_half_days : null,
 
             },
 

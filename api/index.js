@@ -156,7 +156,7 @@ app.post('/api/add-user', (req, res) => {
 	// raw info from request
 	const email = req.body.addEmail;
 	const plaintextPass = req.body.addPassword;
-	const firstgame = req.body.addFirstName;
+	const firstName = req.body.addFirstName;
 	const lastName = req.body.addLastName;
 	const phone = req.body.addPhoneNum;
 	const crewNum = req.body.addCrewNum;
@@ -301,7 +301,35 @@ app.post('/api/get-joblist', (req, res) => {
 	})
 });
 
-//author : Nick Madero
+app.post('/api/show-maxHalf', (req,res) => {
+    const show_maxHalf = "call get_all_zip_codes();";
+    dbController.query(show_maxHalf,(err,result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(result)
+            const maxhalfs = result[0].map(maxhalf => ({
+                zipcode : maxhalf.zip_code,
+                maxhalfdays : maxhalf.max_half_days
+            }));
+            res.send(maxhalfs);
+        }
+    })
+})
+
+app.post('/api/update-maxHalf', (req,res) => {
+    const updateMax = " call set_max_half_days_zip_code(?,?);";
+    dbController.query(updateMax,[req.body.max_half_days,req.body.zip_code],(err,result) =>{
+        if (err){
+            console.log(err);
+        }   else {
+            console.log(result);
+
+        }
+    })
+})
+
+//author : Nick
 app.post('/api/show-appointments', (req, res) => {
     const show_appointments = "call get_all_appointments_on_date(?);";
     dbController.query(show_appointments, [req.body.date], (err, result) => {

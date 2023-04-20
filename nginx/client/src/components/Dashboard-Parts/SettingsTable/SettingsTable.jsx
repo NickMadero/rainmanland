@@ -19,7 +19,7 @@ function SelectableAppointmentTable() {
 
 
     const handleButtonClick = (setting) => {
-        const value = prompt("enter for setting: " + setting.id)
+        const value = prompt("enter for setting: " + setting.name)
         if (value != null && setting.name != null) {
             axios.post('/api/put-setting', {setting_name: setting.name, setting_value: value})
                 .then(res => {
@@ -35,14 +35,14 @@ function SelectableAppointmentTable() {
                 setAppointments(response.data);
             })
             .catch(error => console.log(error));
-
+        window.location.reload();
     };
 
     return (
-        <div className={styles.wrapper}>
-            <Form.Label>Settings</Form.Label>
-            <div className={styles['table']}>
-            <Table striped bordered>
+        <div className={styles['wrapper']}>
+            <Form.Label className={styles['settings-label']}>Settings</Form.Label>
+            <div className={styles['settings-table']}>
+            <Table>
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -63,7 +63,7 @@ function SelectableAppointmentTable() {
                 </tbody>
             </Table>
             </div>
-        </div>
+            </div>
     );
 }
 

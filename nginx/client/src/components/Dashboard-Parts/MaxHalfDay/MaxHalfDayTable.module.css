@@ -1,0 +1,30 @@
+.halfday-wrapper{
+    padding: 1rem;
+    box-sizing: border-box; 
+    position: relative;
+    border-radius: 2px;
+    width:70%;
+    height: 50%;
+    gap: 2rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: #ffffffc2;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    
+}
+
+.halfday-label{
+    color:rgb(0, 0, 0);
+    font-size: 2rem;
+    font-weight:600;
+}
+
+.halfday-table{
+    overflow-y:scroll;
+    height: 18rem !important;
+}
+
+thead{
+    width: fit-content;
+    white-space: nowrap;
+}

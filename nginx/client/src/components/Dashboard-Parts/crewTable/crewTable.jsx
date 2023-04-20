@@ -85,11 +85,13 @@ function CrewTable() {
                 });
                 setCrews(updatedCrews);
                 setNewMemberEmail('');
-                window.alert(`${newMemberEmail} has been added to the crew.`);
+
             })
             .catch(error => {
                 console.log(error);
             });
+        window.alert(`${newMemberEmail} has been added to the crew.`);
+        window.location.reload();
     }
 
     const handleAddZip = (crewName, zip) => {
@@ -109,8 +111,10 @@ function CrewTable() {
                 });
                 setZipCodes(UpdateZip);
                 setNewZipCode('');
-                window.alert(`${zip} has been added to the zip Codes for this crew`)
+
             })
+        window.alert(`${zip} has been added to the zip Codes for this crew`)
+        window.location.reload();
     }
 
 
@@ -131,11 +135,13 @@ function CrewTable() {
                     return crew;
                 });
                 setCrews(updatedCrews);
-                window.alert(`${memberEmail} has been removed from the crew.`);
+
             })
             .catch(error => {
                 console.log(error);
             });
+        window.alert(`${memberEmail} has been removed from the crew.`);
+        window.location.reload();
     }
 
     const handleRemovalZip = (zip, crewName) => {
@@ -156,11 +162,13 @@ function CrewTable() {
                     return c;
                 });
                 setCrews(updatedCrews);
-                window.alert(`${zip} has been removed from the crew.`);
+
             })
             .catch(error => {
                 console.log(error);
             });
+        window.alert(`${zip} has been removed from the crew.`);
+        window.location.reload();
     };
 
     const handleAddCrew = (newCrewName , startLocation) => {
@@ -170,11 +178,13 @@ function CrewTable() {
                 // Update the crew list to reflect the addition of the new crew
                 setCrews([...crews, { crew_name: newCrewName, members: [], zipcodes: [] }]);
                 setNewCrew('');
-                window.alert(`${newCrewName} has been added to the crews.`);
+
             })
             .catch(error => {
                 console.log(error);
             });
+        window.alert(`${newCrewName} has been added to the crews.`);
+        window.location.reload();
     }
 
     return (
@@ -182,10 +192,10 @@ function CrewTable() {
         <div>
             <div  className={styles['form-wrapper']}>
             <FormGroup>
-                <Form.Label>Crew List</Form.Label>
+                <Form.Label className={styles['crew-label']}>Crew List</Form.Label>
                 <Button onClick={() => setAddCrewModal(true)} className={styles['btn-add']}>Add Crew</Button>
             </FormGroup>
-            <Table striped bordered className={styles['table']} >
+            <Table className={styles['table']} >
                 <thead>
                 <tr>
                     <th>Crews</th>
