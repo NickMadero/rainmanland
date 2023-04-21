@@ -553,6 +553,13 @@ app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
 
 }
 
+/**
+ * this sets an appointment to is complete once the house being visited is done being serviced
+ * @param date the date which the appointment takes place
+ * @param whichHalf first or second half of the day
+ * @param crewName the crew name that is servicing the address
+ * @param address the address that the service has been completed for
+ */
 app.post('/api/set-appointment-complete'), async (req, res) =>{
     try {
         const { date, whichHalf, crewName, address } = req.body;
