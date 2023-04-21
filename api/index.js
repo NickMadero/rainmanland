@@ -553,6 +553,32 @@ app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
 
 }
 
+app.post('/api/set-appointment-complete'), async (req, res) =>{
+    try {
+        const { date, whichHalf, crewName, address } = req.body;
+
+        if (!date || !whichHalf || !crewName || !address) {
+            return res.status(400).json({ error: 'Missing required parameters' });
+        }
+
+        const markAsComplete = 'CALL `set-appointment-complete`{?, ?, ? ,? );';
+
+        // res.json(sortedAppointments);
+        dbController.query(markAsComplete, [address, whichHalf, date, crewName ], (err, result) => {
+            if (err){
+                console.log(err);
+                res.status(500).send("Error changing complete");
+            }else {
+                res.status(200).send("Complete changed successfully");
+            }
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })
 
