@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Container, Card, Row } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from "axios";
+import app from "../App";
 
 const DayButton = () => {
   const [buttonState, setButtonState] = useState({
@@ -58,9 +60,27 @@ function EmployeeDashboard(props) {
 	const [completedAppointments, setCompletedAppointments] = useState({});
 
 	const markComplete = (appointmentId) => {
+		const formattedDate = new Date(appointmentId.date_occuring).toISOString().slice(0, 10)
+		console.log(appointmentId.address)
+		console.log(appointmentId.which_half)
+		console.log(formattedDate)
+		console.log(appointmentId.crew_name)
+
+		axios.post('/api/set-appointment-complete',{address: appointmentId.address ,
+			whichHalf: appointmentId.which_half ,
+			date: formattedDate,
+			crewName : appointmentId.crew_name, }
+
+		)
+			.then(response => {
+				console.log(response.data);
+				setCompletedAppointments({ ...completedAppointments, [appointmentId]: true });
+			})
+			.catch(error => console.log(error + "you broke it "))
+
 		// Update the appointment in the database and set completion status to true
 		// After updating, update the completedAppointments state with the appointmentId
-		setCompletedAppointments({ ...completedAppointments, [appointmentId]: true });
+
 	};
 
 	const openDirections = (address) => {
@@ -76,7 +96,7 @@ function EmployeeDashboard(props) {
 		} else {
 			val.controller_location = 'Indoor';
 		}
-		const isCompleted = completedAppointments[key];
+		const isCompleted = completedAppointments[val];
 		return (
 			<React.Fragment key={key}>
 				<Card
@@ -96,7 +116,7 @@ function EmployeeDashboard(props) {
 						</Card.Text>
 						<Button
 						variant="primary"
-						onClick={() => markComplete(key)}
+						onClick={() => markComplete(val)}
 						>
 						Mark Complete
 						</Button>

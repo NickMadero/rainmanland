@@ -75,76 +75,76 @@ app.post('/api/verify-user', (req, res) => {
     const pass = req.body.sentPw;
     if (!email || !pass) {
         res.json({
-			success: false,
-			message: "Email and password are required"
-		});
+            success: false,
+            message: "Email and password are required"
+        });
         return;
-	}
+    }
     const getHashQuery = "CALL get_password_hash(?);";
     dbController.query(getHashQuery, [email], (err, result) => {
         console.log(result)
         if (err) {
             console.log("Error while retrieving password hash.");
             res.json({
-				success: false,
-				message: 'Error while retrieving password hash.'
-			});
-			return;
+                success: false,
+                message: 'Error while retrieving password hash.'
+            });
+            return;
         }
         else {
-			const password_hash = result[0]?.[0]?.password_hash || false;
-			if (!password_hash) {
-				res.json({
-					success: false,
-					message: 'User does not exist.'
-				});
-				return;
-			}
+            const password_hash = result[0]?.[0]?.password_hash || false;
+            if (!password_hash) {
+                res.json({
+                    success: false,
+                    message: 'User does not exist.'
+                });
+                return;
+            }
             console.log("User email exists.");
             bcrypt.compare(pass, result[0][0].password_hash, function(err, hashResult) {
                 if (hashResult) {
                     console.log("User verified.");
-					// now get the relevant user info
-					const userInfoQuery = "CALL get_user_info(?);";
-					dbController.query(userInfoQuery, [email], (err, result) => {
-						console.log(result);
-						if (err) {
-							res.json({
-								success: false,
-								message: "Error getting user info"
-							});
-							return;
-						} else {
-							var allInfoButCrew = result[0][0];
-							const getCrewNameQuery = "SELECT c.crew_name FROM placed_on AS p JOIN crew AS c ON p.crew_id = c.crew_id WHERE p.user_id = ?;";
-							dbController.query(getCrewNameQuery, [allInfoButCrew.user_id], (err, resultTwo) => {
-								console.log(result);
-								if (err) {
-									res.json({
-										success: false,
-										message: "Error while getting user's crew"
-									});
-									return;
-								} else {
-									allInfoButCrew.crewName = resultTwo[0].crew_name;
-									res.json({
-										success: true,
-										message: "User info sent.",
-										queryResult: allInfoButCrew
-									});
-									return;
-								}
-							})
-						}
-					})
-				} else {
+                    // now get the relevant user info
+                    const userInfoQuery = "CALL get_user_info(?);";
+                    dbController.query(userInfoQuery, [email], (err, result) => {
+                        console.log(result);
+                        if (err) {
+                            res.json({
+                                success: false,
+                                message: "Error getting user info"
+                            });
+                            return;
+                        } else {
+                            var allInfoButCrew = result[0][0];
+                            const getCrewNameQuery = "SELECT c.crew_name FROM placed_on AS p JOIN crew AS c ON p.crew_id = c.crew_id WHERE p.user_id = ?;";
+                            dbController.query(getCrewNameQuery, [allInfoButCrew.user_id], (err, resultTwo) => {
+                                console.log(result);
+                                if (err) {
+                                    res.json({
+                                        success: false,
+                                        message: "Error while getting user's crew"
+                                    });
+                                    return;
+                                } else {
+                                    allInfoButCrew.crewName = resultTwo[0].crew_name;
+                                    res.json({
+                                        success: true,
+                                        message: "User info sent.",
+                                        queryResult: allInfoButCrew
+                                    });
+                                    return;
+                                }
+                            })
+                        }
+                    })
+                } else {
                     console.log("Bad password");
                     console.log(err);
                     res.json({
-						success: true,
-						message: "Password doesn't match.",
-						queryResult: false
-					});
+                        success: true,
+                        message: "Password doesn't match.",
+                        queryResult: false
+                    });
                 }
             })
         }
@@ -153,62 +153,62 @@ app.post('/api/verify-user', (req, res) => {
 
 // Add a new employee to the user table
 app.post('/api/add-user', (req, res) => {
-	// raw info from request
-	const email = req.body.addEmail;
-	const plaintextPass = req.body.addPassword;
-	const firstName = req.body.addFirstName;
-	const lastName = req.body.addLastName;
-	const phone = req.body.addPhoneNum;
-	const crewNum = req.body.addCrewNum;
-	const currentlyWorking = req.body.addCurrentlyWorking ? 1 : 0;
+    // raw info from request
+    const email = req.body.addEmail;
+    const plaintextPass = req.body.addPassword;
+    const firstName = req.body.addFirstName;
+    const lastName = req.body.addLastName;
+    const phone = req.body.addPhoneNum;
+    const crewNum = req.body.addCrewNum;
+    const currentlyWorking = req.body.addCurrentlyWorking ? 1 : 0;
 
-	// generate password hash
-	const passHash = bcrypt.hash(plaintextPass, saltRounds, (err, hashedPassword) => {
-		if (err) {
-			console.error('Error hashing password: ', err);
-			res.json({
-				success: false,
-				message: 'Error hashing password.'
-			});
-			return;
-		} else {
-			console.log('Hashed password: ', hashedPassword);
-			// add to database using stored procedure
-			const addCustQuery = "CALL add_new_crew_member(CURDATE(),?,?,?,?,?,?);";
-			const params = [firstName, lastName, email, hashedPassword, phone, currentlyWorking];
-			dbController.query(addCustQuery, params, (err, result) => {
-				if (err) {
-					console.log("error while adding crew member: ", err);
-					res.json({
-						success: false,
-						message: 'Error while adding crew member.'
-					});
-					return;
-				} else {
-					console.log("successfully added new employee");
-				}
-				// if a crew number was given while adding the employee, add them to the crew
-				if (crewNum) {
-					const addToCrewQuery = "CALL put_user_on_crew(?,?);";
-					dbController.query(addToCrewQuery, [email, crewNum], (err, result) => {
-						if (err) {
-							console.log("error while adding new crew member to crew: ", err);
-							res.json({
-								success: false,
-								message: 'Error while adding new crew member to crew.'
-							});
-						} else {
-							console.log("successfully added employee to crew");
-							res.json({
-								success: true,
-								message: 'successfully added employee to crew'
-							})
-						}
-					})
-				}
-			})
-		}
-	})
+    // generate password hash
+    const passHash = bcrypt.hash(plaintextPass, saltRounds, (err, hashedPassword) => {
+        if (err) {
+            console.error('Error hashing password: ', err);
+            res.json({
+                success: false,
+                message: 'Error hashing password.'
+            });
+            return;
+        } else {
+            console.log('Hashed password: ', hashedPassword);
+            // add to database using stored procedure
+            const addCustQuery = "CALL add_new_crew_member(CURDATE(),?,?,?,?,?,?);";
+            const params = [firstName, lastName, email, hashedPassword, phone, currentlyWorking];
+            dbController.query(addCustQuery, params, (err, result) => {
+                if (err) {
+                    console.log("error while adding crew member: ", err);
+                    res.json({
+                        success: false,
+                        message: 'Error while adding crew member.'
+                    });
+                    return;
+                } else {
+                    console.log("successfully added new employee");
+                }
+                // if a crew number was given while adding the employee, add them to the crew
+                if (crewNum) {
+                    const addToCrewQuery = "CALL put_user_on_crew(?,?);";
+                    dbController.query(addToCrewQuery, [email, crewNum], (err, result) => {
+                        if (err) {
+                            console.log("error while adding new crew member to crew: ", err);
+                            res.json({
+                                success: false,
+                                message: 'Error while adding new crew member to crew.'
+                            });
+                        } else {
+                            console.log("successfully added employee to crew");
+                            res.json({
+                                success: true,
+                                message: 'successfully added employee to crew'
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
 });
 
 // get a list of the available controller brand options author: Nick Madero / Steve Piccolo
@@ -216,11 +216,11 @@ app.post('/api/get-controller-brand', (req, res) => {
     const getController = "call get_controller_enum();";
     dbController.query(getController,  (err, result) => {
         // console.log(result);
-		// parse the result before sending it to the frontend
-		const unparsedString = result[0][0]["column_type"];
-		// console.log(`Got unparsed string: ${unparsedString}.`);
-		const parsedArray = unparsedString.slice(1, -1).split("','");
-		// console.log(`Parsed string into array: ${parsedArray}`);
+        // parse the result before sending it to the frontend
+        const unparsedString = result[0][0]["column_type"];
+        // console.log(`Got unparsed string: ${unparsedString}.`);
+        const parsedArray = unparsedString.slice(1, -1).split("','");
+        // console.log(`Parsed string into array: ${parsedArray}`);
         res.send(parsedArray);
     })
 })
@@ -260,45 +260,45 @@ app.post('/api/insert-newcustomer', (req, res) => {
 // Get a list of today's appointments for a specific crew
 app.post('/api/get-joblist', (req, res) => {
 
-	console.log(`Body of request to /get-joblist : ${req.body}`);
+    console.log(`Body of request to /get-joblist : ${req.body}`);
 
-	const getTodayDate = () => {
-		const today = new Date();
-		const year = today.getFullYear();
-		const month = String(today.getMonth() + 1).padStart(2, '0');
-		const day = String(today.getDate()).padStart(2, '0');
-		return `${year}-${month}-${day}`;
-	}
+    const getTodayDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
-	// send failure response if bad request
-	if (!req.body.crewName) {
-		res.json({
-			success: false,
-			message: "Bad request: no crew number included."
-		});
-		return;
-	}
+    // send failure response if bad request
+    if (!req.body.crewName) {
+        res.json({
+            success: false,
+            message: "Bad request: no crew number included."
+        });
+        return;
+    }
 
-	// if request was good, make the db query	
-	const getJobListQuery = "CALL get_appointments_on_half_day_from_date_crew(?, CURDATE());";
-	const params = [req.body.crewName];
-	dbController.query(getJobListQuery, params, (err, result) => {
-		if (err) {
-			console.log("Error while fetching appointments: ", err);
-			res.json({
-				success: false,
-				message: "Error while fetching appointments"
-			});
-			return;
-		} else {
-			console.log("successfully fetched appointments: ", result);
-			res.json({
-				success: true,
-				message: "Successfully fetched appointments",
-				queryResult: result
-			});
-		}
-	})
+    // if request was good, make the db query
+    const getJobListQuery = "CALL get_appointments_on_half_day_from_date_crew(?, CURDATE());";
+    const params = [req.body.crewName];
+    dbController.query(getJobListQuery, params, (err, result) => {
+        if (err) {
+            console.log("Error while fetching appointments: ", err);
+            res.json({
+                success: false,
+                message: "Error while fetching appointments"
+            });
+            return;
+        } else {
+            console.log("successfully fetched appointments: ", result);
+            res.json({
+                success: true,
+                message: "Successfully fetched appointments",
+                queryResult: result
+            });
+        }
+    })
 });
 
 app.post('/api/show-maxHalf', (req,res) => {
@@ -553,14 +553,7 @@ app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
 
 }
 
-/**
- * this sets an appointment to is complete once the house being visited is done being serviced
- * @param date the date which the appointment takes place
- * @param whichHalf first or second half of the day
- * @param crewName the crew name that is servicing the address
- * @param address the address that the service has been completed for
- */
-app.post('/api/set-appointment-complete'), async (req, res) =>{
+app.post('/api/set-appointment-complete', async (req, res) =>{
     try {
         const { date, whichHalf, crewName, address } = req.body;
 
@@ -568,7 +561,7 @@ app.post('/api/set-appointment-complete'), async (req, res) =>{
             return res.status(400).json({ error: 'Missing required parameters' });
         }
 
-        const markAsComplete = 'CALL `set-appointment-complete`{?, ?, ? ,? );';
+        const markAsComplete = 'CALL `set-appointment-complete`(?, ?, ? ,? );';
 
         // res.json(sortedAppointments);
         dbController.query(markAsComplete, [address, whichHalf, date, crewName ], (err, result) => {
@@ -583,7 +576,7 @@ app.post('/api/set-appointment-complete'), async (req, res) =>{
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+})
 
 
 // add a port to expose the API when the server is running
