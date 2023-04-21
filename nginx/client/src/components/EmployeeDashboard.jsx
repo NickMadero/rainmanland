@@ -25,10 +25,10 @@ const DayButton = () => {
   );
 };
 
-const FinishDayButton = () => {
+const FinishDayButton = (props) => {
   const [buttonState, setButtonState] = useState({
 	color: 'secondary',
-	text: 'Finish Day',
+	text: 'Finish half Day',
   });
 
   const handleClick = () => {
@@ -70,7 +70,7 @@ function EmployeeDashboard(props) {
 	};
 
 
-	let card = props.jobsToday.map((val, key) => {
+	let card1 = props.halfDay1.map((val, key) => {
 		if (val.controller_is_outside) {
 			val.controller_location = 'Outdoor';
 		} else {
@@ -112,6 +112,48 @@ function EmployeeDashboard(props) {
 		);
 	});
 
+	let card2 = props.halfDay2.map((val, key) => {
+		if (val.controller_is_outside) {
+			val.controller_location = 'Outdoor';
+		} else {
+			val.controller_location = 'Indoor';
+		}
+		const isCompleted = completedAppointments[key];
+		return (
+			<React.Fragment key={key}>
+				<Card
+					style={{
+						borderColor: isCompleted ? 'green' : '',
+						borderWidth: isCompleted ? '2px' : '',
+					}}
+				>
+					<Card.Header as="h5">{val.address}</Card.Header>
+					<Card.Body>
+						<Card.Title>{val.customer_name}</Card.Title>
+						<Card.Subtitle>
+							Appointment window is {val.start_time} to {val.end_time}.
+						</Card.Subtitle>
+						<Card.Text>
+							{val.controller_location} {val.controller_brand} controller with {val.zone_amount} zone(s).
+						</Card.Text>
+						<Button
+							variant="primary"
+							onClick={() => markComplete(key)}
+						>
+							Mark Complete
+						</Button>
+						<Button
+							variant="primary"
+							onClick={() => openDirections(val.address)}
+						>
+							Open Directions in Google Maps
+						</Button>
+					</Card.Body>
+				</Card>
+			</React.Fragment>
+		);
+	});
+
 	return (
 		<div className="App">
 			<h1>Job list: Crew {props.crewNum}</h1>
@@ -121,7 +163,8 @@ function EmployeeDashboard(props) {
 
 			<div className="d-grid gap-2">
 				<DayButton/>
-					<Row>{card}</Row>
+					<Row>{card1}</Row>
+					<Row>{card2}</Row>
 				<FinishDayButton/>
 
 		</div>
