@@ -62,7 +62,8 @@ class App extends Component {
             // other state attributes
             setSomeField1: '',
             setSomeField2: '',
-            fetchJobsTodayData: [],
+            fetchJobsTodayData1: [],
+            fetchJobsTodayData2: [],
             someFieldUpdate: ''
         };
 
