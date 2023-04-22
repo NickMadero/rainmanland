@@ -28,7 +28,7 @@ const DayButton = () => {
 const FinishDayButton = () => {
   const [buttonState, setButtonState] = useState({
 	color: 'secondary',
-	text: 'Finish half Day',
+	text: 'Finish Day',
   });
 
   const handleClick = () => {
@@ -55,6 +55,8 @@ const FinishDayButton = () => {
 
 
 function EmployeeDashboard(props) {
+	console.log(props);
+	props.other('one');
 	const [completedAppointments, setCompletedAppointments] = useState({});
 
 	const markComplete = (appointmentId) => {

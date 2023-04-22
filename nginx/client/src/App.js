@@ -188,13 +188,13 @@ class App extends Component {
 
     // gets a list of today's jobs for the specified crew from the database
     getJobsTodayForCrew(crew_name) {
-        axios.post('/api/get-crew-jobs-on-date', {date:(new Date()).toISOString().slice(0, 10), whichHalf: 'first', crewName: crew_name})
+        axios.post('/api/get-crew-jobs-on-date', {date:"2023-04-20", whichHalf: 'first', crewName: crew_name})
             .then((response) => {
                 this.setState({
                     fetchJobsTodayData1: response.data.queryResult[0]
                 })
             })
-        axios.post('/api/get-crew-jobs-on-date', {date:(new Date()).toISOString().slice(0, 10), whichHalf: 'second', crewName: crew_name})
+        axios.post('/api/get-crew-jobs-on-date', {date:"2023-04-20", whichHalf: 'second', crewName: crew_name})
             .then((response) => {
                 this.setState({
                     fetchJobsTodayData2: response.data.queryResult[0]
@@ -260,6 +260,7 @@ class App extends Component {
                     <Route path='owner-dashboard' element={<OwnerDashboard
                         onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='employee-dashboard' element={<EmployeeDashboard
+                        other={this.getJobsTodayForCrew}
                         halfDay1={this.state.fetchJobsTodayData1}
                         halfDay2={this.state.fetchJobsTodayData2}
                         crewNum={this.state.userInfo.crewName} />} />
