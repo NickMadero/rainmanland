@@ -25,7 +25,7 @@ const DayButton = () => {
   );
 };
 
-const FinishDayButton = (props) => {
+const FinishDayButton = () => {
   const [buttonState, setButtonState] = useState({
 	color: 'secondary',
 	text: 'Finish half Day',
