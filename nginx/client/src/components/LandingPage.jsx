@@ -3,6 +3,7 @@ import {ReactComponent as ReactLogo} from './RmlLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import { Button, Container, Row, Col, Card } from 'react-bootstrap';
 import '../style/LandingPage.css';
+import axios from 'axios'; ////////////////////////////////////////
 
 function LandingPage(props) {
     let navigate = useNavigate();
@@ -16,6 +17,15 @@ function LandingPage(props) {
         let path = 'employee-login';
         navigate(path);
     }
+
+    const sendEmail = () => {
+        axios.post("/api/send-mail",
+            {
+            to: 'wallabytest8@gmail.com',
+            subject: 'test email',
+            text: 'this is a test email'});
+    }
+
 
     return (
         <div className="App">
@@ -43,6 +53,9 @@ function LandingPage(props) {
             <div className="employee-login">
                 <Button onClick={goToEmployeeLogin} variant="outline-secondary">
                     Employee Login
+                </Button>
+                <Button onClick={sendEmail} variant="outline-secondary">
+                    send email
                 </Button>
             </div>
         </div>

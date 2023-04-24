@@ -24,6 +24,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const nodemailer = require('nodemailer');
+const email = 'wallabytest8@gmail.com'
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: email,
+        pass: 'kxdedschdfgofvvn'
+    }
+});
+
+
 // [TEMPLATE] retrieve something from the database
 app.get('/get-something', (req, res) => {
     const SelectQuery = " SELECT * FROM table_name";
@@ -584,6 +595,22 @@ app.post('/api/set-appointment-complete'), async (req, res) =>{
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+app.post('/api/send-mail', (req, res) => {
+    const mailOptions = {
+        from: email,
+        to: req.body.to,
+        subject: req.body.subject,
+        text: req.body.text
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+})
 
 
 // add a port to expose the API when the server is running
