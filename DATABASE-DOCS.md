@@ -261,3 +261,19 @@ This will return all of the appointments that are created
 
 ******************************************************
 
+## Get  half days for a given crew from a date
+
+this will return all the half days that a crew is responsible for
+this will return only from the current day and ordering by the date
+
+    CALL `rainmanland`.`get_all_half_days_by_crew`(<{crew_name varchar(45)}>);
+
+*******************************************************
+
+## get appointments on half day by which half and crew
+
+this returns all appointments that only take place during a half day given which half 
+
+    CALL `rainmanland`.`get_appointments_on_half_day_from_date_crew_by_which_half`(<{crew_name varchar(45)}>, <{date_occur date}>, <{which_half enum('first', 'second')}>);
+
+********************************************

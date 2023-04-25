@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Table, Form, Button, FormGroup, FormLabel, Modal } from 'react-bootstrap';
 import { useState, useEffect } from "react";
+import styles from './crewTable.module.css'
 
 function CrewTable() {
 
@@ -84,11 +85,13 @@ function CrewTable() {
                 });
                 setCrews(updatedCrews);
                 setNewMemberEmail('');
-                window.alert(`${newMemberEmail} has been added to the crew.`);
+
             })
             .catch(error => {
                 console.log(error);
             });
+        window.alert(`${newMemberEmail} has been added to the crew.`);
+        window.location.reload();
     }
 
     const handleAddZip = (crewName, zip) => {
@@ -108,8 +111,10 @@ function CrewTable() {
                 });
                 setZipCodes(UpdateZip);
                 setNewZipCode('');
-                window.alert(`${zip} has been added to the zip Codes for this crew`)
+
             })
+        window.alert(`${zip} has been added to the zip Codes for this crew`)
+        window.location.reload();
     }
 
 
@@ -130,11 +135,13 @@ function CrewTable() {
                     return crew;
                 });
                 setCrews(updatedCrews);
-                window.alert(`${memberEmail} has been removed from the crew.`);
+
             })
             .catch(error => {
                 console.log(error);
             });
+        window.alert(`${memberEmail} has been removed from the crew.`);
+        window.location.reload();
     }
 
     const handleRemovalZip = (zip, crewName) => {
@@ -155,11 +162,13 @@ function CrewTable() {
                     return c;
                 });
                 setCrews(updatedCrews);
-                window.alert(`${zip} has been removed from the crew.`);
+
             })
             .catch(error => {
                 console.log(error);
             });
+        window.alert(`${zip} has been removed from the crew.`);
+        window.location.reload();
     };
 
     const handleAddCrew = (newCrewName , startLocation) => {
@@ -169,21 +178,24 @@ function CrewTable() {
                 // Update the crew list to reflect the addition of the new crew
                 setCrews([...crews, { crew_name: newCrewName, members: [], zipcodes: [] }]);
                 setNewCrew('');
-                window.alert(`${newCrewName} has been added to the crews.`);
+
             })
             .catch(error => {
                 console.log(error);
             });
+        window.alert(`${newCrewName} has been added to the crews.`);
+        window.location.reload();
     }
 
     return (
         // displays the crew table
-        <div style={{ position: "absolute", top: 15, left: 0, width: '50%', height: '50%', overflowY: 'scroll' }}>
+        <div>
+            <div  className={styles['form-wrapper']}>
             <FormGroup>
-                <Form.Label>Crew List</Form.Label>
-                <Button   style={{marginLeft:"5px", marginBottom:"5px"}} onClick={() => setAddCrewModal(true)}>Add Crew</Button>
+                <Form.Label className={styles['crew-label']}>Crew List</Form.Label>
+                <Button onClick={() => setAddCrewModal(true)} className={styles['btn-add']}>Add Crew</Button>
             </FormGroup>
-            <Table striped bordered style={{border:"solid"}} >
+            <Table className={styles['table']} >
                 <thead>
                 <tr>
                     <th>Crews</th>
@@ -204,7 +216,8 @@ function CrewTable() {
                 ))}
                 </tbody>
             </Table>
-
+            </div>
+    
             {/*Modal for adding a new crew */}
             <Modal show={showAddCrewModal} onHide={() => setAddCrewModal(false)}>
                 <Modal.Header closeButton>

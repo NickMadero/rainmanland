@@ -5,6 +5,10 @@ const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcrypt');
 
+const { setAppointment, initCalander } = require("./calander/calender");
+const {storeAppointmentIntoDatabase} = require('./calander/storeAppointment');
+const {getAppointmentsForHalfDay} = require('./crew/loadCrewAppointments');
+
 const dbController = require('./dbController');
 
 // Set constants
@@ -88,6 +92,14 @@ app.post('/api/verify-user', (req, res) => {
 			return;
         }
         else {
+			const password_hash = result[0]?.[0]?.password_hash || false;
+			if (!password_hash) {
+				res.json({
+					success: false,
+					message: 'User does not exist.'
+				});
+				return;
+			}
             console.log("User email exists.");
             bcrypt.compare(pass, result[0][0].password_hash, function(err, hashResult) {
                 if (hashResult) {
@@ -203,28 +215,44 @@ app.post('/api/add-user', (req, res) => {
 app.post('/api/get-controller-brand', (req, res) => {
     const getController = "call get_controller_enum();";
     dbController.query(getController,  (err, result) => {
-        console.log(result);
+        // console.log(result);
 		// parse the result before sending it to the frontend
 		const unparsedString = result[0][0]["column_type"];
-		console.log(`Got unparsed string: ${unparsedString}.`);
+		// console.log(`Got unparsed string: ${unparsedString}.`);
 		const parsedArray = unparsedString.slice(1, -1).split("','");
-		console.log(`Parsed string into array: ${parsedArray}`);
+		// console.log(`Parsed string into array: ${parsedArray}`);
         res.send(parsedArray);
     })
 })
 
 //author : Nick Madero
 app.post('/api/insert-newcustomer', (req, res) => {
-    console.log(req.body); // added console.log statement
-
-    const new_appointment = "call create_new_appointment(?,?,?,?,?,?,?,?,?);";
+    const new_appointment = `CALL create_new_appointment_return_app_id(?, ?, ?, ?, ?, ?, ?, ?, ?, @appointment_id_out);`;
+    const app_id = `SELECT @appointment_id_out AS appointment_id;`;
     dbController.query(new_appointment, [req.body.email, req.body.first_name, req.body.last_name, req.body.address,
         req.body.numZones,req.body.brand, req.body.outside,req.body.zip_code , req.body.phone_number],  (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send(err);
         } else {
-            res.send(result);
+            //this is used to send the current appointment to the calander to generate
+            let appointment_id;
+            dbController.query(app_id, async (error, resultt) => {
+                appointment_id = resultt[0].appointment_id;
+                // console.log(resultt);
+                // setAppointment(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
+                //     req.body.outside, req.body.zip_code);
+                //this will start the process of generating a calander
+                let calendar = await initCalander(appointment_id, req.body.address, 0, req.body.numZones, req.body.brand,
+                    req.body.outside, req.body.zip_code);
+
+                const responseObj = {
+                    appointment_id: appointment_id,
+                    result: result,
+                    calendar: calendar
+                };
+                res.send(responseObj);
+            });
         }
     })
 })
@@ -273,14 +301,42 @@ app.post('/api/get-joblist', (req, res) => {
 	})
 });
 
-//author : Nick Madero
+app.post('/api/show-maxHalf', (req,res) => {
+    const show_maxHalf = "call get_all_zip_codes();";
+    dbController.query(show_maxHalf,(err,result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(result)
+            const maxhalfs = result[0].map(maxhalf => ({
+                zipcode : maxhalf.zip_code,
+                maxhalfdays : maxhalf.max_half_days
+            }));
+            res.send(maxhalfs);
+        }
+    })
+})
+
+app.post('/api/update-maxHalf', (req,res) => {
+    const updateMax = " call set_max_half_days_zip_code(?,?);";
+    dbController.query(updateMax,[req.body.max_half_days,req.body.zip_code],(err,result) =>{
+        if (err){
+            console.log(err);
+        }   else {
+            console.log(result);
+
+        }
+    })
+})
+
+//author : Nick
 app.post('/api/show-appointments', (req, res) => {
     const show_appointments = "call get_all_appointments_on_date(?);";
     dbController.query(show_appointments, [req.body.date], (err, result) => {
         if (err) {
             console.log(err);
         } else {
-            console.log(result);
+            // console.log(result);
             const appointments = result[0].map(appointment => ({
 
                 address: appointment.address,
@@ -300,6 +356,7 @@ app.post('/api/show-appointments', (req, res) => {
     })
 });
 
+// Add a crew member
 app.post('/api/add-crewmember' , (req,res) => {
     const add_member = "call put_user_on_crew(?,?);";
     dbController.query(add_member,[req.body.email,req.body.crew_name],(err,result) =>{
@@ -310,6 +367,8 @@ app.post('/api/add-crewmember' , (req,res) => {
         }
     })
 })
+
+// Remove a crew member
 app.post('/api/remove-crewmember', (req,res) => {
     const remove_member = "call remove_user_from_crew(?,?);";
     if (!req.body.crew_name) {
@@ -326,8 +385,6 @@ app.post('/api/remove-crewmember', (req,res) => {
     }
 })
 
-
-
 // author Nick
 app.post('/api/add-zip-to-crew', (req,res) =>{
     const add_zip_to_crew = "call add_zip_to_crew(?,?);";
@@ -339,6 +396,7 @@ app.post('/api/add-zip-to-crew', (req,res) =>{
         }
     })
 })
+
 // author Nick
 app.post('/api/remove-zip-from-crew', (req,res) =>{
     const remove_zip_to_crew = "call remove_zip_from_crew(?,?);";
@@ -377,7 +435,6 @@ app.post('/api/get-zip-by-crew', (req,res) =>{
         }
     });
 });
-
 
 // author Nick
 app.post('/api/get-crew', (req, res) => {
@@ -423,6 +480,8 @@ app.post('/api/add-new-crew', (req,res) =>{
         }
     })
 })
+
+// Get settings
 app.post('/api/get-settings', (req, res) => {
     const getSettings = "call get_settings();";
     dbController.query(getSettings, (err, result) => {
@@ -440,7 +499,7 @@ app.post('/api/get-settings', (req, res) => {
     })
 })
 
-
+// Change a setting
 app.post('/api/put-setting', (req, res) => {
     const putSetting = "call put_setting(?, ?);";
 
@@ -454,9 +513,69 @@ app.post('/api/put-setting', (req, res) => {
     })
 })
 
+/**
+ * @param req require that req has appointmentId, crewName, halfDay, email, firstName, lastName
+ *  stored as those names
+ */
+app.post('/api/put-new-appointment', async (req, res) => {
 
+    const { appointmentId, crewName, halfDay, email, firstName, lastName } = req.body;
 
+    try {
+        const result = await storeAppointmentIntoDatabase(appointmentId, crewName, halfDay, email, firstName, lastName);
+        res.status(200).json({ success: true, message: 'Appointment stored successfully', data: result });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ success: false, message: 'Error storing appointment' });
+    }
+})
+
+/**
+ * this is used to get the appointments that occur on a given halfday
+ * @param date "YYYY-MM-DD" the date for which the appointment is to occur
+ * @param whichHalf (first, second) which half of a date is it
+ * @param crewName the name of the crew you wish to get
+ */
+app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
+    try {
+        const { date, whichHalf, crewName } = req.body;
+
+        if (!date || !whichHalf || !crewName) {
+            return res.status(400).json({ error: 'Missing required parameters' });
+        }
+
+        const sortedAppointments = await getAppointmentsForHalfDay(date, whichHalf, crewName);
+        res.json(sortedAppointments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+}
+
+/**
+ * this is used to get the appointments that occur on a given halfday
+ * @param date "YYYY-MM-DD" the date for which the appointment is to occur
+ * @param whichHalf (first, second) which half of a date is it
+ * @param crewName the name of the crew you wish to get
+ */
+app.post('/api/get-crew-jobs-on-date', async (req, res) => {
+    try {
+        const { date, whichHalf, crewName } = req.body;
+
+        if (!date || !whichHalf || !crewName) {
+            return res.status(400).json({ error: 'Missing required parameters' });
+        }
+
+        const sortedAppointments = await getAppointmentsForHalfDay(date, whichHalf, crewName);
+        res.json(sortedAppointments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })
+

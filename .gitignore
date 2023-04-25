@@ -32,3 +32,4 @@
 !api/pm2.json
 !api/entrypoint.dev.sh
 !api/entrypoint.prod.sh
+/node_modules

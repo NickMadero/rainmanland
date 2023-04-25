@@ -1,0 +1,50 @@
+.form-wrapper{
+    padding: 1rem;
+    box-sizing: border-box; 
+    position: relative;
+    border-radius: 2px;
+    width:100%;
+    height: auto;
+    gap: 2rem !important;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: #ffffffc2;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.crew-label{
+    color:rgb(0, 0, 0);
+    font-size: 2rem;
+    font-weight:600;
+}
+th,
+td {
+    padding: 0.75rem;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    position: sticky;
+}
+
+table{
+    overflow-y:scroll;
+}
+
+.btn-add{
+    color: #ffffff;
+    border: 0;
+    white-space: nowrap;
+    padding: 0.5em;
+    margin: 0.5rem;
+    width: fit-content;
+    height: 2.5rem;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.btn-add:hover{
+    opacity: 0.90;
+    transition: 0.25s;
+}
+
+.modal{
+    gap: 1rem !important;
+}

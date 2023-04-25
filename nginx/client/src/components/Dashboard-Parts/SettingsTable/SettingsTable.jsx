@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Form, Button } from 'react-bootstrap';
+import styles from './SettingsTable.module.css'
 
 function SelectableAppointmentTable() {
     const [appointments, setAppointments] = useState([]);
@@ -18,7 +19,7 @@ function SelectableAppointmentTable() {
 
 
     const handleButtonClick = (setting) => {
-        const value = prompt("enter for setting: " + setting.id)
+        const value = prompt("enter for setting: " + setting.name)
         if (value != null && setting.name != null) {
             axios.post('/api/put-setting', {setting_name: setting.name, setting_value: value})
                 .then(res => {
@@ -34,13 +35,14 @@ function SelectableAppointmentTable() {
                 setAppointments(response.data);
             })
             .catch(error => console.log(error));
-
+        window.location.reload();
     };
 
     return (
-        <div style={{ position: 'absolute', top: 400, right: 0, width: '100%', height: '50%', overflowY: 'scroll' }}>
-            <Form.Label>Settings</Form.Label>
-            <Table striped bordered >
+        <div className={styles['wrapper']}>
+            <Form.Label className={styles['settings-label']}>Settings</Form.Label>
+            <div className={styles['settings-table']}>
+            <Table>
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -60,7 +62,8 @@ function SelectableAppointmentTable() {
                 ))}
                 </tbody>
             </Table>
-        </div>
+            </div>
+            </div>
     );
 }
 
