@@ -1,3 +1,11 @@
+/**
+ * Author: Marcus Tangradi
+ *
+ * This file is responsible for the calander backend.
+ * It needs a crew, and the appointment information for the appointment trying to schedule
+ *
+ *
+ */
 const { generateHalfDaysForCrew } = require('./generateHalfDay');
 const { checkCalendarAvailability } = require('./halfDayAvailability');
 const dbController = require('../dbController');
