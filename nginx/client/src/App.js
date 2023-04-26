@@ -62,18 +62,19 @@ class App extends Component {
             // other state attributes
             setSomeField1: '',
             setSomeField2: '',
-            fetchJobsTodayData: [],
+            fetchJobsTodayData1: [],
+            fetchJobsTodayData2: [],
             someFieldUpdate: ''
         };
 
         // The following bindings are set so the App's methods can refer to the App class as "this" like normal
         this.handleEmpLoginButtonClick = this.handleEmpLoginButtonClick.bind(this);
         this.handleGoToCalendarButtonClick = this.handleGoToCalendarButtonClick.bind(this);
-		this.saveApptInfo = this.saveApptInfo.bind(this);
-		this.addNewAppointment = this.addNewAppointment.bind(this);
-		this.goToPage = this.goToPage.bind(this);
-		this.clearUserInfo = this.clearUserInfo.bind(this);
-		this.getJobsTodayForCrew = this.getJobsTodayForCrew.bind(this);
+        this.saveApptInfo = this.saveApptInfo.bind(this);
+        this.addNewAppointment = this.addNewAppointment.bind(this);
+        this.goToPage = this.goToPage.bind(this);
+        this.clearUserInfo = this.clearUserInfo.bind(this);
+        this.getJobsTodayForCrew = this.getJobsTodayForCrew.bind(this);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,85 +113,91 @@ class App extends Component {
             })
     }
 
-	// Add a new user (called when user clicks "submit" on the add employee form)
-	onNewEmployeeSubmit(childComponentState) {
-		axios.post("/api/add-user", childComponentState)
-			.then((response) => {
-				if (response.data.success) {
-					console.log(response.data.message);
-					alert("Employee added successfully.");
-				}
-				else {
-					console.log(response.data.message);
-					alert("Error while adding employee.");
-				}
-			})
-	}
+    // Add a new user (called when user clicks "submit" on the add employee form)
+    onNewEmployeeSubmit(childComponentState) {
+        axios.post("/api/add-user", childComponentState)
+            .then((response) => {
+                if (response.data.success) {
+                    console.log(response.data.message);
+                    alert("Employee added successfully.");
+                }
+                else {
+                    console.log(response.data.message);
+                    alert("Error while adding employee.");
+                }
+            })
+    }
 
     // when a user clicks on the "Go to Calendar" button in the appointment info page, this handler is triggered
     handleGoToCalendarButtonClick(custInfo) {
         this.setState({
-			customerInfo: custInfo,
-			loading: true,
-		});
+            customerInfo: custInfo,
+            loading: true,
+        });
     }
 
-	// takes the calendar object from the CustomerInfoPage component before switching pages
-	saveApptInfo(custInfoComponentState) {
-		this.setState(
-			prevState => ({
-				...prevState,
-				calendar: custInfoComponentState.calendar,
-				newApptParams: {
-					appointmentId: custInfoComponentState.appointmentID,
-					crewName: custInfoComponentState.calendar.crewName,
-					halfDay: null,
-					email: custInfoComponentState.email,
-					firstName: custInfoComponentState.First_Name,
-					lastName: custInfoComponentState.Last_Name
-				}
-			}),
-			() => {
-				console.log(`SAVED CALENDAR TO APP.JS:\n${JSON.stringify(this.state.calendar, null, 2)}`);
-        		this.props.navigate('/calendar');
-			}
-		);
-	}
+    // takes the calendar object from the CustomerInfoPage component before switching pages
+    saveApptInfo(custInfoComponentState) {
+        this.setState(
+            prevState => ({
+                ...prevState,
+                calendar: custInfoComponentState.calendar,
+                newApptParams: {
+                    appointmentId: custInfoComponentState.appointmentID,
+                    crewName: custInfoComponentState.calendar.crewName,
+                    halfDay: null,
+                    email: custInfoComponentState.email,
+                    firstName: custInfoComponentState.First_Name,
+                    lastName: custInfoComponentState.Last_Name
+                }
+            }),
+            () => {
+                console.log(`SAVED CALENDAR TO APP.JS:\n${JSON.stringify(this.state.calendar, null, 2)}`);
+                this.props.navigate('/calendar');
+            }
+        );
+    }
 
-	async addNewAppointment(halfDayObject) {
-		// now that we know the specific half day that's been selected, we can add it to the params
-		var params = this.state.newApptParams;
-		params.halfDay = halfDayObject;
+    async addNewAppointment(halfDayObject) {
+        // now that we know the specific half day that's been selected, we can add it to the params
+        var params = this.state.newApptParams;
+        params.halfDay = halfDayObject;
 
-		// call the POST endpoint with the params as request payload
-		return await axios.post('/api/put-new-appointment', params)
-			.then((response) => {
-				return response.data.success;
-			})
-			.catch((error) => {
-				console.error(error);
-				return false;
-			});
-	}
+        // call the POST endpoint with the params as request payload
+        return await axios.post('/api/put-new-appointment', params)
+            .then((response) => {
+                return response.data.success;
+            })
+            .catch((error) => {
+                console.error(error);
+                return false;
+            });
+    }
 
-	// Go to some page (used for child components - passed as prop) 
-	goToPage(pageUrlSuffix) {
-		this.props.navigate(pageUrlSuffix);
-	}
+    // Go to some page (used for child components - passed as prop)
+    goToPage(pageUrlSuffix) {
+        this.props.navigate(pageUrlSuffix);
+    }
 
-	// Logs a user out by clearing the userInfo state attribute
-	clearUserInfo() {
-		this.setState({
-			userInfo: false
-		})
-	}
+    // Logs a user out by clearing the userInfo state attribute
+    clearUserInfo() {
+        this.setState({
+            userInfo: false
+        })
+    }
 
     // gets a list of today's jobs for the specified crew from the database
     getJobsTodayForCrew(crew_name) {
-        axios.post('/api/get-joblist', {crewName: crew_name})
+        axios.post('/api/get-crew-jobs-on-date', {date:(new Date).toISOString().slice(0,10), whichHalf: 'first', crewName: crew_name})
             .then((response) => {
                 this.setState({
-                    fetchJobsTodayData: response.data.queryResult[0]
+                    fetchJobsTodayData1: response.data.sortedAppointments
+                })
+            })
+        axios.post('/api/get-crew-jobs-on-date', {date:(new Date).toISOString().slice(0,10), whichHalf: 'second', crewName: crew_name})
+            .then((response) => {
+                this.setState({
+                    fetchJobsTodayData2: response.data.sortedAppointments
                 })
             })
     };
@@ -211,24 +218,24 @@ class App extends Component {
 
     submit = () => {
         axios.post('/api/insert', this.state)
-	    .then(() => { alert('success post') })
-	console.log(this.state)
-	document.location.reload();
+            .then(() => { alert('success post') })
+        console.log(this.state)
+        document.location.reload();
     }
 
     delete = (id) => {
         if (confirm("Do you want to delete? ")) {
             axios.delete(`/api/delete/${id}`)
             document.location.reload()
-		}
+        }
     }
 
     edit = (id) => {
         axios.put(`/api/update/${id}`, this.state)
-	document.location.reload();
+        document.location.reload();
     }
 
-	// loads components from the landing_page.jsx file and renders them in the browser
+    // loads components from the landing_page.jsx file and renders them in the browser
     render() {
 
         const App = () => (
@@ -236,24 +243,25 @@ class App extends Component {
                 <Routes>
                     <Route path='/' element={<LandingPage propsWork={true}/>}/>
                     <Route path='employee-login' element={<EmployeeSignInPage
-						mainState={this.state}
-						clearUserInfo={this.clearUserInfo}
-						goToPage={this.goToPage}
-						getJobsTodayForCrew={this.getJobsTodayForCrew}
-                        onLoginClick={this.handleEmpLoginButtonClick} 
-						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
+                        mainState={this.state}
+                        clearUserInfo={this.clearUserInfo}
+                        goToPage={this.goToPage}
+                        getJobsTodayForCrew={this.getJobsTodayForCrew}
+                        onLoginClick={this.handleEmpLoginButtonClick}
+                        onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='appointment-info' element={<CustomerInfoPage
-                        onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick} 
-						saveApptInfo={this.saveApptInfo} /> }/>
+                        onGoToCalendarButtonClick={this.handleGoToCalendarButtonClick}
+                        saveApptInfo={this.saveApptInfo} /> }/>
                     <Route path='calendar' element={<Calendar
-						goToPage={this.goToPage}
+                        goToPage={this.goToPage}
                         custInfo={this.state.customerInfo}
-						addNewAppointment={this.addNewAppointment}
-						calendar={this.state.calendar} />} />
+                        addNewAppointment={this.addNewAppointment}
+                        calendar={this.state.calendar} />} />
                     <Route path='owner-dashboard' element={<OwnerDashboard
-						onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
+                        onNewEmployeeSubmit={this.onNewEmployeeSubmit} />} />
                     <Route path='employee-dashboard' element={<EmployeeDashboard
-                        jobsToday={this.state.fetchJobsTodayData}
+                        halfDay1={this.state.fetchJobsTodayData1}
+                        halfDay2={this.state.fetchJobsTodayData2}
                         crewNum={this.state.userInfo.crewName} />} />
                 </Routes>
             </div>
@@ -263,7 +271,7 @@ class App extends Component {
         return (
             <App />
         );
-	}
+    }
 }
 
 export default withRouter(App);
