@@ -554,36 +554,26 @@ app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
 }
 
 /**
- * this sets an appointment to is complete once the house being visited is done being serviced
- * @param date the date which the appointment takes place
- * @param whichHalf first or second half of the day
- * @param crewName the crew name that is servicing the address
- * @param address the address that the service has been completed for
+ * this is used to get the appointments that occur on a given halfday
+ * @param date "YYYY-MM-DD" the date for which the appointment is to occur
+ * @param whichHalf (first, second) which half of a date is it
+ * @param crewName the name of the crew you wish to get
  */
-app.post('/api/set-appointment-complete'), async (req, res) =>{
+app.post('/api/get-crew-jobs-on-date', async (req, res) => {
     try {
-        const { date, whichHalf, crewName, address } = req.body;
+        const { date, whichHalf, crewName } = req.body;
 
-        if (!date || !whichHalf || !crewName || !address) {
+        if (!date || !whichHalf || !crewName) {
             return res.status(400).json({ error: 'Missing required parameters' });
         }
 
-        const markAsComplete = 'CALL `set-appointment-complete`{?, ?, ? ,? );';
-
-        // res.json(sortedAppointments);
-        dbController.query(markAsComplete, [address, whichHalf, date, crewName ], (err, result) => {
-            if (err){
-                console.log(err);
-                res.status(500).send("Error changing complete");
-            }else {
-                res.status(200).send("Complete changed successfully");
-            }
-        })
+        const sortedAppointments = await getAppointmentsForHalfDay(date, whichHalf, crewName);
+        res.json(sortedAppointments);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+});
 
 
 // add a port to expose the API when the server is running
