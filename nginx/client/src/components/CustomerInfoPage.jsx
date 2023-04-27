@@ -138,7 +138,7 @@ class CustomerInfoPage extends React.Component {
                 </Row>
                 <Form.Group controlId="formAddress">
                     <Form.Label>What is your address?</Form.Label>
-                    <Form.Control name="address" type="text" placeholder="enter address"required onChange={this.handleInputChange}/>
+                    <Form.Control name="address" type="text" placeholder="street address, township, state initials zip code"required onChange={this.handleInputChange}/>
                 </Form.Group>
                 <Form.Group controlId="formEmailAddress">
                     <Form.Label>What is your Email address?</Form.Label>
