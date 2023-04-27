@@ -307,29 +307,22 @@ function CrewTable() {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {!selectedCrew || selectedCrew.members.length === 0 ? (
-                        <div>No crew members yet.</div>
-                    ) : (
-                        <ul>
-                            {selectedCrew.members.map((member) => (
+                    <ul>
+                        {selectedCrew?.members.length > 0 ? (
+                            selectedCrew.members.map((member) => (
                                 <li key={member.id} className="row">
-                                    <div className="col" style={{ whiteSpace: 'nowrap' }}>
-                                        {member.first_name} | {member.last_name} | {member.emailaddress}
-                                    </div>
-                                    <div className="col-auto">
-                                        <Form.Check>
-                                            <Form.Check.Input
-                                                type="checkbox"
-                                                onChange={() => handleRemoveMember(member.emailaddress, selectedCrew.name)}
-                                            />
-                                            <Form.Check.Label style={{ fontSize: '12px' }}>Remove</Form.Check.Label>
-                                        </Form.Check>
-                                    </div>
+                                    <div className="col" style={{ whiteSpace: 'nowrap' }}>{member.first_name} | {member.last_name} | {member.emailaddress}</div>
+                                    <div className="col-auto"><Form.Check>
+                                        <Form.Check.Input type="checkbox" onChange={() => handleRemoveMember(member.emailaddress, selectedCrew.name)} />
+                                        <Form.Check.Label style={{ fontSize: '12px' }}>Remove</Form.Check.Label>
+                                    </Form.Check></div>
                                 </li>
-                            ))}
-                        </ul>
-                    )}
+                            ))
+                        ) : (
+                            <div>No crew members yet.</div>
+                        )}
 
+                    </ul>
                 </Modal.Body>
 
 
