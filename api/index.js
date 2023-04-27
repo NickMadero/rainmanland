@@ -447,28 +447,33 @@ app.post('/api/get-crew', (req, res) => {
         } else {
             console.log(result);
             const crewData = {};
-            result[0].forEach(crew => {
+            result[0].forEach((crew) => {
                 const crewName = crew.crew_name;
-                const crewMember = {
-                    first_name: crew.first_name,
-                    last_name: crew.last_name,
-                    emailaddress: crew.email,
-                    crewName: crew.crew_name
-                };
-                if (!crewData[crewName]) {
-                    crewData[crewName] = {
-                        name: crewName,
-                        members: []
+                const email = crew.email;
+                if (email) {
+                    const crewMember = {
+                        first_name: crew.first_name,
+                        last_name: crew.last_name,
+                        emailaddress: email,
+                        crewName: crewName,
                     };
-                }
-                crewData[crewName].members.push(crewMember);
-                if (!crewData[crewName]) {
-                    crewData[crewName] = {
-                        name: crewName,
-                        members: []
-                    };
+                    if (!crewData[crewName]) {
+                        crewData[crewName] = {
+                            name: crewName,
+                            members: [],
+                        };
+                    }
+                    crewData[crewName].members.push(crewMember);
+                } else {
+                    if (!crewData[crewName]) {
+                        crewData[crewName] = {
+                            name: crewName,
+                            members: [],
+                        };
+                    }
                 }
             });
+
             console.log(crewData)
             const crews = Object.values(crewData);
             res.send(crews);
