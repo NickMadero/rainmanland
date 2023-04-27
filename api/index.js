@@ -462,7 +462,14 @@ app.post('/api/get-crew', (req, res) => {
                     };
                 }
                 crewData[crewName].members.push(crewMember);
+                if (!crewData[crewName]) {
+                    crewData[crewName] = {
+                        name: crewName,
+                        members: []
+                    };
+                }
             });
+            console.log(crewData)
             const crews = Object.values(crewData);
             res.send(crews);
         }

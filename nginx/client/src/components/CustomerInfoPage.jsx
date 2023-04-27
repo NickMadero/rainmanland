@@ -154,7 +154,7 @@ class CustomerInfoPage extends React.Component {
                 </Form.Group>
                 <Form.Group controlId="formzipcode">
                     <Form.Label>what is your zip code?</Form.Label>
-                    <Form.Control name="zipcode" type="text" placeholder="zip code"required  pattern="\d{5} "  onChange={this.handleInputChange}/>
+                    <Form.Control name="zipcode" type="text" placeholder="zip code"required  pattern="\d{5}"  onChange={this.handleInputChange}/>
                 </Form.Group>
                 <Form.Group controlId="formphone">
                     <Form.Label>what is your phone number?</Form.Label>
