@@ -1,3 +1,9 @@
+/**
+ * Author: Nick Madero
+ * Max Half table displays all Max half days for each zip code and updating max half days.
+ */
+
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {Table, Form, Button, FormGroup, Modal} from 'react-bootstrap';

@@ -1,3 +1,7 @@
+/**
+ * Author: Nick Madero
+ * Crew Table displays / add / remove of crews and zip code.
+ */
 import axios from 'axios';
 import { Table, Form, Button, FormGroup, FormLabel, Modal } from 'react-bootstrap';
 import { useState, useEffect } from "react";
@@ -187,6 +191,35 @@ function CrewTable() {
         window.location.reload();
     }
 
+    const handleRemovalOfCrew = async (crewName) => {
+        // 1.use get all zip codes for a crew end point to find all current zipcodes
+
+        try {
+            const response = await axios.post('/api/get-zip-by-crew', {crew_name: crewName});
+           await setZipCodes(response.data);
+            console.log(response.data);
+
+            // 2.loop through the remove zip for a crew end point to then remove all current zipcodes
+            // 3.then call remove crew end point shown below to remove crew throw error if crew is not empty.
+            console.log(zipcodes);
+            console.log(selectedCrew.members.length);
+            if(selectedCrew?.members.length > 0 || zipcodes.length > 0) {
+                window.alert("please delete all crew members first and/or zip codes.");
+            } else {
+                axios.post('/api/remove-crew', {crew_name: crewName})
+                    .then(response => {
+                        console.log(crewName);
+                    });
+                window.alert(`${crewName} has been delete`);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        // window.location.reload();
+    }
+
     return (
         // displays the crew table
         <div>
@@ -303,6 +336,9 @@ function CrewTable() {
                         Crew Members for {selectedCrew?.name}
                         <Button   style={{fontSize:"x-small", marginLeft:"5px"}} variant="primary" onClick={() => setShowAddMemberModal(true)}>
                             Add Member
+                        </Button>
+                        <Button style={{fontSize:"x-small", marginLeft:"5px"}} variant="primary" onClick={() => handleRemovalOfCrew(selectedCrew?.name)  } >
+                            Delete Crew
                         </Button>
                     </Modal.Title>
                 </Modal.Header>
