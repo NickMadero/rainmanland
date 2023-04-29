@@ -42,6 +42,12 @@ function CrewTable() {
             });
     }, []);
 
+    //removal of crew function
+    useEffect(() => {
+        console.log(zipcodes);
+    }, [zipcodes]);
+
+
     const showzipCode = (crewname) => {
         // Fetch zip data from backend API
         axios.post('/api/get-zip-by-crew', { crew_name:  crewname })
@@ -192,33 +198,29 @@ function CrewTable() {
     }
 
     const handleRemovalOfCrew = async (crewName) => {
-        // 1.use get all zip codes for a crew end point to find all current zipcodes
-
         try {
-            const response = await axios.post('/api/get-zip-by-crew', {crew_name: crewName});
-           await setZipCodes(response.data);
-            console.log(response.data);
+            const response1 = await axios.post('/api/get-zip-by-crew', { crew_name: crewName });
+            console.log(response1.data);
+            await setZipCodes(response1.data);
+           // console.log(zipcodes)
 
-            // 2.loop through the remove zip for a crew end point to then remove all current zipcodes
-            // 3.then call remove crew end point shown below to remove crew throw error if crew is not empty.
-            console.log(zipcodes);
-            console.log(selectedCrew.members.length);
-            if(selectedCrew?.members.length > 0 || zipcodes.length > 0) {
+            if (selectedCrew?.members.length > 0 || zipcodes.length > 0) {
                 window.alert("please delete all crew members first and/or zip codes.");
             } else {
-                axios.post('/api/remove-crew', {crew_name: crewName})
-                    .then(response => {
-                        console.log(crewName);
-                    });
-                window.alert(`${crewName} has been delete`);
+                const response2 = await axios.post('/api/remove-crew', { crew_name: crewName });
+                console.log(response2.data);
+                window.alert(`${crewName} has been deleted`);
             }
-
         } catch (error) {
             console.log(error);
         }
-
-        // window.location.reload();
     }
+
+
+
+
+    // window.location.reload();
+
 
     return (
         // displays the crew table

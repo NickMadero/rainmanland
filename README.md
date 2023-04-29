@@ -1,5 +1,10 @@
 # RML Smart Calendar
 
+##    :exclamation: Important Notice: Please read carefully!
+Before using our web application, it is essential to understand that the current version is an unfinished proof-of-concept and is not intended for commercial use. The application requires further development, particularly in the areas of legal compliance and security features, to ensure it is suitable for commercial operation. 
+
+__By using this project, you acknowledge and assume full responsibility for any risks associated with its use.__
+
 ## Quick-Start Guide (I will write better docs as soon as I can)
 
 #### Overview
