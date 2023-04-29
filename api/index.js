@@ -587,6 +587,19 @@ app.post('/api/get-crew-jobs-on-date', async (req, res) => {
     }
 });
 
+// this end point is to remove a crew
+app.post('/api/remove-crew', (req,res) => {
+
+    const removeCrew = " call remove_crew(?);";
+    dbController.query(removeCrew, req.body.crew_name, (err, result) => {
+        if (err){
+            console.log(err);
+        }else {
+            console.log(result)
+            res.status(200).send("removed crew");
+        }
+    })
+})
 
 // add a port to expose the API when the server is running
 app.listen('3001', () => { })

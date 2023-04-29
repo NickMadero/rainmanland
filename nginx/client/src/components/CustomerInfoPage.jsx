@@ -1,3 +1,7 @@
+/**
+ * Author : Nick Madero
+ *  customer Info allows customers to enter required Information.
+ */
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';

@@ -1,3 +1,7 @@
+/**
+ * Author: Nick Madero
+ * Crew Table displays / add / remove of crews and zip code.
+ */
 import axios from 'axios';
 import { Table, Form, Button, FormGroup, FormLabel, Modal } from 'react-bootstrap';
 import { useState, useEffect } from "react";
@@ -37,6 +41,12 @@ function CrewTable() {
                 console.log(error);
             });
     }, []);
+
+    //removal of crew function
+    useEffect(() => {
+        console.log(zipcodes);
+    }, [zipcodes]);
+
 
     const showzipCode = (crewname) => {
         // Fetch zip data from backend API
@@ -187,6 +197,37 @@ function CrewTable() {
         window.location.reload();
     }
 
+    const handleRemovalOfCrew = async (crewName) => {
+        try {
+            const response1 = await axios.post('/api/get-zip-by-crew', { crew_name: crewName });
+            console.log(response1.data);
+
+            const crewZipCodes = response1.data;
+
+            if (selectedCrew?.members.length > 0 || crewZipCodes.length > 0) {
+                window.alert("please delete all crew members first and/or zip codes.");
+            } else {
+                const response2 = await axios.post('/api/remove-crew', { crew_name: crewName });
+                console.log(response2.data);
+                window.alert(`Crew ${crewName} has been deleted`);
+
+                // Update the state to remove the crew
+                setCrews(crews.filter(c => c.crew_name !== crewName));
+
+                window.location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+
+
+
+    // window.location.reload();
+
+
     return (
         // displays the crew table
         <div>
@@ -303,6 +344,9 @@ function CrewTable() {
                         Crew Members for {selectedCrew?.name}
                         <Button   style={{fontSize:"x-small", marginLeft:"5px"}} variant="primary" onClick={() => setShowAddMemberModal(true)}>
                             Add Member
+                        </Button>
+                        <Button style={{fontSize:"x-small", marginLeft:"5px"}} variant="primary" onClick={() => handleRemovalOfCrew(selectedCrew?.name)  } >
+                            Delete Crew
                         </Button>
                     </Modal.Title>
                 </Modal.Header>

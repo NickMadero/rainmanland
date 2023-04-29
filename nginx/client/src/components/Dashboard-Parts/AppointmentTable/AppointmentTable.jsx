@@ -1,4 +1,7 @@
-
+/**
+ * Author : Nick Madero
+ * Appointment Table displays all appointments/Information on a given day.
+ */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Form, Button } from 'react-bootstrap';
