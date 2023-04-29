@@ -564,6 +564,24 @@ app.post('/api/get-crew-jobs-on-date'), async (req, res) =>{
     }
 
 }
+app.post('/api/set-appointment-complete', async (req, res) =>{
+    try {
+        const { date, whichHalf, crewName, address } = req.body;
+
+        if (!date || !whichHalf || !crewName || !address) {
+            return res.status(400).json({ error: 'Missing required parameters' });
+        }
+
+        const markAsComplete = 'CALL `set-appointment-complete`(?, ?, ? ,? );';
+
+        // res.json(sortedAppointments);
+        dbController.query(markAsComplete, [address, whichHalf, date, crewName ], (err, result) => {
+Expand All
+	@@ -583,7 +576,7 @@ app.post('/api/set-appointment-complete'), async (req, res) =>{
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
 
 /**
  * this is used to get the appointments that occur on a given halfday
