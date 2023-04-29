@@ -201,20 +201,26 @@ function CrewTable() {
         try {
             const response1 = await axios.post('/api/get-zip-by-crew', { crew_name: crewName });
             console.log(response1.data);
-            await setZipCodes(response1.data);
-           // console.log(zipcodes)
 
-            if (selectedCrew?.members.length > 0 || zipcodes.length > 0) {
+            const crewZipCodes = response1.data;
+
+            if (selectedCrew?.members.length > 0 || crewZipCodes.length > 0) {
                 window.alert("please delete all crew members first and/or zip codes.");
             } else {
                 const response2 = await axios.post('/api/remove-crew', { crew_name: crewName });
                 console.log(response2.data);
-                window.alert(`${crewName} has been deleted`);
+                window.alert(`Crew ${crewName} has been deleted`);
+
+                // Update the state to remove the crew
+                setCrews(crews.filter(c => c.crew_name !== crewName));
+
+                window.location.reload();
             }
         } catch (error) {
             console.log(error);
         }
     }
+
 
 
 
