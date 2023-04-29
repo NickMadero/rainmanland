@@ -69,28 +69,58 @@ async function getStoredHalfDay(date, whichHalf, crewName){
  * @returns {Promise<{driveTimes: *, sortedAddresses: *}>} returns an array of sorted addresses by drive time
  */
 async function sortAppointmentsByDriveTime(startAddr, appointments) {
-    const results = await Promise.all(
-        appointments.map((appointment) =>
-            googleMapsClient
-                .distanceMatrix({
-                    origins: [startAddr],
-                    destinations: [appointment.address],
-                    mode: 'driving',
-                })
-                .asPromise()
-        )
-    );
+    const remainingAppointments = [...appointments];
+    const sortedAppointments = [];
+    let currentAddress = startAddr;
 
-    const durationMap = new Map();
-    await appointments.forEach((appointment, index) => {
-        const durationValue = results[index]?.json?.rows[0]?.elements[0]?.duration?.value;
+    while (remainingAppointments.length > 0) {
+        const driveTimeResults = await Promise.all(
+            remainingAppointments.map((appointment) =>
+                googleMapsClient
+                    .distanceMatrix({
+                        origins: [currentAddress],
+                        destinations: [appointment.address],
+                        mode: 'driving',
+                    })
+                    .asPromise()
+            )
+        );
+
+        const durationMap = new Map();
+        remainingAppointments.forEach((appointment, index) => {
+            const durationValue = driveTimeResults[index]?.json?.rows[0]?.elements[0]?.duration?.value;
+            if (durationValue !== undefined) {
+                durationMap.set(appointment, durationValue);
+            }
+        });
+
+        const nearestAppointment = remainingAppointments.reduce((a, b) =>
+            durationMap.get(a) < durationMap.get(b) ? a : b
+        );
+
+        sortedAppointments.push(nearestAppointment);
+        remainingAppointments.splice(remainingAppointments.indexOf(nearestAppointment), 1);
+        currentAddress = nearestAppointment.address;
+    }
+
+    const driveTimes = [];
+    for (let i = 0; i < sortedAppointments.length - 1; i++) {
+        const origin = sortedAppointments[i].address;
+        const destination = sortedAppointments[i + 1].address;
+        const result = await googleMapsClient
+            .distanceMatrix({
+                origins: [origin],
+                destinations: [destination],
+                mode: 'driving',
+            })
+            .asPromise();
+        const durationValue = result?.json?.rows[0]?.elements[0]?.duration?.value;
         if (durationValue !== undefined) {
-            durationMap.set(appointment, durationValue);
+            driveTimes.push(durationValue);
+        } else {
+            driveTimes.push(null);
         }
-    });
-
-    const sortedAppointments = await appointments.sort((a, b) => durationMap.get(a) - durationMap.get(b));
-    const driveTimes = await sortedAppointments.map((appointment) => durationMap.get(appointment));
+    }
 
     return Promise.resolve({ sortedAppointments, driveTimes });
 }
