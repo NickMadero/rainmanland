@@ -74,32 +74,43 @@ class EmployeeSignInPage extends React.Component {
         });
     };
 
-	render() {
-		return (
-			<Container>
-				<Row className="justify-content-md-center">
-					<Col md="auto">
-						<Card className="mt-4 mb-4 p-4">
-							<Card.Title>Employee Login</Card.Title>
-							<Form onSubmit={this.handleSubmit}>
-								<Form.Group controlId="email">
-									<Form.Label>Email</Form.Label>
-									<Form.Control type="text" name="email" value={this.state.email} onChange={this.handleInputChange} />
-								</Form.Group>
-								<Form.Group controlId="password">
-									<Form.Label>Password</Form.Label>
-									<Form.Control type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
-								</Form.Group>
-								<Button variant="primary" type="submit">
-									Log In
-								</Button>
-							</Form>
-						</Card>
-					</Col>
-				</Row>
-			</Container>
-		);
-	}
+    render() {
+        const rowStyle = {
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+        };
+
+        const buttonStyle = {
+            display: 'block',
+            margin: '1rem auto',
+        };
+
+        return (
+            <Container>
+                <Row className="justify-content-md-center" style={rowStyle}>
+                    <Col md="auto">
+                        <Card className="mt-4 mb-4 p-4">
+                            <Card.Title>Employee Login</Card.Title>
+                            <Form onSubmit={this.handleSubmit}>
+                                <Form.Group controlId="email">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="text" name="email" value={this.state.email} onChange={this.handleInputChange} />
+                                </Form.Group>
+                                <Form.Group controlId="password">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
+                                </Form.Group>
+                                <Button variant="primary" type="submit" style={buttonStyle}>
+                                    Log In
+                                </Button>
+                            </Form>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
 }
 
 export default withRouter(EmployeeSignInPage);
