@@ -14,23 +14,46 @@ const NewCalendar = (props) => {
 	const [selectedEvent, setSelectedEvent] = useState(null);
 
 	// Parses the calendar object and formats the halfDay array to make it easier for creating calendar events
-	const formatEvents = (data) => {
-			const formattedEvents = data.halfDays.map((halfDay, index) => {
-			const startDate = new Date(halfDay.date + "T" + halfDay.startTime);
-			const endDate = new Date(halfDay.date + "T" + halfDay.endTime);
+  	const formatEvents = (data) => {
+    const formattedEvents = data.halfDays.map((halfDay, index) => {
+        const startDate = new Date(halfDay.date + "T" + halfDay.startTime);
+        const endDate = new Date(halfDay.date + "T" + halfDay.endTime);
 
-			return {
-				id: index,
-				title: halfDay.whichHalf === "first" ? "AM Time Slot" : "PM Time Slot",
-				start: startDate,
-				end: endDate,
-				isAvailable: halfDay.isAvailable,
-				originalHalfDay: halfDay
-			};
-		});
+        return {
+            id: index,
+            title: halfDay.whichHalf === "first" ? "AM Time Slot" : "PM Time Slot",
+            start: startDate,
+            end: endDate,
+            isAvailable: halfDay.isAvailable,
+            appointmentCount: halfDay.appointment_count,
+            originalHalfDay: halfDay
+        };
+    });
 
-		return formattedEvents;
-	};
+    const availableHalfDays = formattedEvents.filter((halfDay) => halfDay.isAvailable);
+
+    availableHalfDays.sort((a, b) => {
+        if (b.appointmentCount !== a.appointmentCount) {
+            return b.appointmentCount - a.appointmentCount;
+        } else {
+            return a.start - b.start;
+        }
+    });
+
+    for (let i = 0; i < availableHalfDays.length && i < 2; i++) {
+        availableHalfDays[i].discountEligible = true;
+    }
+
+    const updatedEvents = formattedEvents.map((halfDay) => {
+        const availableHalfDay = availableHalfDays.find((ahd) => ahd.id === halfDay.id);
+        return {
+            ...halfDay,
+            discountEligible: availableHalfDay ? availableHalfDay.discountEligible : false
+        };
+    });
+
+    return updatedEvents;
+};
 
 	// Handlers for what happens when you click a specific time slot / halfDay
 	const handleSelectEvent = (event) => {
