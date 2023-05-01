@@ -98,7 +98,7 @@ const NewCalendar = (props) => {
 				views={["month", "week", "agenda"]}
 				onSelectEvent={handleSelectEvent}
 				eventPropGetter={(event) => {
-					const backgroundColor = event.isAvailable ? "green" : "red";
+					const backgroundColor = event.isAvailable ? event.discountEligible ? "green" : "blue" : "red";
 					return { style: { backgroundColor } };
 				}}
 			/>
