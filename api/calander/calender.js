@@ -185,7 +185,7 @@ function getInitalHalfDays(crew){
 
     };
 
-    const getHalfDays = 'CALL `get_all_half_days_by_crew`(?);';
+    const getHalfDays = 'CALL `get_all_half_days_by_crew_with_count`(?);';
 
     return new Promise((resolve, reject) => {
         dbController.query(getHalfDays, [crew.crewName], (err, result) => {
@@ -202,6 +202,7 @@ function getInitalHalfDays(crew){
                         endTime: halfDay.end_time,
                         isAvailable: halfDay.is_available,
                         isFull: halfDay.is_full,
+						appointment_count: halfDay.appointment_count,
                         date: new Date(halfDay.date).toISOString().slice(0, 10) // this just converts to yyyy-mm-dd the slice is for getting the actual value we care about
 
                     };
