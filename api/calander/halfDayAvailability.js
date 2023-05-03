@@ -11,10 +11,10 @@
 const dbController = require("../dbController");
 const {add} = require("nodemon/lib/rules");
 
-const apiKey = 'AIzaSyAF2m0svp07tGLzObVsQFEIMw6EpRh14Hc';
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
 const googleMapsClient = require('@google/maps').createClient({
-    key: apiKey,
+    key: GOOGLE_MAPS_API_KEY,
     Promise: Promise
 });
 
@@ -105,7 +105,7 @@ async function checkDistanceBetweenAppointmentsTooFar(halfDay, appointment, crew
 
     for(let i = 0; i < storedHalfDay.appointments[0].length; i++) {
         // let tempApp = storedHalfDay.appointments[0][i];
-        let tempApp = await getZipCode(storedHalfDay.appointments[0][i].address, apiKey);
+        let tempApp = await getZipCode(storedHalfDay.appointments[0][i].address, GOOGLE_MAPS_API_KEY);
         if (tempApp === appointment.zipCode){
             calendar.currentHalfDaysForZip += 1;
 
@@ -376,8 +376,8 @@ async function sortAddressesByDriveTime(startAddr, addresses){
     return Promise.resolve({ sortedAddresses, driveTimes });
 }
 
-async function getZipCode(address, apiKey) {
-    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`);
+async function getZipCode(address, GOOGLE_MAPS_API_KEY) {
+    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_MAPS_API_KEY}`);
     const data = await response.json();
     const result = data.results[0];
     return result && result.address_components.find(c => c.types.includes('postal_code')).short_name;
